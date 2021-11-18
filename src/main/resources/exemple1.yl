@@ -1,4 +1,4 @@
-progran p1
+program p1
 begin
 int x;
 x := 100;
