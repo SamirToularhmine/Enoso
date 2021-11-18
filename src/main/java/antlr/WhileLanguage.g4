@@ -4,14 +4,15 @@ program : Program (Identifier) declaration* Begin lDeclVariables statements End;
 declaration : Proc Identifier OpeningParenthesis lDeclIdent (Coma Res type Identifier)ClosingParenthesis Begin statements End;
 lDeclIdent : type Identifier (Coma type Identifier)*;
 lDeclVariables : declVariables lDeclVariables*;
-declVariables : type lIdentifier;
+declVariables : type lIdentifier Semicolon ;
 lIdentifier : Identifier (Coma Identifier)*;
 type : Int | Boolean ;
 block : statement
         | OpeningParenthesis statements ClosingParenthesis
         ;
-statements : statement ( Semicolon statements )*;
-statement : Skip
+statements : statement ( Semicolon statements )*; // j'ai ajouté le semicolon à la fin ici
+
+statement : 'skip'
         | Identifier Affectation aexpression
         | If bexpression Then block ( Else block )
         | While bexpression Do block
@@ -44,7 +45,6 @@ opr : Lower
         | Equal
         | Different
         ;
-Identifier : [a-zA-Z_][a-zA-Z0-9_]*;
 Constant: Pos
         | Neg
         ;
@@ -79,8 +79,8 @@ Proc : 'proc';
 Begin : 'begin';
 End : 'end';
 Res : 'res';
-Skip : 'skip';
 Call : 'call';
+
 
 If : 'if';
 Then : 'then';
@@ -90,3 +90,11 @@ Do : 'do';
 
 Boolean : 'boolean';
 Int : 'int';
+
+
+
+
+Identifier : [a-zA-Z_][a-zA-Z0-9_]*;
+
+WS: [ \t\r\n]+ -> skip;
+
