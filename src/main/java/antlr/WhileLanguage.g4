@@ -1,6 +1,6 @@
 grammar WhileLanguage;
 
-program : Program (Identifier) declaration* Begin lDeclVariables statements End;
+program : Program Identifier? declaration* Begin lDeclVariables statements End;
 declaration : Proc Identifier OpeningParenthesis lDeclIdent (Coma Res type Identifier)ClosingParenthesis Begin statements End;
 lDeclIdent : type Identifier (Coma type Identifier)*;
 lDeclVariables : declVariables lDeclVariables*;
@@ -46,10 +46,10 @@ opr : Lower
         | Different
         ;
 Constant: Pos
-        | Neg
+//        | Neg
         ;
 Pos : [0-9]+;
-Neg : '-' Pos;
+// Neg : '-' Pos;
 
 Plus : '+';
 Minus : '-';
