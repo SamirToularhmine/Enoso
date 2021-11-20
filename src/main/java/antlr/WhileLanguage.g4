@@ -94,7 +94,7 @@ Int : 'int';
 
 
 
-Identifier : [a-zA-Z_][a-zA-Z0-9_]*;
+Identifier : [a-z][a-z0-9_]*;
 
 WS: [ \t\r\n]+ -> skip;
 
