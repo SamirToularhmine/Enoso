@@ -6,13 +6,13 @@ lDeclIdent : type Identifier (Coma type Identifier)*;
 lDeclVariables : declVariables lDeclVariables*;
 declVariables : type lIdentifier Semicolon ;
 lIdentifier : Identifier (Coma Identifier)*;
-type : Int | Boolean ;
+type : Type | Table;
 block : statement
         | OpeningParenthesis statements ClosingParenthesis
         ;
 statements : statement ( Semicolon statements )*; // j'ai ajouté le semicolon à la fin ici
 
-statement : 'skip'
+statement : Skip
         | Identifier Affectation aexpression
         | If bexpression Then block ( Else block )
         | While bexpression Do block
@@ -24,6 +24,7 @@ aexpression : Identifier
         | aexpression opa aexpression
         | Minus aexpression
         | OpeningParenthesis aexpression ClosingParenthesis
+        | Identifier OpeningBracket aexpression ClosingBracket
         ;
 
 opa : Plus
@@ -51,6 +52,8 @@ constant: (Minus)? Pos
 Pos : [0-9]+;
 // Neg : '-' Pos;
 
+Skip : 'skip';
+
 Plus : '+';
 Minus : '-';
 Multiplication : '*';
@@ -69,6 +72,8 @@ Different : '<>';
 Not : 'not';
 OpeningParenthesis : '(';
 ClosingParenthesis : ')';
+OpeningBracket : '[' ;
+ClosingBracket : ']';
 
 Coma : ',';
 Semicolon : ';';
@@ -88,13 +93,15 @@ Else : 'else';
 While : 'while';
 Do : 'do';
 
+Type : Boolean | Int ;
+Table : Type OpeningBracket Pos ClosingBracket ;
+
 Boolean : 'boolean';
 Int : 'int';
-
-
 
 
 Identifier : [a-z][a-z0-9_]*;
 
 WS: [ \t\r\n]+ -> skip;
+
 
