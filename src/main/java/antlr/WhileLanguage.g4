@@ -20,7 +20,7 @@ statement : 'skip'
         ;
 lAexpression : aexpression (Coma aexpression)*;
 aexpression : Identifier
-        | Constant
+        | constant
         | aexpression opa aexpression
         | Minus aexpression
         | OpeningParenthesis aexpression ClosingParenthesis
@@ -45,7 +45,7 @@ opr : Lower
         | Equal
         | Different
         ;
-Constant: Pos
+constant: (Minus)? Pos
 //        | Neg
         ;
 Pos : [0-9]+;
