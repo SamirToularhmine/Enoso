@@ -10,7 +10,7 @@ type : Type | Table;
 block : statement
         | OpeningParenthesis statements ClosingParenthesis
         ;
-statements : statement ( Semicolon statements )*; // j'ai ajouté le semicolon à la fin ici
+statements : statement ( Semicolon statements )*;
 
 statement : Skip
         | Identifier Affectation aexpression
@@ -19,12 +19,14 @@ statement : Skip
         | Call Identifier OpeningParenthesis lAexpression ClosingParenthesis
         ;
 lAexpression : aexpression (Coma aexpression)*;
+
 aexpression : Identifier
         | constant
         | aexpression opa aexpression
         | Minus aexpression
         | OpeningParenthesis aexpression ClosingParenthesis
         | Identifier OpeningBracket aexpression ClosingBracket
+        | New Type OpeningBracket aexpression ClosingBracket
         ;
 
 opa : Plus
@@ -46,11 +48,10 @@ opr : Lower
         | Equal
         | Different
         ;
-constant: (Minus)? Pos
-//        | Neg
-        ;
+constant: (Minus)? Pos;
+
 Pos : [0-9]+;
-// Neg : '-' Pos;
+New : 'new';
 
 Skip : 'skip';
 
@@ -94,7 +95,7 @@ While : 'while';
 Do : 'do';
 
 Type : Boolean | Int ;
-Table : Type OpeningBracket Pos ClosingBracket ;
+Table : Type OpeningBracket ClosingBracket ;
 
 Boolean : 'boolean';
 Int : 'int';
