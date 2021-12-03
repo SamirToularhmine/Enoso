@@ -25,7 +25,7 @@ lAexpression : aexpression (Coma aexpression)*;
 aexpression : Identifier                                                       #AexpressionIdentifier
         | constant                                                             #AexpressionConstant
         | aexpression opa aexpression                                          #AexpressionBinary
-        | Minus aexpression                                                    #AexpressionUnary
+        | Minus aexpression                                                    #AexpressionNeg
         | OpeningParenthesis aexpression ClosingParenthesis                    #AexpressionParenthesis
         | Identifier OpeningBracket aexpression ClosingBracket                 #AexpressionArray
         | New Type OpeningBracket aexpression ClosingBracket                   #AexpressionNew

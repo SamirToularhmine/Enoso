@@ -7,7 +7,7 @@ public interface VisitorAexpression<T> {
     T visit(AexpressionIdentifier aexpressionIdentifier);
     T visit(AexpressionNew aexpressionNew);
     T visit(AexpressionParenthesis aexpressionParenthesis);
-    T visit(AexpressionUnary aexpressionUnary);
+    T visit(AexpressionNeg aexpressionUnary);
 
 
 }
