@@ -5,4 +5,4 @@ Le projet est réalisé par l'équipe **Legit IT**, composée des plus grands, c
 - Pierre-Louis BERTRAND
 - Ionas NEONAKIS
 - Thomas QUETIER
-- Samir TOULARMINE
+- Samir TOULARHMINE
