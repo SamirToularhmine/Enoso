@@ -6,47 +6,49 @@ lDeclIdent : type Identifier (Coma type Identifier)*;
 lDeclVariables : declVariables lDeclVariables*;
 declVariables : type lIdentifier Semicolon ;
 lIdentifier : Identifier (Coma Identifier)*;
-type : Type | Table;
-block : statement
-        | OpeningParenthesis statements ClosingParenthesis
+type : Type                                                                    #TypeType
+        | Table                                                                #TypeTable
+        ;
+block : statement                                                              #BlockStatement
+        | OpeningParenthesis statements ClosingParenthesis                     #BlockWithinParenthesis
         ;
 statements : statement ( Semicolon statements )*;
 
-statement : Skip
-        | Identifier Affectation aexpression
-        | If bexpression Then block ( Else block )
-        | While bexpression Do block
-        | Call Identifier OpeningParenthesis lAexpression ClosingParenthesis
+statement : Skip                                                               #StatementSkip
+        | Identifier Affectation aexpression                                   #StatementAffectation
+        | If bexpression Then block ( Else block ) ?                           #StatementIf
+        | While bexpression Do block                                           #StatementWhile
+        | Call Identifier OpeningParenthesis lAexpression ClosingParenthesis   #StatementCall
         ;
 lAexpression : aexpression (Coma aexpression)*;
 
-aexpression : Identifier
-        | constant
-        | aexpression opa aexpression
-        | Minus aexpression
-        | OpeningParenthesis aexpression ClosingParenthesis
-        | Identifier OpeningBracket aexpression ClosingBracket
-        | New Type OpeningBracket aexpression ClosingBracket
+aexpression : Identifier                                                       #AexpressionIdentifier
+        | constant                                                             #AexpressionConstant
+        | aexpression opa aexpression                                          #AexpressionBinary
+        | Minus aexpression                                                    #AexpressionUnary
+        | OpeningParenthesis aexpression ClosingParenthesis                    #AexpressionParenthesis
+        | Identifier OpeningBracket aexpression ClosingBracket                 #AexpressionArray
+        | New Type OpeningBracket aexpression ClosingBracket                   #AexpressionNew
         ;
 
-opa : Plus
-        | Minus
-        | Multiplication
-        | Division
+opa : Plus                                                                     #OpaPlus
+        | Minus                                                                #OpaMinus
+        | Multiplication                                                       #OpaMultiplication
+        | Division                                                             #OpaDivision
         ;
-bexpression : True
-        | False
-        | aexpression opr aexpression
-        | Not bexpression
-        | OpeningParenthesis bexpression ClosingParenthesis
+bexpression : True                                                             #BexpressionTrue
+        | False                                                                #BexpressionFalse
+        | aexpression opr aexpression                                          #BexpressionAexpressionOprAexpression
+        | Not bexpression                                                      #BexpressionNot
+        | OpeningParenthesis bexpression ClosingParenthesis                    #BexpressionParenthesis
         ;
 
-opr : Lower
-        | LowerOrEqual
-        | Greater
-        | GreaterOrEqual
-        | Equal
-        | Different
+opr : Lower                                                                    #OprLower
+        | LowerOrEqual                                                         #OprLowerOrEqual
+        | Greater                                                              #OprGreater
+        | GreaterOrEqual                                                       #OprGreaterOrEqual
+        | Equal                                                                #OprEqual
+        | Different                                                            #OprDifferent
         ;
 constant: (Minus)? Pos;
 
