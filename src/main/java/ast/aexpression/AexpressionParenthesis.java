@@ -11,16 +11,16 @@ public class AexpressionParenthesis extends Aexpression {
         this.position = position;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
     public Aexpression getAexpression() {
         return aexpression;
     }
 
     public void setAexpression(Aexpression aexpression) {
         this.aexpression = aexpression;
-    }
-
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
     }
 }

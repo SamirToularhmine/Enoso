@@ -107,8 +107,6 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         return new AexpressionArray(pos, ctx.Identifier().getText(), (Aexpression) ctx.aexpression().accept(this));
     }
 
-
-
     @Override
     public Node visitAexpressionParenthesis(WhileLanguageParser.AexpressionParenthesisContext ctx) {
         return super.visitAexpressionParenthesis(ctx);

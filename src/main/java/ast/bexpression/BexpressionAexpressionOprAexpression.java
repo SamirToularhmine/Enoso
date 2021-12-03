@@ -17,6 +17,11 @@ public class BexpressionAexpressionOprAexpression extends Bexpression{
         this.position = position;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
     public Aexpression getLeft() {
         return left;
     }
@@ -39,10 +44,5 @@ public class BexpressionAexpressionOprAexpression extends Bexpression{
 
     public void setOpr(Opr opr) {
         this.opr = opr;
-    }
-
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
     }
 }

@@ -15,4 +15,12 @@ public class BexpressionConst extends Bexpression{
         public Object accept(Visitor visitor) {
                 return visitor.visit(this);
         }
+
+        public boolean isValue() {
+                return value;
+        }
+
+        public void setValue(boolean value) {
+                this.value = value;
+        }
 }

@@ -13,6 +13,11 @@ public class AexpressionArray extends Aexpression {
         this.index = index;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
     public String getIdentifier() {
         return identifier;
     }
@@ -29,8 +34,4 @@ public class AexpressionArray extends Aexpression {
         this.index = index;
     }
 
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
-    }
 }

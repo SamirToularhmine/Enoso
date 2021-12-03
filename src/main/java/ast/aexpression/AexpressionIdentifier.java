@@ -11,6 +11,11 @@ public class AexpressionIdentifier extends Aexpression {
         this.position = position;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
     public String getIdentifier() {
         return identifier;
     }
@@ -19,8 +24,4 @@ public class AexpressionIdentifier extends Aexpression {
         this.identifier = identifier;
     }
 
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
-    }
 }

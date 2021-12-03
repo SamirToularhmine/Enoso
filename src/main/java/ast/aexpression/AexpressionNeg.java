@@ -6,21 +6,21 @@ import ast.Visitor;
 public class AexpressionNeg extends Aexpression {
     private Aexpression value;
 
-    public Aexpression getValue() {
-        return value;
-    }
-
     public AexpressionNeg(Position position, Aexpression value) {
         this.value = value;
         this.position = position;
     }
 
-    public void setValue(Aexpression value) {
-        this.value = value;
-    }
-
     @Override
     public Object accept(Visitor visitor) {
         return visitor.visit(this);
+    }
+
+    public Aexpression getValue() {
+        return value;
+    }
+
+    public void setValue(Aexpression value) {
+        this.value = value;
     }
 }

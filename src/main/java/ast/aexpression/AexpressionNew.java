@@ -14,6 +14,10 @@ public class AexpressionNew extends Aexpression {
         this.value = value;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
     public Type getType() {
         return type;
     }
@@ -28,10 +32,5 @@ public class AexpressionNew extends Aexpression {
 
     public void setValue(Aexpression value) {
         this.value = value;
-    }
-
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
     }
 }

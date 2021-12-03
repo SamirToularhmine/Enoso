@@ -12,12 +12,12 @@ public class AexpressionConstant extends Aexpression {
         this.position = position;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     @Override
     public Object accept(Visitor visitor) {
         return visitor.visit(this);
+    }
+
+    public int getValue() {
+        return value;
     }
 }

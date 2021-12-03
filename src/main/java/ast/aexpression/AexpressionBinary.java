@@ -15,6 +15,11 @@ public class AexpressionBinary extends Aexpression {
         this.operator = operator;
     }
 
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
     public Aexpression getLeft() {
         return left;
     }
@@ -37,12 +42,5 @@ public class AexpressionBinary extends Aexpression {
 
     public void setOperator(Opa operator) {
         this.operator = operator;
-    }
-
-
-    @Override
-    public Object accept(Visitor visitor) {
-        return visitor.visit(this);
-
     }
 }
