@@ -1,14 +1,24 @@
 package ast;
 
 
-import ast.aexpression.Aexpression;
-import ast.aexpression.AexpressionArray;
-import ast.aexpression.AexpressionBinary;
-import ast.aexpression.AexpressionConstant;
+import ast.aexpression.*;
+import ast.bexpression.*;
+import ast.block.Block;
+import ast.block.BlockStatement;
+import ast.block.BlockWithinParenthesis;
 import ast.opa.Opa;
+import ast.opa.OpaValue;
+import ast.opr.Opr;
+import ast.opr.OprValue;
+import ast.statement.*;
+import ast.type.Type;
+import ast.type.TypeTable;
+import ast.type.TypeType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import parser.WhileLanguageBaseVisitor;
 import parser.WhileLanguageParser;
+
+import java.util.List;
 
 public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
@@ -48,17 +58,20 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitTypeType(WhileLanguageParser.TypeTypeContext ctx) {
-        return super.visitTypeType(ctx);
+        Position position = this.makePos(ctx);
+        return new TypeType(position);
     }
 
     @Override
     public Node visitTypeTable(WhileLanguageParser.TypeTableContext ctx) {
-        return super.visitTypeTable(ctx);
+        Position position = this.makePos(ctx);
+        return new TypeTable(position);
     }
 
     @Override
     public Node visitBlockStatement(WhileLanguageParser.BlockStatementContext ctx) {
-        return super.visitBlockStatement(ctx);
+        Position position = this.makePos(ctx);
+        return new BlockStatement(position, (Statement) ctx.statement().accept(this));
     }
 
     @Override
@@ -73,22 +86,26 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitStatementSkip(WhileLanguageParser.StatementSkipContext ctx) {
-        return super.visitStatementSkip(ctx);
+        Position pos = this.makePos(ctx);
+        return new StatementSkip(pos);
     }
 
     @Override
     public Node visitStatementAffectation(WhileLanguageParser.StatementAffectationContext ctx) {
-        return super.visitStatementAffectation(ctx);
+        Position pos = this.makePos(ctx);
+        return new StatementAffectation(pos, ctx.Identifier().getText(), (Aexpression) ctx.aexpression().accept(this));
     }
 
     @Override
     public Node visitStatementIf(WhileLanguageParser.StatementIfContext ctx) {
-        return super.visitStatementIf(ctx);
+        Position pos = this.makePos(ctx);
+        return new StatementIf(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.block(0).accept(this), (Block) ctx.block(1).accept(this));
     }
 
     @Override
     public Node visitStatementWhile(WhileLanguageParser.StatementWhileContext ctx) {
-        return super.visitStatementWhile(ctx);
+        Position pos = this.makePos(ctx);
+        return new StatementWhile(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.bexpression().accept(this));
     }
 
     @Override
@@ -109,16 +126,19 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitAexpressionParenthesis(WhileLanguageParser.AexpressionParenthesisContext ctx) {
-        return super.visitAexpressionParenthesis(ctx);
+        Position pos = this.makePos(ctx);
+        return new AexpressionParenthesis(pos, (Aexpression) ctx.aexpression().accept(this));
     }
 
     @Override
     public Node visitAexpressionIdentifier(WhileLanguageParser.AexpressionIdentifierContext ctx) {
-        return super.visitAexpressionIdentifier(ctx);
+        Position pos = this.makePos(ctx);
+        return new AexpressionIdentifier(pos, ctx.Identifier().accept(this).toString() );
     }
 
     @Override
     public Node visitAexpressionUnary(WhileLanguageParser.AexpressionUnaryContext ctx) {
+        Position pos = this.makePos(ctx);
         return super.visitAexpressionUnary(ctx);
     }
 
@@ -130,88 +150,104 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx) {
-        return super.visitAexpressionNew(ctx);
+        Position pos = this.makePos(ctx);
+        return new AexpressionNew(pos,(Type) ctx.Type().accept(this), (Aexpression) ctx.aexpression().accept(this) );
     }
 
     @Override
     public Node visitAexpressionBinary(WhileLanguageParser.AexpressionBinaryContext ctx) {
-        return new AexpressionBinary(new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()), (Aexpression) ctx.aexpression(0).accept(this), (Aexpression) ctx.aexpression(1).accept(this), (Opa) ctx.opa().accept(this));
+        Position position = this.makePos(ctx);
+        return new AexpressionBinary(position, (Aexpression) ctx.aexpression(0).accept(this), (Aexpression) ctx.aexpression(1).accept(this), (Opa) ctx.opa().accept(this));
     }
 
     @Override
     public Node visitOpaPlus(WhileLanguageParser.OpaPlusContext ctx) {
-        return super.visitOpaPlus(ctx);
+        Position pos = this.makePos(ctx);
+        return new OpaValue(pos, "+");
     }
 
     @Override
     public Node visitOpaMinus(WhileLanguageParser.OpaMinusContext ctx) {
-        return super.visitOpaMinus(ctx);
+        Position pos = this.makePos(ctx);
+        return new OpaValue(pos, "-");
     }
 
     @Override
     public Node visitOpaMultiplication(WhileLanguageParser.OpaMultiplicationContext ctx) {
-        return super.visitOpaMultiplication(ctx);
+        Position pos = this.makePos(ctx);
+        return new OpaValue(pos, "*");
     }
 
     @Override
     public Node visitOpaDivision(WhileLanguageParser.OpaDivisionContext ctx) {
-        return super.visitOpaDivision(ctx);
+        Position pos = this.makePos(ctx);
+        return new OpaValue(pos, "/");
     }
 
     @Override
     public Node visitBexpressionTrue(WhileLanguageParser.BexpressionTrueContext ctx) {
-
-        return super.visitBexpressionTrue(ctx);
+        Position pos = this.makePos(ctx);
+        return new BexpressionConst(pos, true);
     }
 
     @Override
     public Node visitBexpressionFalse(WhileLanguageParser.BexpressionFalseContext ctx) {
-        return super.visitBexpressionFalse(ctx);
+        Position pos = this.makePos(ctx);
+        return new BexpressionConst(pos, false);
     }
 
     @Override
     public Node visitBexpressionAexpressionOprAexpression(WhileLanguageParser.BexpressionAexpressionOprAexpressionContext ctx) {
-        return super.visitBexpressionAexpressionOprAexpression(ctx);
+        Position pos = this.makePos(ctx);
+        return new BexpressionAexpressionOprAexpression(pos, (Aexpression) ctx.aexpression(0).accept(this), (Aexpression) ctx.aexpression(1).accept(this), (Opr) ctx.opr().accept(this));
     }
 
     @Override
     public Node visitBexpressionNot(WhileLanguageParser.BexpressionNotContext ctx) {
-        return super.visitBexpressionNot(ctx);
+        Position pos = this.makePos(ctx);
+        return new BexpressionNot(pos, (Bexpression) ctx.bexpression().accept(this));
     }
 
     @Override
     public Node visitBexpressionParenthesis(WhileLanguageParser.BexpressionParenthesisContext ctx) {
-        return super.visitBexpressionParenthesis(ctx);
+        Position pos = this.makePos(ctx);
+        return new BexpressionParenthesis(pos, (Bexpression) ctx.bexpression().accept(this));
     }
 
     @Override
     public Node visitOprLower(WhileLanguageParser.OprLowerContext ctx) {
-        return super.visitOprLower(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, "<");
     }
 
     @Override
     public Node visitOprLowerOrEqual(WhileLanguageParser.OprLowerOrEqualContext ctx) {
-        return super.visitOprLowerOrEqual(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, "<=");
     }
 
     @Override
     public Node visitOprGreater(WhileLanguageParser.OprGreaterContext ctx) {
-        return super.visitOprGreater(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, ">");
     }
 
     @Override
     public Node visitOprGreaterOrEqual(WhileLanguageParser.OprGreaterOrEqualContext ctx) {
-        return super.visitOprGreaterOrEqual(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, ">=");
     }
 
     @Override
     public Node visitOprEqual(WhileLanguageParser.OprEqualContext ctx) {
-        return super.visitOprEqual(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, "==");
     }
 
     @Override
     public Node visitOprDifferent(WhileLanguageParser.OprDifferentContext ctx) {
-        return super.visitOprDifferent(ctx);
+        Position pos = this.makePos(ctx);
+        return new OprValue(pos, "!=");
     }
 
     @Override

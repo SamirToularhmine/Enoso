@@ -9,4 +9,7 @@ public interface VisitorOpr<T> {
     T visit(OprLower oprLower);
     T visit(OprLowerOrEqual orEqual);
 
+
+    T visit(OprValue oprValue);
+
 }
