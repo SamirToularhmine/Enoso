@@ -1,6 +1,5 @@
-// Generated from E:/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
+// Generated from C:/Users/ionas/Desktop/IONAS/Cours_fac/M2/S1/Analyse_Statique/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
 package parser;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -233,6 +232,18 @@ public interface WhileLanguageListener extends ParseTreeListener {
 	 */
 	void exitAexpressionIdentifier(WhileLanguageParser.AexpressionIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code AexpressionNewArray}
+	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAexpressionNewArray(WhileLanguageParser.AexpressionNewArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AexpressionNewArray}
+	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAexpressionNewArray(WhileLanguageParser.AexpressionNewArrayContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AexpressionConstant}
 	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
 	 * @param ctx the parse tree
@@ -256,18 +267,6 @@ public interface WhileLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAexpressionNeg(WhileLanguageParser.AexpressionNegContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AexpressionNew}
-	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AexpressionNew}
-	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AexpressionBinary}
 	 * labeled alternative in {@link WhileLanguageParser#aexpression}.

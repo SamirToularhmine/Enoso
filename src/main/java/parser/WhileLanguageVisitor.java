@@ -1,4 +1,4 @@
-// Generated from E:/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
+// Generated from C:/Users/ionas/Desktop/IONAS/Cours_fac/M2/S1/Analyse_Statique/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
 package parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -143,6 +143,13 @@ public interface WhileLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAexpressionIdentifier(WhileLanguageParser.AexpressionIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code AexpressionNewArray}
+	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAexpressionNewArray(WhileLanguageParser.AexpressionNewArrayContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code AexpressionConstant}
 	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
 	 * @param ctx the parse tree
@@ -156,13 +163,6 @@ public interface WhileLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAexpressionNeg(WhileLanguageParser.AexpressionNegContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code AexpressionNew}
-	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AexpressionBinary}
 	 * labeled alternative in {@link WhileLanguageParser#aexpression}.
