@@ -39,16 +39,19 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         if(ctx.Identifier() != null){
             programName = ctx.Identifier().getSymbol().getText();
         }
-        List<Declaration> declarationList = new ArrayList<>();
+        List<Declaration> declarationList = new ArrayList<>(); // La déclaration des procs (avant le begin)
         for (int i = 0; i < ctx.declaration().size(); i++){
             declarationList.add((Declaration) ctx.declaration(i).accept(this));
         }
-        List<DecVariable> decVariableList = new ArrayList<>();
-//        for (int i = 0; i < ctx.lDeclVariables().dec; i++){
-//            declarationList.add((Declaration) ctx.declaration(i).accept(this));
-//        }
-//        Program program = new Program();
-        return null;
+        List<DecVariable> decVariableList = new ArrayList<>(); // Déclaration des variables
+        decVariableList.add((DecVariable) ctx.lDeclVariables().declVariables().accept(this));
+        for(int i = 0; i < ctx.lDeclVariables().lDeclVariables().size(); i++){
+            DecVariable decVariable = (DecVariable) ctx.lDeclVariables().lDeclVariables(i).accept(this);
+            decVariableList.add(decVariable);
+        }
+
+        Program program = new Program(this.makePos(ctx),programName, declarationList, decVariableList, null);
+        return program;
     }
 
     @Override
@@ -68,7 +71,13 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitDeclVariables(WhileLanguageParser.DeclVariablesContext ctx) {
-        return super.visitDeclVariables(ctx);
+        Type type = (Type) ctx.type().accept(this);
+
+        List<String> identifiers = new ArrayList<>();
+        for(int i = 0; i < ctx.lIdentifier().Identifier().size(); i++){
+            identifiers.add(ctx.lIdentifier().Identifier(i).getSymbol().getText());
+        }
+        return new DecVariable(this.makePos(ctx), type, identifiers);
     }
 
     @Override

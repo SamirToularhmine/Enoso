@@ -10,7 +10,8 @@ public class Program extends Node{
     private List<DecVariable> lDeclVariables;
     private List<Statement> statements;
 
-    public Program(String programName, List<Declaration> declarationList, List<DecVariable> lDeclVariables, List<Statement> statements) {
+    public Program(Position position,String programName, List<Declaration> declarationList, List<DecVariable> lDeclVariables, List<Statement> statements) {
+        this.position = position;
         this.programName = programName;
         this.declarationList = declarationList;
         this.lDeclVariables = lDeclVariables;
