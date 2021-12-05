@@ -12,4 +12,7 @@ public interface Visitor<T> extends VisitorBlock<T>, VisitorStatement<T>, Visito
         VisitorOpa<T>, VisitorBexpression<T>, VisitorOpr<T> {
     T visit(Program program);
 
+    T visit(DecVariable decVariable);
+
+    T visit(Declaration declaration);
 }

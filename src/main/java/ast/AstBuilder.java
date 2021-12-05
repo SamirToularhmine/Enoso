@@ -15,9 +15,12 @@ import ast.type.Type;
 import ast.type.TypeTable;
 import ast.type.TypeType;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import parser.WhileLanguageBaseVisitor;
 import parser.WhileLanguageParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
@@ -26,9 +29,26 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         return new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
     }
 
+    private String getOpString(TerminalNode terminalNode){
+        return terminalNode.getSymbol().getText();
+    }
+
     @Override
     public Node visitProgram(WhileLanguageParser.ProgramContext ctx) {
-        return super.visitProgram(ctx);
+        String programName = "";
+        if(ctx.Identifier() != null){
+            programName = ctx.Identifier().getSymbol().getText();
+        }
+        List<Declaration> declarationList = new ArrayList<>();
+        for (int i = 0; i < ctx.declaration().size(); i++){
+            declarationList.add((Declaration) ctx.declaration(i).accept(this));
+        }
+        List<DecVariable> decVariableList = new ArrayList<>();
+//        for (int i = 0; i < ctx.lDeclVariables().dec; i++){
+//            declarationList.add((Declaration) ctx.declaration(i).accept(this));
+//        }
+//        Program program = new Program();
+        return null;
     }
 
     @Override
@@ -59,13 +79,16 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitTypeType(WhileLanguageParser.TypeTypeContext ctx) {
         Position position = this.makePos(ctx);
-        return new TypeType(position);
+        String value = ctx.Type().getSymbol().getText();
+        return new TypeType(position, value);
     }
 
     @Override
     public Node visitTypeTable(WhileLanguageParser.TypeTableContext ctx) {
         Position position = this.makePos(ctx);
-        return new TypeTable(position);
+        //A vérifier todo
+        TypeType type = (TypeType) ctx.Table().getChild(0).accept(this);
+        return new TypeTable(position, type);
     }
 
     @Override
@@ -105,7 +128,7 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitStatementWhile(WhileLanguageParser.StatementWhileContext ctx) {
         Position pos = this.makePos(ctx);
-        return new StatementWhile(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.bexpression().accept(this));
+        return new StatementWhile(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.block().accept(this));
     }
 
     @Override
@@ -133,7 +156,7 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitAexpressionIdentifier(WhileLanguageParser.AexpressionIdentifierContext ctx) {
         Position pos = this.makePos(ctx);
-        return new AexpressionIdentifier(pos, ctx.Identifier().accept(this).toString() );
+        return new AexpressionIdentifier(pos, ctx.Identifier().getSymbol().getText() );
     }
 
     @Override
@@ -163,25 +186,25 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitOpaPlus(WhileLanguageParser.OpaPlusContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OpaValue(pos, "+");
+        return new OpaValue(pos, this.getOpString(ctx.Plus()));
     }
 
     @Override
     public Node visitOpaMinus(WhileLanguageParser.OpaMinusContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OpaValue(pos, "-");
+        return new OpaValue(pos, this.getOpString(ctx.Minus()));
     }
 
     @Override
     public Node visitOpaMultiplication(WhileLanguageParser.OpaMultiplicationContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OpaValue(pos, "*");
+        return new OpaValue(pos, this.getOpString(ctx.Multiplication()));
     }
 
     @Override
     public Node visitOpaDivision(WhileLanguageParser.OpaDivisionContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OpaValue(pos, "/");
+        return new OpaValue(pos, this.getOpString(ctx.Division()));
     }
 
     @Override
@@ -217,37 +240,37 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitOprLower(WhileLanguageParser.OprLowerContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, "<");
+        return new OprValue(pos, this.getOpString(ctx.Lower()));
     }
 
     @Override
     public Node visitOprLowerOrEqual(WhileLanguageParser.OprLowerOrEqualContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, "<=");
+        return new OprValue(pos, this.getOpString(ctx.LowerOrEqual()));
     }
 
     @Override
     public Node visitOprGreater(WhileLanguageParser.OprGreaterContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, ">");
+        return new OprValue(pos, this.getOpString(ctx.Greater()));
     }
 
     @Override
     public Node visitOprGreaterOrEqual(WhileLanguageParser.OprGreaterOrEqualContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, ">=");
+        return new OprValue(pos, this.getOpString(ctx.GreaterOrEqual()));
     }
 
     @Override
     public Node visitOprEqual(WhileLanguageParser.OprEqualContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, "==");
+        return new OprValue(pos, this.getOpString(ctx.Equal()));
     }
 
     @Override
     public Node visitOprDifferent(WhileLanguageParser.OprDifferentContext ctx) {
         Position pos = this.makePos(ctx);
-        return new OprValue(pos, "!=");
+        return new OprValue(pos, this.getOpString(ctx.Different()));
     }
 
     @Override
