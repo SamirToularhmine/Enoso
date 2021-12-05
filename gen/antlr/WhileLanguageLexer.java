@@ -1,5 +1,5 @@
 // Generated from E:/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
-package parser;
+package antlr;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

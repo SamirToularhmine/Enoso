@@ -1,6 +1,8 @@
 package ast;
 
 
+import ast.FunctionDeclaration.Arguments;
+import ast.FunctionDeclaration.Declaration;
 import ast.aexpression.*;
 import ast.bexpression.*;
 import ast.block.Block;
@@ -15,7 +17,7 @@ import ast.type.Type;
 import ast.type.TypeTable;
 import ast.type.TypeType;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import parser.WhileLanguageBaseVisitor;
 import parser.WhileLanguageParser;
@@ -33,6 +35,54 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         return terminalNode.getSymbol().getText();
     }
 
+    private List<Aexpression> getAllAexpression(WhileLanguageParser.LAexpressionContext ctx) {
+        List<Aexpression> res = new ArrayList<>();
+        for(int i = 0; i < ctx.aexpression().size(); i++){
+            res.add((Aexpression) ctx.aexpression(i).accept(this));
+        }
+
+        return res;
+    }
+
+    private List<Arguments> getAllArgs(WhileLanguageParser.LDeclIdentContext lDeclIdent) {
+        List<Arguments> res = new ArrayList<>();
+        for(int i = 0; i < lDeclIdent.Identifier().size(); i++){
+            res.add(new Arguments((Type)lDeclIdent.type(i).getRuleContext().accept(this),this.getOpString(lDeclIdent.Identifier(i))));
+        }
+        return res;
+    }
+
+    private List<DecVariable> getAllDeclaration(WhileLanguageParser.LDeclVariablesContext lDeclVariables) {
+        List<DecVariable> res = new ArrayList<>();
+        res.add((DecVariable) lDeclVariables.declVariables().accept(this));
+        if(lDeclVariables.lDeclVariables().size() == 0){
+            return res;
+        }else{
+            List<DecVariable> enfant = new ArrayList<>();
+            for(int i = 0; i < lDeclVariables.lDeclVariables().size(); i++){
+                enfant.addAll(getAllDeclaration(lDeclVariables.lDeclVariables(i)));
+            }
+            res.addAll(enfant);
+        }
+        return res;
+    }
+
+    private List<Statement> getAllStatments(WhileLanguageParser.StatementsContext statements) {
+        List<Statement> res = new ArrayList<>();
+        res.add((Statement) statements.statement().accept(this));
+        if(statements.statements().size() == 0){
+            return res;
+        }else{
+            List<Statement> enfant = new ArrayList<>();
+            for(int i = 0; i < statements.statements().size(); i++){
+                enfant.addAll(getAllStatments(statements.statements(i)));
+            }
+            res.addAll(enfant);
+        }
+        return res;
+    }
+
+
     @Override
     public Node visitProgram(WhileLanguageParser.ProgramContext ctx) {
         String programName = "";
@@ -43,26 +93,23 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         for (int i = 0; i < ctx.declaration().size(); i++){
             declarationList.add((Declaration) ctx.declaration(i).accept(this));
         }
-        List<DecVariable> decVariableList = new ArrayList<>(); // Déclaration des variables
-        decVariableList.add((DecVariable) ctx.lDeclVariables().declVariables().accept(this));
-        for(int i = 0; i < ctx.lDeclVariables().lDeclVariables().size(); i++){
-            DecVariable decVariable = (DecVariable) ctx.lDeclVariables().lDeclVariables(i).accept(this);
-            decVariableList.add(decVariable);
-        }
+        List<DecVariable> dec = this.getAllDeclaration(ctx.lDeclVariables());
 
-        Program program = new Program(this.makePos(ctx),programName, declarationList, decVariableList, null);
+        List<Statement> statements = this.getAllStatments(ctx.statements());
+
+        Program program = new Program(this.makePos(ctx),programName, declarationList, dec, statements);
         return program;
     }
 
-    @Override
-    public Node visitDeclaration(WhileLanguageParser.DeclarationContext ctx) {
-        return super.visitDeclaration(ctx);
-    }
 
     @Override
-    public Node visitLDeclIdent(WhileLanguageParser.LDeclIdentContext ctx) {
-        return super.visitLDeclIdent(ctx);
+    public Node visitDeclaration(WhileLanguageParser.DeclarationContext ctx) {
+        List<Arguments> arguments = this.getAllArgs(ctx.lDeclIdent());
+        List<Statement> statements = this.getAllStatments(ctx.statements());
+        Declaration declaration = new Declaration(this.makePos(ctx), this.getOpString(ctx.Identifier(0)), arguments, new Pair<>(this.getOpString(ctx.Identifier(1)), (Type)ctx.type().accept(this)), statements);
+        return declaration;
     }
+
 
     @Override
     public Node visitLDeclVariables(WhileLanguageParser.LDeclVariablesContext ctx) {
@@ -92,11 +139,11 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
         return new TypeType(position, value);
     }
 
+
     @Override
     public Node visitTypeTable(WhileLanguageParser.TypeTableContext ctx) {
         Position position = this.makePos(ctx);
-        //A vérifier todo
-        TypeType type = (TypeType) ctx.Table().getChild(0).accept(this);
+        TypeType type = new TypeType(position, ctx.Type().getSymbol().getText());
         return new TypeTable(position, type);
     }
 
@@ -108,7 +155,8 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitBlockWithinParenthesis(WhileLanguageParser.BlockWithinParenthesisContext ctx) {
-        return super.visitBlockWithinParenthesis(ctx);
+        List<Statement> statements = getAllStatments(ctx.statements());
+        return new BlockWithinParenthesis(this.makePos(ctx), statements);
     }
 
     @Override
@@ -118,6 +166,7 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitStatementSkip(WhileLanguageParser.StatementSkipContext ctx) {
+
         Position pos = this.makePos(ctx);
         return new StatementSkip(pos);
     }
@@ -125,6 +174,7 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitStatementAffectation(WhileLanguageParser.StatementAffectationContext ctx) {
         Position pos = this.makePos(ctx);
+
         return new StatementAffectation(pos, ctx.Identifier().getText(), (Aexpression) ctx.aexpression().accept(this));
     }
 
@@ -142,8 +192,10 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
 
     @Override
     public Node visitStatementCall(WhileLanguageParser.StatementCallContext ctx) {
-        return super.visitStatementCall(ctx);
+        List<Aexpression> aexpressions = getAllAexpression(ctx.lAexpression());
+        return new StatementCall(this.makePos(ctx), getOpString(ctx.Identifier()), aexpressions);
     }
+
 
     @Override
     public Node visitLAexpression(WhileLanguageParser.LAexpressionContext ctx) {
@@ -169,9 +221,9 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitAexpressionUnary(WhileLanguageParser.AexpressionUnaryContext ctx) {
+    public Node visitAexpressionNeg(WhileLanguageParser.AexpressionNegContext ctx) {
         Position pos = this.makePos(ctx);
-        return super.visitAexpressionUnary(ctx);
+        return super.visitAexpressionNeg(ctx);
     }
 
     @Override
@@ -183,7 +235,8 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx) {
         Position pos = this.makePos(ctx);
-        return new AexpressionNew(pos,(Type) ctx.Type().accept(this), (Aexpression) ctx.aexpression().accept(this) );
+        TypeType type = new TypeType(pos, ctx.Type().getSymbol().getText());
+        return new AexpressionNew(pos, type, (Aexpression) ctx.aexpression().accept(this) );
     }
 
     @Override

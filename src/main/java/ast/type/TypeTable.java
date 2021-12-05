@@ -5,19 +5,19 @@ import ast.Visitor;
 
 public class TypeTable extends Type{
 
-    private TypeType type;
+    private Type type;
 
-    public TypeTable(Position position, TypeType type){
+    public TypeTable(Position position, Type type){
         this.type = type;
         this.position = position;
     }
 
 
-    public TypeType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(TypeType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

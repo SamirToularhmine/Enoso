@@ -7,7 +7,7 @@ lDeclVariables : declVariables lDeclVariables*;
 declVariables : type lIdentifier Semicolon ;
 lIdentifier : Identifier (Coma Identifier)*;
 type : Type                                                                    #TypeType
-        | Table                                                                #TypeTable
+        | Type OpeningBracket ClosingBracket                                   #TypeTable
         ;
 block : statement                                                              #BlockStatement
         | OpeningParenthesis statements ClosingParenthesis                     #BlockWithinParenthesis
@@ -97,7 +97,6 @@ While : 'while';
 Do : 'do';
 
 Type : Boolean | Int ;
-Table : Type OpeningBracket ClosingBracket ;
 
 Boolean : 'boolean';
 Int : 'int';

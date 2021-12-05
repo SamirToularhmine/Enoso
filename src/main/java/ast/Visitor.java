@@ -1,5 +1,6 @@
 package ast;
 
+import ast.FunctionDeclaration.Declaration;
 import ast.aexpression.VisitorAexpression;
 import ast.bexpression.VisitorBexpression;
 import ast.block.VisitorBlock;

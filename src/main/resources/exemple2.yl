@@ -2,7 +2,8 @@ program p2
 begin
 int x, y, z;
 boolean p, i;
-boolean q;
+int u;
+boolean o;
 y := x; z := 1;
 
 while (y > 1) do (

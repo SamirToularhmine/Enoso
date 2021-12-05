@@ -1,5 +1,6 @@
 package ast;
 
+import ast.FunctionDeclaration.Declaration;
 import ast.statement.Statement;
 
 import java.util.List;
