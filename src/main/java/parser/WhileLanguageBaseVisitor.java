@@ -1,6 +1,5 @@
-// Generated from E:/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
+// Generated from C:/Users/ionas/Desktop/IONAS/Cours_fac/M2/S1/Analyse_Statique/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
 package parser;
-
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -158,6 +157,13 @@ public class WhileLanguageBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAexpressionNewArray(WhileLanguageParser.AexpressionNewArrayContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAexpressionConstant(WhileLanguageParser.AexpressionConstantContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -166,13 +172,6 @@ public class WhileLanguageBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAexpressionNeg(WhileLanguageParser.AexpressionNegContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitAexpressionNew(WhileLanguageParser.AexpressionNewContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
