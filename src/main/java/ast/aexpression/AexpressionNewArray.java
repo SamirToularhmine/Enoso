@@ -4,11 +4,11 @@ import ast.Position;
 import ast.Visitor;
 import ast.type.Type;
 
-public class AexpressionNew extends Aexpression {
+public class AexpressionNewArray extends Aexpression {
     private Type type;
     private Aexpression value;
 
-    public AexpressionNew(Position position, Type type, Aexpression value) {
+    public AexpressionNewArray(Position position, Type type, Aexpression value) {
         this.position = position;
         this.type = type;
         this.value = value;

@@ -1,4 +1,6 @@
 import ast.AstBuilder;
+import ast.Visitor;
+import ast.VisitorPrint;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -66,6 +68,8 @@ public class Main {
         ParseTree parseTree = parse(inputStream);
         ast.Program program = buildAst(parseTree);
         System.out.println(program);
+        VisitorPrint visitorPrint = new VisitorPrint();
+        System.out.print(program.accept(visitorPrint));
         exitWithCode(ErrorCode.SUCCESS);
     }
 }

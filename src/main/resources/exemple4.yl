@@ -2,8 +2,7 @@ program p4
 begin
 int x, y;
 int[] t;
-x := 0; y := 0;
-t := new int[10];
+x := 0; y := 0; t := new int[10];
 while (x < 10) do (
     y := y + t[x]; x := x+1
 )

@@ -236,7 +236,7 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     public Node visitAexpressionNewArray(WhileLanguageParser.AexpressionNewArrayContext ctx) {
         Position pos = this.makePos(ctx);
         TypeType type = new TypeType(pos, ctx.Type().getSymbol().getText());
-        return new AexpressionNew(pos, type, (Aexpression) ctx.aexpression().accept(this) );
+        return new AexpressionNewArray(pos, type, (Aexpression) ctx.aexpression().accept(this) );
     }
 
     @Override

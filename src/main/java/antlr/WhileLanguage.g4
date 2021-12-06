@@ -1,7 +1,7 @@
 grammar WhileLanguage;
 
 program : Program Identifier? declaration* Begin lDeclVariables statements End;
-declaration : Proc Identifier OpeningParenthesis lDeclIdent (Coma Res type Identifier)ClosingParenthesis Begin statements End;
+declaration : Proc Identifier OpeningParenthesis lDeclIdent (Coma Res type Identifier)? ClosingParenthesis Begin statements End;
 lDeclIdent : type Identifier (Coma type Identifier)*;
 lDeclVariables : declVariables lDeclVariables*;
 declVariables : type lIdentifier Semicolon ;

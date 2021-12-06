@@ -5,7 +5,7 @@ public interface VisitorAexpression<T> {
     T visit(AexpressionBinary aexpressionBinary);
     T visit(AexpressionConstant aexpressionConstant);
     T visit(AexpressionIdentifier aexpressionIdentifier);
-    T visit(AexpressionNew aexpressionNew);
+    T visit(AexpressionNewArray aexpressionNewArray);
     T visit(AexpressionParenthesis aexpressionParenthesis);
     T visit(AexpressionNeg aexpressionUnary);
 

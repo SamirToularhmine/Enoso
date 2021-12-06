@@ -23,4 +23,6 @@ public class BexpressionConst extends Bexpression{
         public void setValue(boolean value) {
                 this.value = value;
         }
+
+
 }
