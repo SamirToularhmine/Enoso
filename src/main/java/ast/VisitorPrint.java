@@ -15,6 +15,8 @@ import ast.statement.*;
 import ast.type.TypeTable;
 import ast.type.TypeType;
 
+import java.util.List;
+
 public class VisitorPrint implements Visitor<String> {
     @Override
     public String visit(Program program) {
@@ -22,17 +24,22 @@ public class VisitorPrint implements Visitor<String> {
         if (program.getProgramName() != null){
             res.append(program.getProgramName());
         }
+        res.append("\n");
         for (Declaration declaration : program.getDeclarationList()) {
             res.append((String) declaration.accept(this));
         }
-        res.append("\nbegin \n");
+        res.append("begin \n");
         for (DecVariable getlDeclVariable : program.getlDeclVariables()) {
             res.append((String) getlDeclVariable.accept(this));
         }
-        for (Statement statement : program.getStatements()) {
+        List<Statement> statements = program.getStatements();
+        for (int i = 0; i < statements.size(); i++) {
+            Statement statement = statements.get(i);
             res.append((String) statement.accept(this));
+            if (i != statements.size()-1){
+                res.append(";\n");
+            }
         }
-        res.deleteCharAt(res.length()-2);
         res.append("\nend");
         return res.toString();
     }
@@ -54,15 +61,15 @@ public class VisitorPrint implements Visitor<String> {
         StringBuilder str = new StringBuilder("proc " + declaration.getProcName() + "(");
         for (int i = 0; i < declaration.getArguments().size(); i++) {
             Arguments argument = declaration.getArguments().get(i);
-            str.append((String) argument.getType().accept(this) + " " + argument.getIdentifier());
+            str.append(argument.getType().accept(this) + " " + argument.getIdentifier());
             if (i != declaration.getArguments().size()-1){
                 str.append(", ");
             }
         }
         if (declaration.getReturnType() != null){
-            str.append(", " + (String) declaration.getReturnType().b.accept(this) + " " + declaration.getReturnType().a);
+            str.append(", res " + (String) declaration.getReturnType().b.accept(this) + " " + declaration.getReturnType().a);
         }
-        str.append(" )\nbegin\n");
+        str.append(")\nbegin\n");
 
         for (int i = 0; i < declaration.getBody().size(); i++) {
             str.append(declaration.getBody().get(i).accept(this));
@@ -72,7 +79,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(AexpressionArray aexpressionArray) {
-        return aexpressionArray.getIdentifier() + " [" + aexpressionArray.getIndex().accept(this) + "]";
+        return aexpressionArray.getIdentifier() + "[" + aexpressionArray.getIndex().accept(this) + "]";
     }
 
     @Override
@@ -92,7 +99,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(AexpressionNewArray aexpressionNewArray) {
-        return "new " + aexpressionNewArray.getType().accept(this) + " [" + aexpressionNewArray.getValue().accept(this)+ "]";
+        return "new " + aexpressionNewArray.getType().accept(this) + "[" + aexpressionNewArray.getValue().accept(this)+ "]";
     }
 
     @Override
@@ -107,7 +114,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(BexpressionAexpressionOprAexpression bexpressionAexpressionOprAexpression) {
-        return (String) bexpressionAexpressionOprAexpression.getLeft().accept(this) + " " + bexpressionAexpressionOprAexpression.getOpr().accept(this) + " " + bexpressionAexpressionOprAexpression.getRight().accept(this);
+        return (String) bexpressionAexpressionOprAexpression.getLeft().accept(this) + bexpressionAexpressionOprAexpression.getOpr().accept(this) + bexpressionAexpressionOprAexpression.getRight().accept(this);
     }
 
     @Override
@@ -127,7 +134,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(BlockStatement blockStatement) {
-        return (String) blockStatement.getStatement().accept(this);
+        return (String) blockStatement.getStatement().accept(this) + "\n";
     }
 
     @Override
@@ -135,41 +142,49 @@ public class VisitorPrint implements Visitor<String> {
         StringBuilder str = new StringBuilder("(\n");
         for (int i = 0; i < blockWithinParenthesis.getStatements().size(); i++) {
             str.append(blockWithinParenthesis.getStatements().get(i).accept(this));
+            if(i != blockWithinParenthesis.getStatements().size() -1){
+                str.append("; ");
+            }
         }
-        return str.append("\n);").toString();
+        return str.append("\n)").toString();
     }
 
     @Override
     public String visit(OpaValue opaValue) {
-        return opaValue.getCaracter();
+        return " " +opaValue.getCaracter() + " ";
     }
 
     @Override
     public String visit(OprValue oprValue) {
-        return oprValue.getCaracter();
+        return " " + oprValue.getCaracter() + " ";
     }
 
     @Override
     public String visit(StatementAffectation statementAffectation) {
-        return statementAffectation.getIdentifier() + " := " + statementAffectation.getAexpression().accept(this) + "; ";
+        return statementAffectation.getIdentifier() + " := " + statementAffectation.getAexpression().accept(this);
     }
 
     @Override
     public String visit(StatementCall statementCall) {
-        String parameters = "";
-        for (Aexpression parameter : statementCall.getParameters()) {
-            parameters = (String) parameter.accept(this);
+        StringBuilder str = new StringBuilder();
+        List<Aexpression> statementCallParameters = statementCall.getParameters();
+        for (int i = 0; i < statementCallParameters.size(); i++) {
+            Aexpression parameter = statementCallParameters.get(i);
+            str.append((String) parameter.accept(this));
+            if(i != statementCallParameters.size() -1){
+                str.append(", ");
+            }
         }
-        return "call " + statementCall.getIdentifier() + "(" + parameters + ")";
+        return "call " + statementCall.getIdentifier() + "(" + str + ")";
     }
 
     @Override
     public String visit(StatementIf statementIf) {
         String elseString = "";
         if (statementIf.getElseBlock()!= null){
-            elseString = " else \n " + statementIf.getElseBlock().accept(this);
+            elseString = "else " + statementIf.getElseBlock().accept(this);
         }
-        return "if " + statementIf.getCondition().accept(this)+ " then \n " + statementIf.getIfBlock().accept(this) + elseString;
+        return "if " + statementIf.getCondition().accept(this)+ " then " + statementIf.getIfBlock().accept(this) + elseString;
     }
 
     @Override
@@ -179,7 +194,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(StatementWhile statementWhile) {
-        return "\nwhile " +  statementWhile.getCondition().accept(this) + " do " + statementWhile.getBlock().accept(this) + "\n";
+        return "while " +  statementWhile.getCondition().accept(this) + " do " + statementWhile.getBlock().accept(this) + "";
     }
 
     @Override
