@@ -1,3 +1,5 @@
+import analyse.Flow;
+import analyse.State;
 import ast.AstBuilder;
 import ast.VisitorPrint;
 import org.antlr.v4.runtime.CharStream;
@@ -11,8 +13,55 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Main {
+
+    private static void testState(){
+        //Test des fonctions d'analyse
+
+        State etat1 = new State(null, 1, new ArrayList<>(), new ArrayList<>());
+        State etat2 = new State(null, 2, new ArrayList<>(), new ArrayList<>());
+        State etat3 = new State(null, 3, new ArrayList<>(), new ArrayList<>());
+        State etat4 = new State(null, 4, new ArrayList<>(), new ArrayList<>());
+        State etat5 = new State(null, 5, new ArrayList<>(), new ArrayList<>());
+        State etat6 = new State(null, 6, new ArrayList<>(), new ArrayList<>());
+        State etat7 = new State(null, 7, new ArrayList<>(), new ArrayList<>());
+        State sortie = new State(null, -1, new ArrayList<>(), new ArrayList<>());
+
+        etat1.setChildren(List.of(etat2));
+        etat1.setParents(List.of(etat2, sortie));
+        etat2.setParents(List.of(etat1));
+
+        etat2.setChildren(List.of(etat3, etat1, etat4));
+        etat3.setParents(List.of(etat2));
+
+        etat4.setParents(List.of(etat2));
+        etat4.setChildren(List.of(sortie, etat5));
+        etat3.setChildren(List.of(sortie));
+
+        etat5.setParents(List.of(etat4));
+        etat5.setChildren(List.of(sortie));
+
+        etat6.setParents(List.of(sortie));
+        etat6.setChildren(List.of(etat7));
+        etat7.setParents(List.of(etat6));
+        etat7.setChildren(List.of(sortie));
+
+
+        Flow flow = new Flow();
+        flow.setHead(List.of(etat1, etat6));
+        System.out.println(flow);
+        flow.reverseFlow();
+        System.out.println("After reverse \n");
+        System.out.println(flow);
+        flow.reverseFlow();
+        System.out.println("After reverse \n");
+        System.out.println(flow);
+    }
+
     private enum ErrorCode {
         SUCCESS,
         NO_FILE_NAME,
@@ -69,6 +118,9 @@ public class Main {
         System.out.println(program);
         VisitorPrint visitorPrint = new VisitorPrint();
         System.out.print(program.accept(visitorPrint));
+        testState();
         exitWithCode(ErrorCode.SUCCESS);
+
+
     }
 }
