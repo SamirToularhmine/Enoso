@@ -3,6 +3,8 @@ package ast.aexpression;
 import ast.Position;
 import ast.Visitor;
 
+import java.util.Objects;
+
 public class AexpressionArray extends Aexpression {
     private String identifier;
     private Aexpression index;
@@ -32,6 +34,15 @@ public class AexpressionArray extends Aexpression {
 
     public void setIndex(Aexpression index) {
         this.index = index;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AexpressionArray that = (AexpressionArray) o;
+        return Objects.equals(identifier, that.identifier) && Objects.equals(index, that.index);
     }
 
 }

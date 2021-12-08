@@ -4,6 +4,8 @@ import ast.Position;
 import ast.Visitor;
 import ast.opa.Opa;
 
+import java.util.Objects;
+
 public class AexpressionBinary extends Aexpression {
     private Aexpression left, right;
     private Opa operator;
@@ -42,5 +44,18 @@ public class AexpressionBinary extends Aexpression {
 
     public void setOperator(Opa operator) {
         this.operator = operator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AexpressionBinary that = (AexpressionBinary) o;
+        return left.equals(that.left) && right.equals(that.right) && operator.equals(that.operator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(left, right, operator);
     }
 }

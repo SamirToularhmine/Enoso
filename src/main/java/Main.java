@@ -1,5 +1,10 @@
+import analyse.Comparison;
+import analyse.Flow;
+import analyse.JoinType;
+import analyse.MonotoneFramework;
 import ast.AstBuilder;
 import ast.VisitorPrint;
+import ast.aexpression.Aexpression;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     private enum ErrorCode {
@@ -69,6 +76,10 @@ public class Main {
         System.out.println(program);
         VisitorPrint visitorPrint = new VisitorPrint();
         System.out.print(program.accept(visitorPrint));
+
+        Flow flow = new Flow();
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
+
         exitWithCode(ErrorCode.SUCCESS);
     }
 }

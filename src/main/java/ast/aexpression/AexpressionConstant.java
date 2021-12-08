@@ -3,6 +3,8 @@ package ast.aexpression;
 import ast.Position;
 import ast.Visitor;
 
+import java.util.Objects;
+
 public class AexpressionConstant extends Aexpression {
 
     private final int value;
@@ -19,5 +21,18 @@ public class AexpressionConstant extends Aexpression {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AexpressionConstant that = (AexpressionConstant) o;
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

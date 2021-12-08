@@ -4,6 +4,8 @@ import ast.Position;
 import ast.Visitor;
 import ast.type.Type;
 
+import java.util.Objects;
+
 public class AexpressionNewArray extends Aexpression {
     private Type type;
     private Aexpression value;
@@ -32,5 +34,18 @@ public class AexpressionNewArray extends Aexpression {
 
     public void setValue(Aexpression value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AexpressionNewArray that = (AexpressionNewArray) o;
+        return Objects.equals(type, that.type) && Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, value);
     }
 }
