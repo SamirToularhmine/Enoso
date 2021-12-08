@@ -117,6 +117,10 @@ public class Main {
         VisitorPrint visitorPrint = new VisitorPrint();
         System.out.print(program.accept(visitorPrint));
         testState();
+
+        Flow flow = new Flow(program);
+        System.out.println(flow);
+
         exitWithCode(ErrorCode.SUCCESS);
 
 
