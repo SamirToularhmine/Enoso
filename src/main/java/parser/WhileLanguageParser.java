@@ -1,13 +1,10 @@
-// Generated from C:/Users/ionas/Desktop/IONAS/Cours_fac/M2/S1/Analyse_Statique/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
+// Generated from C:/Users/ionas/Desktop/Cours/M2/S1/Analyse_Statique/Enoso/src/main/java/antlr\WhileLanguage.g4 by ANTLR 4.9.2
 package parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class WhileLanguageParser extends Parser {
@@ -130,14 +127,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterProgram(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitProgram(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
@@ -224,14 +213,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_declaration; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitDeclaration(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitDeclaration(this);
 			else return visitor.visitChildren(this);
@@ -241,6 +222,7 @@ public class WhileLanguageParser extends Parser {
 	public final DeclarationContext declaration() throws RecognitionException {
 		DeclarationContext _localctx = new DeclarationContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_declaration);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -252,23 +234,29 @@ public class WhileLanguageParser extends Parser {
 			match(OpeningParenthesis);
 			setState(50);
 			lDeclIdent();
-			{
-			setState(51);
-			match(Coma);
-			setState(52);
-			match(Res);
-			setState(53);
-			type();
-			setState(54);
-			match(Identifier);
-			}
 			setState(56);
-			match(ClosingParenthesis);
-			setState(57);
-			match(Begin);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Coma) {
+				{
+				setState(51);
+				match(Coma);
+				setState(52);
+				match(Res);
+				setState(53);
+				type();
+				setState(54);
+				match(Identifier);
+				}
+			}
+
 			setState(58);
-			statements();
+			match(ClosingParenthesis);
 			setState(59);
+			match(Begin);
+			setState(60);
+			statements();
+			setState(61);
 			match(End);
 			}
 		}
@@ -303,14 +291,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_lDeclIdent; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterLDeclIdent(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitLDeclIdent(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitLDeclIdent(this);
 			else return visitor.visitChildren(this);
@@ -324,29 +304,29 @@ public class WhileLanguageParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61);
+			setState(63);
 			type();
-			setState(62);
+			setState(64);
 			match(Identifier);
-			setState(69);
+			setState(71);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(63);
-					match(Coma);
-					setState(64);
-					type();
 					setState(65);
+					match(Coma);
+					setState(66);
+					type();
+					setState(67);
 					match(Identifier);
 					}
 					} 
 				}
-				setState(71);
+				setState(73);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			}
 			}
 		}
@@ -376,14 +356,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_lDeclVariables; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterLDeclVariables(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitLDeclVariables(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitLDeclVariables(this);
 			else return visitor.visitChildren(this);
@@ -397,23 +369,23 @@ public class WhileLanguageParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(72);
+			setState(74);
 			declVariables();
-			setState(76);
+			setState(78);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(73);
+					setState(75);
 					lDeclVariables();
 					}
 					} 
 				}
-				setState(78);
+				setState(80);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			}
 			}
 		}
@@ -441,14 +413,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_declVariables; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterDeclVariables(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitDeclVariables(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitDeclVariables(this);
 			else return visitor.visitChildren(this);
@@ -461,11 +425,11 @@ public class WhileLanguageParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79);
-			type();
-			setState(80);
-			lIdentifier();
 			setState(81);
+			type();
+			setState(82);
+			lIdentifier();
+			setState(83);
 			match(Semicolon);
 			}
 		}
@@ -494,14 +458,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_lIdentifier; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterLIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitLIdentifier(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitLIdentifier(this);
 			else return visitor.visitChildren(this);
@@ -515,21 +471,21 @@ public class WhileLanguageParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83);
+			setState(85);
 			match(Identifier);
-			setState(88);
+			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==Coma) {
 				{
 				{
-				setState(84);
+				setState(86);
 				match(Coma);
-				setState(85);
+				setState(87);
 				match(Identifier);
 				}
 				}
-				setState(90);
+				setState(92);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -563,14 +519,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingBracket() { return getToken(WhileLanguageParser.ClosingBracket, 0); }
 		public TypeTableContext(TypeContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterTypeTable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitTypeTable(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitTypeTable(this);
 			else return visitor.visitChildren(this);
@@ -579,14 +527,6 @@ public class WhileLanguageParser extends Parser {
 	public static class TypeTypeContext extends TypeContext {
 		public TerminalNode Type() { return getToken(WhileLanguageParser.Type, 0); }
 		public TypeTypeContext(TypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterTypeType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitTypeType(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitTypeType(this);
@@ -598,14 +538,14 @@ public class WhileLanguageParser extends Parser {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_type);
 		try {
-			setState(95);
+			setState(97);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				_localctx = new TypeTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(91);
+				setState(93);
 				match(Type);
 				}
 				break;
@@ -613,11 +553,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new TypeTableContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(92);
-				match(Type);
-				setState(93);
-				match(OpeningBracket);
 				setState(94);
+				match(Type);
+				setState(95);
+				match(OpeningBracket);
+				setState(96);
 				match(ClosingBracket);
 				}
 				break;
@@ -653,14 +593,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingParenthesis() { return getToken(WhileLanguageParser.ClosingParenthesis, 0); }
 		public BlockWithinParenthesisContext(BlockContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBlockWithinParenthesis(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBlockWithinParenthesis(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBlockWithinParenthesis(this);
 			else return visitor.visitChildren(this);
@@ -672,14 +604,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		public BlockStatementContext(BlockContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBlockStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBlockStatement(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBlockStatement(this);
 			else return visitor.visitChildren(this);
@@ -690,7 +614,7 @@ public class WhileLanguageParser extends Parser {
 		BlockContext _localctx = new BlockContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_block);
 		try {
-			setState(102);
+			setState(104);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Skip:
@@ -701,7 +625,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BlockStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(97);
+				setState(99);
 				statement();
 				}
 				break;
@@ -709,11 +633,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BlockWithinParenthesisContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(98);
-				match(OpeningParenthesis);
-				setState(99);
-				statements();
 				setState(100);
+				match(OpeningParenthesis);
+				setState(101);
+				statements();
+				setState(102);
 				match(ClosingParenthesis);
 				}
 				break;
@@ -751,14 +675,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_statements; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatements(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatements(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatements(this);
 			else return visitor.visitChildren(this);
@@ -772,25 +688,25 @@ public class WhileLanguageParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
+			setState(106);
 			statement();
-			setState(109);
+			setState(111);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(105);
+					setState(107);
 					match(Semicolon);
-					setState(106);
+					setState(108);
 					statements();
 					}
 					} 
 				}
-				setState(111);
+				setState(113);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			}
 			}
 		}
@@ -831,14 +747,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Else() { return getToken(WhileLanguageParser.Else, 0); }
 		public StatementIfContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatementIf(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatementIf(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatementIf(this);
 			else return visitor.visitChildren(this);
@@ -847,14 +755,6 @@ public class WhileLanguageParser extends Parser {
 	public static class StatementSkipContext extends StatementContext {
 		public TerminalNode Skip() { return getToken(WhileLanguageParser.Skip, 0); }
 		public StatementSkipContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatementSkip(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatementSkip(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatementSkip(this);
@@ -872,14 +772,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		public StatementWhileContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatementWhile(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatementWhile(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatementWhile(this);
 			else return visitor.visitChildren(this);
@@ -895,14 +787,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingParenthesis() { return getToken(WhileLanguageParser.ClosingParenthesis, 0); }
 		public StatementCallContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatementCall(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatementCall(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatementCall(this);
 			else return visitor.visitChildren(this);
@@ -916,14 +800,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		public StatementAffectationContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterStatementAffectation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitStatementAffectation(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitStatementAffectation(this);
 			else return visitor.visitChildren(this);
@@ -934,14 +810,14 @@ public class WhileLanguageParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_statement);
 		try {
-			setState(135);
+			setState(137);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Skip:
 				_localctx = new StatementSkipContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(112);
+				setState(114);
 				match(Skip);
 				}
 				break;
@@ -949,11 +825,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new StatementAffectationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(113);
-				match(Identifier);
-				setState(114);
-				match(Affectation);
 				setState(115);
+				match(Identifier);
+				setState(116);
+				match(Affectation);
+				setState(117);
 				aexpression(0);
 				}
 				break;
@@ -961,22 +837,22 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new StatementIfContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(116);
-				match(If);
-				setState(117);
-				bexpression();
 				setState(118);
-				match(Then);
+				match(If);
 				setState(119);
+				bexpression();
+				setState(120);
+				match(Then);
+				setState(121);
 				block();
-				setState(122);
+				setState(124);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 				case 1:
 					{
-					setState(120);
+					setState(122);
 					match(Else);
-					setState(121);
+					setState(123);
 					block();
 					}
 					break;
@@ -987,13 +863,13 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new StatementWhileContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(124);
-				match(While);
-				setState(125);
-				bexpression();
 				setState(126);
-				match(Do);
+				match(While);
 				setState(127);
+				bexpression();
+				setState(128);
+				match(Do);
+				setState(129);
 				block();
 				}
 				break;
@@ -1001,15 +877,15 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new StatementCallContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(129);
-				match(Call);
-				setState(130);
-				match(Identifier);
 				setState(131);
-				match(OpeningParenthesis);
+				match(Call);
 				setState(132);
-				lAexpression();
+				match(Identifier);
 				setState(133);
+				match(OpeningParenthesis);
+				setState(134);
+				lAexpression();
+				setState(135);
 				match(ClosingParenthesis);
 				}
 				break;
@@ -1044,14 +920,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_lAexpression; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterLAexpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitLAexpression(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitLAexpression(this);
 			else return visitor.visitChildren(this);
@@ -1065,21 +933,21 @@ public class WhileLanguageParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(137);
+			setState(139);
 			aexpression(0);
-			setState(142);
+			setState(144);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==Coma) {
 				{
 				{
-				setState(138);
+				setState(140);
 				match(Coma);
-				setState(139);
+				setState(141);
 				aexpression(0);
 				}
 				}
-				setState(144);
+				setState(146);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1116,14 +984,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingBracket() { return getToken(WhileLanguageParser.ClosingBracket, 0); }
 		public AexpressionArrayContext(AexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionArray(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionArray(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionArray(this);
 			else return visitor.visitChildren(this);
@@ -1137,14 +997,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingParenthesis() { return getToken(WhileLanguageParser.ClosingParenthesis, 0); }
 		public AexpressionParenthesisContext(AexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionParenthesis(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionParenthesis(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionParenthesis(this);
 			else return visitor.visitChildren(this);
@@ -1153,14 +1005,6 @@ public class WhileLanguageParser extends Parser {
 	public static class AexpressionIdentifierContext extends AexpressionContext {
 		public TerminalNode Identifier() { return getToken(WhileLanguageParser.Identifier, 0); }
 		public AexpressionIdentifierContext(AexpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionIdentifier(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionIdentifier(this);
@@ -1177,14 +1021,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingBracket() { return getToken(WhileLanguageParser.ClosingBracket, 0); }
 		public AexpressionNewArrayContext(AexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionNewArray(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionNewArray(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionNewArray(this);
 			else return visitor.visitChildren(this);
@@ -1195,14 +1031,6 @@ public class WhileLanguageParser extends Parser {
 			return getRuleContext(ConstantContext.class,0);
 		}
 		public AexpressionConstantContext(AexpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionConstant(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionConstant(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionConstant(this);
@@ -1215,14 +1043,6 @@ public class WhileLanguageParser extends Parser {
 			return getRuleContext(AexpressionContext.class,0);
 		}
 		public AexpressionNegContext(AexpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionNeg(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionNeg(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionNeg(this);
@@ -1240,14 +1060,6 @@ public class WhileLanguageParser extends Parser {
 			return getRuleContext(OpaContext.class,0);
 		}
 		public AexpressionBinaryContext(AexpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterAexpressionBinary(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitAexpressionBinary(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitAexpressionBinary(this);
@@ -1270,16 +1082,16 @@ public class WhileLanguageParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(165);
+			setState(167);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 			case 1:
 				{
 				_localctx = new AexpressionIdentifierContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(146);
+				setState(148);
 				match(Identifier);
 				}
 				break;
@@ -1288,7 +1100,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new AexpressionConstantContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(147);
+				setState(149);
 				constant();
 				}
 				break;
@@ -1297,9 +1109,9 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new AexpressionNegContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(148);
+				setState(150);
 				match(Minus);
-				setState(149);
+				setState(151);
 				aexpression(4);
 				}
 				break;
@@ -1308,11 +1120,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new AexpressionParenthesisContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(150);
-				match(OpeningParenthesis);
-				setState(151);
-				aexpression(0);
 				setState(152);
+				match(OpeningParenthesis);
+				setState(153);
+				aexpression(0);
+				setState(154);
 				match(ClosingParenthesis);
 				}
 				break;
@@ -1321,13 +1133,13 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new AexpressionArrayContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(154);
-				match(Identifier);
-				setState(155);
-				match(OpeningBracket);
 				setState(156);
-				aexpression(0);
+				match(Identifier);
 				setState(157);
+				match(OpeningBracket);
+				setState(158);
+				aexpression(0);
+				setState(159);
 				match(ClosingBracket);
 				}
 				break;
@@ -1336,23 +1148,23 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new AexpressionNewArrayContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(159);
-				match(New);
-				setState(160);
-				match(Type);
 				setState(161);
-				match(OpeningBracket);
+				match(New);
 				setState(162);
-				aexpression(0);
+				match(Type);
 				setState(163);
+				match(OpeningBracket);
+				setState(164);
+				aexpression(0);
+				setState(165);
 				match(ClosingBracket);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(173);
+			setState(175);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,13,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
@@ -1361,18 +1173,18 @@ public class WhileLanguageParser extends Parser {
 					{
 					_localctx = new AexpressionBinaryContext(new AexpressionContext(_parentctx, _parentState));
 					pushNewRecursionContext(_localctx, _startState, RULE_aexpression);
-					setState(167);
-					if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-					setState(168);
-					opa();
 					setState(169);
+					if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+					setState(170);
+					opa();
+					setState(171);
 					aexpression(6);
 					}
 					} 
 				}
-				setState(175);
+				setState(177);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,13,_ctx);
 			}
 			}
 		}
@@ -1402,14 +1214,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Multiplication() { return getToken(WhileLanguageParser.Multiplication, 0); }
 		public OpaMultiplicationContext(OpaContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOpaMultiplication(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOpaMultiplication(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOpaMultiplication(this);
 			else return visitor.visitChildren(this);
@@ -1418,14 +1222,6 @@ public class WhileLanguageParser extends Parser {
 	public static class OpaDivisionContext extends OpaContext {
 		public TerminalNode Division() { return getToken(WhileLanguageParser.Division, 0); }
 		public OpaDivisionContext(OpaContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOpaDivision(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOpaDivision(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOpaDivision(this);
@@ -1436,14 +1232,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Minus() { return getToken(WhileLanguageParser.Minus, 0); }
 		public OpaMinusContext(OpaContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOpaMinus(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOpaMinus(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOpaMinus(this);
 			else return visitor.visitChildren(this);
@@ -1452,14 +1240,6 @@ public class WhileLanguageParser extends Parser {
 	public static class OpaPlusContext extends OpaContext {
 		public TerminalNode Plus() { return getToken(WhileLanguageParser.Plus, 0); }
 		public OpaPlusContext(OpaContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOpaPlus(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOpaPlus(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOpaPlus(this);
@@ -1471,14 +1251,14 @@ public class WhileLanguageParser extends Parser {
 		OpaContext _localctx = new OpaContext(_ctx, getState());
 		enterRule(_localctx, 24, RULE_opa);
 		try {
-			setState(180);
+			setState(182);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Plus:
 				_localctx = new OpaPlusContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(176);
+				setState(178);
 				match(Plus);
 				}
 				break;
@@ -1486,7 +1266,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OpaMinusContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(177);
+				setState(179);
 				match(Minus);
 				}
 				break;
@@ -1494,7 +1274,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OpaMultiplicationContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(178);
+				setState(180);
 				match(Multiplication);
 				}
 				break;
@@ -1502,7 +1282,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OpaDivisionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(179);
+				setState(181);
 				match(Division);
 				}
 				break;
@@ -1536,14 +1316,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode True() { return getToken(WhileLanguageParser.True, 0); }
 		public BexpressionTrueContext(BexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBexpressionTrue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBexpressionTrue(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBexpressionTrue(this);
 			else return visitor.visitChildren(this);
@@ -1557,14 +1329,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode ClosingParenthesis() { return getToken(WhileLanguageParser.ClosingParenthesis, 0); }
 		public BexpressionParenthesisContext(BexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBexpressionParenthesis(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBexpressionParenthesis(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBexpressionParenthesis(this);
 			else return visitor.visitChildren(this);
@@ -1573,14 +1337,6 @@ public class WhileLanguageParser extends Parser {
 	public static class BexpressionFalseContext extends BexpressionContext {
 		public TerminalNode False() { return getToken(WhileLanguageParser.False, 0); }
 		public BexpressionFalseContext(BexpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBexpressionFalse(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBexpressionFalse(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBexpressionFalse(this);
@@ -1599,14 +1355,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		public BexpressionAexpressionOprAexpressionContext(BexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBexpressionAexpressionOprAexpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBexpressionAexpressionOprAexpression(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBexpressionAexpressionOprAexpression(this);
 			else return visitor.visitChildren(this);
@@ -1619,14 +1367,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		public BexpressionNotContext(BexpressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterBexpressionNot(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitBexpressionNot(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitBexpressionNot(this);
 			else return visitor.visitChildren(this);
@@ -1637,14 +1377,14 @@ public class WhileLanguageParser extends Parser {
 		BexpressionContext _localctx = new BexpressionContext(_ctx, getState());
 		enterRule(_localctx, 26, RULE_bexpression);
 		try {
-			setState(194);
+			setState(196);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
 			case 1:
 				_localctx = new BexpressionTrueContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(182);
+				setState(184);
 				match(True);
 				}
 				break;
@@ -1652,7 +1392,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BexpressionFalseContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(183);
+				setState(185);
 				match(False);
 				}
 				break;
@@ -1660,11 +1400,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BexpressionAexpressionOprAexpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(184);
-				aexpression(0);
-				setState(185);
-				opr();
 				setState(186);
+				aexpression(0);
+				setState(187);
+				opr();
+				setState(188);
 				aexpression(0);
 				}
 				break;
@@ -1672,9 +1412,9 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BexpressionNotContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(188);
+				setState(190);
 				match(Not);
-				setState(189);
+				setState(191);
 				bexpression();
 				}
 				break;
@@ -1682,11 +1422,11 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new BexpressionParenthesisContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(190);
-				match(OpeningParenthesis);
-				setState(191);
-				bexpression();
 				setState(192);
+				match(OpeningParenthesis);
+				setState(193);
+				bexpression();
+				setState(194);
 				match(ClosingParenthesis);
 				}
 				break;
@@ -1718,14 +1458,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Lower() { return getToken(WhileLanguageParser.Lower, 0); }
 		public OprLowerContext(OprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprLower(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprLower(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprLower(this);
 			else return visitor.visitChildren(this);
@@ -1734,14 +1466,6 @@ public class WhileLanguageParser extends Parser {
 	public static class OprEqualContext extends OprContext {
 		public TerminalNode Equal() { return getToken(WhileLanguageParser.Equal, 0); }
 		public OprEqualContext(OprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprEqual(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprEqual(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprEqual(this);
@@ -1752,14 +1476,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Different() { return getToken(WhileLanguageParser.Different, 0); }
 		public OprDifferentContext(OprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprDifferent(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprDifferent(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprDifferent(this);
 			else return visitor.visitChildren(this);
@@ -1768,14 +1484,6 @@ public class WhileLanguageParser extends Parser {
 	public static class OprGreaterOrEqualContext extends OprContext {
 		public TerminalNode GreaterOrEqual() { return getToken(WhileLanguageParser.GreaterOrEqual, 0); }
 		public OprGreaterOrEqualContext(OprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprGreaterOrEqual(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprGreaterOrEqual(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprGreaterOrEqual(this);
@@ -1786,14 +1494,6 @@ public class WhileLanguageParser extends Parser {
 		public TerminalNode Greater() { return getToken(WhileLanguageParser.Greater, 0); }
 		public OprGreaterContext(OprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprGreater(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprGreater(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprGreater(this);
 			else return visitor.visitChildren(this);
@@ -1802,14 +1502,6 @@ public class WhileLanguageParser extends Parser {
 	public static class OprLowerOrEqualContext extends OprContext {
 		public TerminalNode LowerOrEqual() { return getToken(WhileLanguageParser.LowerOrEqual, 0); }
 		public OprLowerOrEqualContext(OprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterOprLowerOrEqual(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitOprLowerOrEqual(this);
-		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitOprLowerOrEqual(this);
@@ -1821,14 +1513,14 @@ public class WhileLanguageParser extends Parser {
 		OprContext _localctx = new OprContext(_ctx, getState());
 		enterRule(_localctx, 28, RULE_opr);
 		try {
-			setState(202);
+			setState(204);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Lower:
 				_localctx = new OprLowerContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(196);
+				setState(198);
 				match(Lower);
 				}
 				break;
@@ -1836,7 +1528,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OprLowerOrEqualContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(197);
+				setState(199);
 				match(LowerOrEqual);
 				}
 				break;
@@ -1844,7 +1536,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OprGreaterContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(198);
+				setState(200);
 				match(Greater);
 				}
 				break;
@@ -1852,7 +1544,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OprGreaterOrEqualContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(199);
+				setState(201);
 				match(GreaterOrEqual);
 				}
 				break;
@@ -1860,7 +1552,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OprEqualContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(200);
+				setState(202);
 				match(Equal);
 				}
 				break;
@@ -1868,7 +1560,7 @@ public class WhileLanguageParser extends Parser {
 				_localctx = new OprDifferentContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(201);
+				setState(203);
 				match(Different);
 				}
 				break;
@@ -1895,14 +1587,6 @@ public class WhileLanguageParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).enterConstant(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof WhileLanguageListener ) ((WhileLanguageListener)listener).exitConstant(this);
-		}
-		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof WhileLanguageVisitor ) return ((WhileLanguageVisitor<? extends T>)visitor).visitConstant(this);
 			else return visitor.visitChildren(this);
@@ -1916,17 +1600,17 @@ public class WhileLanguageParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(205);
+			setState(207);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Minus) {
 				{
-				setState(204);
+				setState(206);
 				match(Minus);
 				}
 			}
 
-			setState(207);
+			setState(209);
 			match(Pos);
 			}
 		}
@@ -1957,73 +1641,74 @@ public class WhileLanguageParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u00d4\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u00d6\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2\5"+
 		"\2%\n\2\3\2\7\2(\n\2\f\2\16\2+\13\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\7\4"+
-		"F\n\4\f\4\16\4I\13\4\3\5\3\5\7\5M\n\5\f\5\16\5P\13\5\3\6\3\6\3\6\3\6\3"+
-		"\7\3\7\3\7\7\7Y\n\7\f\7\16\7\\\13\7\3\b\3\b\3\b\3\b\5\bb\n\b\3\t\3\t\3"+
-		"\t\3\t\3\t\5\ti\n\t\3\n\3\n\3\n\7\nn\n\n\f\n\16\nq\13\n\3\13\3\13\3\13"+
-		"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13}\n\13\3\13\3\13\3\13\3\13\3\13"+
-		"\3\13\3\13\3\13\3\13\3\13\3\13\5\13\u008a\n\13\3\f\3\f\3\f\7\f\u008f\n"+
-		"\f\f\f\16\f\u0092\13\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r"+
-		"\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r\u00a8\n\r\3\r\3\r\3\r\3\r\7\r\u00ae"+
-		"\n\r\f\r\16\r\u00b1\13\r\3\16\3\16\3\16\3\16\5\16\u00b7\n\16\3\17\3\17"+
-		"\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00c5\n\17\3\20"+
-		"\3\20\3\20\3\20\3\20\3\20\5\20\u00cd\n\20\3\21\5\21\u00d0\n\21\3\21\3"+
-		"\21\3\21\2\3\30\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\2\2\u00e4"+
-		"\2\"\3\2\2\2\4\61\3\2\2\2\6?\3\2\2\2\bJ\3\2\2\2\nQ\3\2\2\2\fU\3\2\2\2"+
-		"\16a\3\2\2\2\20h\3\2\2\2\22j\3\2\2\2\24\u0089\3\2\2\2\26\u008b\3\2\2\2"+
-		"\30\u00a7\3\2\2\2\32\u00b6\3\2\2\2\34\u00c4\3\2\2\2\36\u00cc\3\2\2\2 "+
-		"\u00cf\3\2\2\2\"$\7\32\2\2#%\7(\2\2$#\3\2\2\2$%\3\2\2\2%)\3\2\2\2&(\5"+
-		"\4\3\2\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*,\3\2\2\2+)\3\2\2\2,"+
-		"-\7\34\2\2-.\5\b\5\2./\5\22\n\2/\60\7\35\2\2\60\3\3\2\2\2\61\62\7\33\2"+
-		"\2\62\63\7(\2\2\63\64\7\23\2\2\64\65\5\6\4\2\65\66\7\27\2\2\66\67\7\36"+
-		"\2\2\678\5\16\b\289\7(\2\29:\3\2\2\2:;\7\24\2\2;<\7\34\2\2<=\5\22\n\2"+
-		"=>\7\35\2\2>\5\3\2\2\2?@\5\16\b\2@G\7(\2\2AB\7\27\2\2BC\5\16\b\2CD\7("+
-		"\2\2DF\3\2\2\2EA\3\2\2\2FI\3\2\2\2GE\3\2\2\2GH\3\2\2\2H\7\3\2\2\2IG\3"+
-		"\2\2\2JN\5\n\6\2KM\5\b\5\2LK\3\2\2\2MP\3\2\2\2NL\3\2\2\2NO\3\2\2\2O\t"+
-		"\3\2\2\2PN\3\2\2\2QR\5\16\b\2RS\5\f\7\2ST\7\30\2\2T\13\3\2\2\2UZ\7(\2"+
-		"\2VW\7\27\2\2WY\7(\2\2XV\3\2\2\2Y\\\3\2\2\2ZX\3\2\2\2Z[\3\2\2\2[\r\3\2"+
-		"\2\2\\Z\3\2\2\2]b\7%\2\2^_\7%\2\2_`\7\25\2\2`b\7\26\2\2a]\3\2\2\2a^\3"+
-		"\2\2\2b\17\3\2\2\2ci\5\24\13\2de\7\23\2\2ef\5\22\n\2fg\7\24\2\2gi\3\2"+
-		"\2\2hc\3\2\2\2hd\3\2\2\2i\21\3\2\2\2jo\5\24\13\2kl\7\30\2\2ln\5\22\n\2"+
-		"mk\3\2\2\2nq\3\2\2\2om\3\2\2\2op\3\2\2\2p\23\3\2\2\2qo\3\2\2\2r\u008a"+
-		"\7\5\2\2st\7(\2\2tu\7\31\2\2u\u008a\5\30\r\2vw\7 \2\2wx\5\34\17\2xy\7"+
-		"!\2\2y|\5\20\t\2z{\7\"\2\2{}\5\20\t\2|z\3\2\2\2|}\3\2\2\2}\u008a\3\2\2"+
-		"\2~\177\7#\2\2\177\u0080\5\34\17\2\u0080\u0081\7$\2\2\u0081\u0082\5\20"+
-		"\t\2\u0082\u008a\3\2\2\2\u0083\u0084\7\37\2\2\u0084\u0085\7(\2\2\u0085"+
-		"\u0086\7\23\2\2\u0086\u0087\5\26\f\2\u0087\u0088\7\24\2\2\u0088\u008a"+
-		"\3\2\2\2\u0089r\3\2\2\2\u0089s\3\2\2\2\u0089v\3\2\2\2\u0089~\3\2\2\2\u0089"+
-		"\u0083\3\2\2\2\u008a\25\3\2\2\2\u008b\u0090\5\30\r\2\u008c\u008d\7\27"+
-		"\2\2\u008d\u008f\5\30\r\2\u008e\u008c\3\2\2\2\u008f\u0092\3\2\2\2\u0090"+
-		"\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\27\3\2\2\2\u0092\u0090\3\2\2"+
-		"\2\u0093\u0094\b\r\1\2\u0094\u00a8\7(\2\2\u0095\u00a8\5 \21\2\u0096\u0097"+
-		"\7\7\2\2\u0097\u00a8\5\30\r\6\u0098\u0099\7\23\2\2\u0099\u009a\5\30\r"+
-		"\2\u009a\u009b\7\24\2\2\u009b\u00a8\3\2\2\2\u009c\u009d\7(\2\2\u009d\u009e"+
-		"\7\25\2\2\u009e\u009f\5\30\r\2\u009f\u00a0\7\26\2\2\u00a0\u00a8\3\2\2"+
-		"\2\u00a1\u00a2\7\4\2\2\u00a2\u00a3\7%\2\2\u00a3\u00a4\7\25\2\2\u00a4\u00a5"+
-		"\5\30\r\2\u00a5\u00a6\7\26\2\2\u00a6\u00a8\3\2\2\2\u00a7\u0093\3\2\2\2"+
-		"\u00a7\u0095\3\2\2\2\u00a7\u0096\3\2\2\2\u00a7\u0098\3\2\2\2\u00a7\u009c"+
-		"\3\2\2\2\u00a7\u00a1\3\2\2\2\u00a8\u00af\3\2\2\2\u00a9\u00aa\f\7\2\2\u00aa"+
-		"\u00ab\5\32\16\2\u00ab\u00ac\5\30\r\b\u00ac\u00ae\3\2\2\2\u00ad\u00a9"+
-		"\3\2\2\2\u00ae\u00b1\3\2\2\2\u00af\u00ad\3\2\2\2\u00af\u00b0\3\2\2\2\u00b0"+
-		"\31\3\2\2\2\u00b1\u00af\3\2\2\2\u00b2\u00b7\7\6\2\2\u00b3\u00b7\7\7\2"+
-		"\2\u00b4\u00b7\7\b\2\2\u00b5\u00b7\7\t\2\2\u00b6\u00b2\3\2\2\2\u00b6\u00b3"+
-		"\3\2\2\2\u00b6\u00b4\3\2\2\2\u00b6\u00b5\3\2\2\2\u00b7\33\3\2\2\2\u00b8"+
-		"\u00c5\7\n\2\2\u00b9\u00c5\7\13\2\2\u00ba\u00bb\5\30\r\2\u00bb\u00bc\5"+
-		"\36\20\2\u00bc\u00bd\5\30\r\2\u00bd\u00c5\3\2\2\2\u00be\u00bf\7\22\2\2"+
-		"\u00bf\u00c5\5\34\17\2\u00c0\u00c1\7\23\2\2\u00c1\u00c2\5\34\17\2\u00c2"+
-		"\u00c3\7\24\2\2\u00c3\u00c5\3\2\2\2\u00c4\u00b8\3\2\2\2\u00c4\u00b9\3"+
-		"\2\2\2\u00c4\u00ba\3\2\2\2\u00c4\u00be\3\2\2\2\u00c4\u00c0\3\2\2\2\u00c5"+
-		"\35\3\2\2\2\u00c6\u00cd\7\f\2\2\u00c7\u00cd\7\r\2\2\u00c8\u00cd\7\16\2"+
-		"\2\u00c9\u00cd\7\17\2\2\u00ca\u00cd\7\20\2\2\u00cb\u00cd\7\21\2\2\u00cc"+
-		"\u00c6\3\2\2\2\u00cc\u00c7\3\2\2\2\u00cc\u00c8\3\2\2\2\u00cc\u00c9\3\2"+
-		"\2\2\u00cc\u00ca\3\2\2\2\u00cc\u00cb\3\2\2\2\u00cd\37\3\2\2\2\u00ce\u00d0"+
-		"\7\7\2\2\u00cf\u00ce\3\2\2\2\u00cf\u00d0\3\2\2\2\u00d0\u00d1\3\2\2\2\u00d1"+
-		"\u00d2\7\3\2\2\u00d2!\3\2\2\2\23$)GNZaho|\u0089\u0090\u00a7\u00af\u00b6"+
-		"\u00c4\u00cc\u00cf";
+		"\3\3\3\3\3\3\3\3\3\3\3\5\3;\n\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3"+
+		"\4\3\4\7\4H\n\4\f\4\16\4K\13\4\3\5\3\5\7\5O\n\5\f\5\16\5R\13\5\3\6\3\6"+
+		"\3\6\3\6\3\7\3\7\3\7\7\7[\n\7\f\7\16\7^\13\7\3\b\3\b\3\b\3\b\5\bd\n\b"+
+		"\3\t\3\t\3\t\3\t\3\t\5\tk\n\t\3\n\3\n\3\n\7\np\n\n\f\n\16\ns\13\n\3\13"+
+		"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13\177\n\13\3\13\3\13"+
+		"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13\u008c\n\13\3\f\3\f"+
+		"\3\f\7\f\u0091\n\f\f\f\16\f\u0094\13\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r"+
+		"\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r\u00aa\n\r\3\r\3\r"+
+		"\3\r\3\r\7\r\u00b0\n\r\f\r\16\r\u00b3\13\r\3\16\3\16\3\16\3\16\5\16\u00b9"+
+		"\n\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17"+
+		"\u00c7\n\17\3\20\3\20\3\20\3\20\3\20\3\20\5\20\u00cf\n\20\3\21\5\21\u00d2"+
+		"\n\21\3\21\3\21\3\21\2\3\30\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36"+
+		" \2\2\2\u00e7\2\"\3\2\2\2\4\61\3\2\2\2\6A\3\2\2\2\bL\3\2\2\2\nS\3\2\2"+
+		"\2\fW\3\2\2\2\16c\3\2\2\2\20j\3\2\2\2\22l\3\2\2\2\24\u008b\3\2\2\2\26"+
+		"\u008d\3\2\2\2\30\u00a9\3\2\2\2\32\u00b8\3\2\2\2\34\u00c6\3\2\2\2\36\u00ce"+
+		"\3\2\2\2 \u00d1\3\2\2\2\"$\7\32\2\2#%\7(\2\2$#\3\2\2\2$%\3\2\2\2%)\3\2"+
+		"\2\2&(\5\4\3\2\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*,\3\2\2\2+)\3"+
+		"\2\2\2,-\7\34\2\2-.\5\b\5\2./\5\22\n\2/\60\7\35\2\2\60\3\3\2\2\2\61\62"+
+		"\7\33\2\2\62\63\7(\2\2\63\64\7\23\2\2\64:\5\6\4\2\65\66\7\27\2\2\66\67"+
+		"\7\36\2\2\678\5\16\b\289\7(\2\29;\3\2\2\2:\65\3\2\2\2:;\3\2\2\2;<\3\2"+
+		"\2\2<=\7\24\2\2=>\7\34\2\2>?\5\22\n\2?@\7\35\2\2@\5\3\2\2\2AB\5\16\b\2"+
+		"BI\7(\2\2CD\7\27\2\2DE\5\16\b\2EF\7(\2\2FH\3\2\2\2GC\3\2\2\2HK\3\2\2\2"+
+		"IG\3\2\2\2IJ\3\2\2\2J\7\3\2\2\2KI\3\2\2\2LP\5\n\6\2MO\5\b\5\2NM\3\2\2"+
+		"\2OR\3\2\2\2PN\3\2\2\2PQ\3\2\2\2Q\t\3\2\2\2RP\3\2\2\2ST\5\16\b\2TU\5\f"+
+		"\7\2UV\7\30\2\2V\13\3\2\2\2W\\\7(\2\2XY\7\27\2\2Y[\7(\2\2ZX\3\2\2\2[^"+
+		"\3\2\2\2\\Z\3\2\2\2\\]\3\2\2\2]\r\3\2\2\2^\\\3\2\2\2_d\7%\2\2`a\7%\2\2"+
+		"ab\7\25\2\2bd\7\26\2\2c_\3\2\2\2c`\3\2\2\2d\17\3\2\2\2ek\5\24\13\2fg\7"+
+		"\23\2\2gh\5\22\n\2hi\7\24\2\2ik\3\2\2\2je\3\2\2\2jf\3\2\2\2k\21\3\2\2"+
+		"\2lq\5\24\13\2mn\7\30\2\2np\5\22\n\2om\3\2\2\2ps\3\2\2\2qo\3\2\2\2qr\3"+
+		"\2\2\2r\23\3\2\2\2sq\3\2\2\2t\u008c\7\5\2\2uv\7(\2\2vw\7\31\2\2w\u008c"+
+		"\5\30\r\2xy\7 \2\2yz\5\34\17\2z{\7!\2\2{~\5\20\t\2|}\7\"\2\2}\177\5\20"+
+		"\t\2~|\3\2\2\2~\177\3\2\2\2\177\u008c\3\2\2\2\u0080\u0081\7#\2\2\u0081"+
+		"\u0082\5\34\17\2\u0082\u0083\7$\2\2\u0083\u0084\5\20\t\2\u0084\u008c\3"+
+		"\2\2\2\u0085\u0086\7\37\2\2\u0086\u0087\7(\2\2\u0087\u0088\7\23\2\2\u0088"+
+		"\u0089\5\26\f\2\u0089\u008a\7\24\2\2\u008a\u008c\3\2\2\2\u008bt\3\2\2"+
+		"\2\u008bu\3\2\2\2\u008bx\3\2\2\2\u008b\u0080\3\2\2\2\u008b\u0085\3\2\2"+
+		"\2\u008c\25\3\2\2\2\u008d\u0092\5\30\r\2\u008e\u008f\7\27\2\2\u008f\u0091"+
+		"\5\30\r\2\u0090\u008e\3\2\2\2\u0091\u0094\3\2\2\2\u0092\u0090\3\2\2\2"+
+		"\u0092\u0093\3\2\2\2\u0093\27\3\2\2\2\u0094\u0092\3\2\2\2\u0095\u0096"+
+		"\b\r\1\2\u0096\u00aa\7(\2\2\u0097\u00aa\5 \21\2\u0098\u0099\7\7\2\2\u0099"+
+		"\u00aa\5\30\r\6\u009a\u009b\7\23\2\2\u009b\u009c\5\30\r\2\u009c\u009d"+
+		"\7\24\2\2\u009d\u00aa\3\2\2\2\u009e\u009f\7(\2\2\u009f\u00a0\7\25\2\2"+
+		"\u00a0\u00a1\5\30\r\2\u00a1\u00a2\7\26\2\2\u00a2\u00aa\3\2\2\2\u00a3\u00a4"+
+		"\7\4\2\2\u00a4\u00a5\7%\2\2\u00a5\u00a6\7\25\2\2\u00a6\u00a7\5\30\r\2"+
+		"\u00a7\u00a8\7\26\2\2\u00a8\u00aa\3\2\2\2\u00a9\u0095\3\2\2\2\u00a9\u0097"+
+		"\3\2\2\2\u00a9\u0098\3\2\2\2\u00a9\u009a\3\2\2\2\u00a9\u009e\3\2\2\2\u00a9"+
+		"\u00a3\3\2\2\2\u00aa\u00b1\3\2\2\2\u00ab\u00ac\f\7\2\2\u00ac\u00ad\5\32"+
+		"\16\2\u00ad\u00ae\5\30\r\b\u00ae\u00b0\3\2\2\2\u00af\u00ab\3\2\2\2\u00b0"+
+		"\u00b3\3\2\2\2\u00b1\u00af\3\2\2\2\u00b1\u00b2\3\2\2\2\u00b2\31\3\2\2"+
+		"\2\u00b3\u00b1\3\2\2\2\u00b4\u00b9\7\6\2\2\u00b5\u00b9\7\7\2\2\u00b6\u00b9"+
+		"\7\b\2\2\u00b7\u00b9\7\t\2\2\u00b8\u00b4\3\2\2\2\u00b8\u00b5\3\2\2\2\u00b8"+
+		"\u00b6\3\2\2\2\u00b8\u00b7\3\2\2\2\u00b9\33\3\2\2\2\u00ba\u00c7\7\n\2"+
+		"\2\u00bb\u00c7\7\13\2\2\u00bc\u00bd\5\30\r\2\u00bd\u00be\5\36\20\2\u00be"+
+		"\u00bf\5\30\r\2\u00bf\u00c7\3\2\2\2\u00c0\u00c1\7\22\2\2\u00c1\u00c7\5"+
+		"\34\17\2\u00c2\u00c3\7\23\2\2\u00c3\u00c4\5\34\17\2\u00c4\u00c5\7\24\2"+
+		"\2\u00c5\u00c7\3\2\2\2\u00c6\u00ba\3\2\2\2\u00c6\u00bb\3\2\2\2\u00c6\u00bc"+
+		"\3\2\2\2\u00c6\u00c0\3\2\2\2\u00c6\u00c2\3\2\2\2\u00c7\35\3\2\2\2\u00c8"+
+		"\u00cf\7\f\2\2\u00c9\u00cf\7\r\2\2\u00ca\u00cf\7\16\2\2\u00cb\u00cf\7"+
+		"\17\2\2\u00cc\u00cf\7\20\2\2\u00cd\u00cf\7\21\2\2\u00ce\u00c8\3\2\2\2"+
+		"\u00ce\u00c9\3\2\2\2\u00ce\u00ca\3\2\2\2\u00ce\u00cb\3\2\2\2\u00ce\u00cc"+
+		"\3\2\2\2\u00ce\u00cd\3\2\2\2\u00cf\37\3\2\2\2\u00d0\u00d2\7\7\2\2\u00d1"+
+		"\u00d0\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\u00d4\7\3"+
+		"\2\2\u00d4!\3\2\2\2\24$):IP\\cjq~\u008b\u0092\u00a9\u00b1\u00b8\u00c6"+
+		"\u00ce\u00d1";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

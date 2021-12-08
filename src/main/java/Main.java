@@ -1,5 +1,4 @@
 import ast.AstBuilder;
-import ast.Visitor;
 import ast.VisitorPrint;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
