@@ -8,8 +8,17 @@ public class State {
     private Node instruction;
     private List<State> children;
     private List<State> parents;
-    private boolean isReversed;
+    private boolean isReversed, isFinal;
     private int label;
+
+    public State(Node instruction, int label, List<State> children, List<State> parents, boolean isFinal) {
+        this.instruction = instruction;
+        this.label = label;
+        this.children = children;
+        this.parents = parents;
+        this.isReversed = false;
+        this.isFinal = isFinal;
+    }
 
     public State(Node instruction, int label, List<State> children, List<State> parents) {
         this.instruction = instruction;
@@ -17,10 +26,15 @@ public class State {
         this.children = children;
         this.parents = parents;
         this.isReversed = false;
+        this.isFinal = false;
     }
 
     public Node getInstruction() {
         return instruction;
+    }
+
+    public boolean isFinal() {
+        return isFinal;
     }
 
     public void setInstruction(Node instruction) {
@@ -44,9 +58,9 @@ public class State {
     }
 
     public List<State> getParents() {
-        if(isReversed){
+        if (isReversed) {
             return this.children;
-        }else{
+        } else {
             return this.parents;
         }
     }
@@ -67,17 +81,15 @@ public class State {
     public Set<State> getLastChildren(List<Integer> alreadySeen) {
         alreadySeen.add(this.label);
         Set<State> res = new HashSet<>();
-        for (State state : this.getNext()) {
-            if(state.getLabel() == -1){
-                res.add(this);
-            }else {
-                for (State next : this.getNext()) {
-                    if(!alreadySeen.contains(next.getLabel())){
-                        res.addAll(next.getLastChildren(alreadySeen));
-                    }
-                }
+        if (this.isFinal) {
+            res.add(this);
+        }
+        for (State next : this.getNext()) {
+            if (!alreadySeen.contains(next.getLabel())) {
+                res.addAll(next.getLastChildren(alreadySeen));
             }
         }
+
         return res;
     }
 
@@ -86,9 +98,10 @@ public class State {
         return "State{" +
                 "instruction=" + instruction +
                 ", isReversed=" + isReversed +
-                " Next="+ this.getNext().stream().map(em->String.valueOf(em.getLabel()+" ")).reduce("",String::concat) +
-                " Parents="+ this.getParents().stream().map(em->String.valueOf(em.getLabel()+" ")).reduce("",String::concat) +
+                " Next=" + this.getNext().stream().map(em -> String.valueOf(em.getLabel() + " ")).reduce("", String::concat) +
+                " Parents=" + this.getParents().stream().map(em -> String.valueOf(em.getLabel() + " ")).reduce("", String::concat) +
                 ", label=" + label +
+                ", isFinal=" + this.isFinal +
                 '}';
     }
 
@@ -99,14 +112,17 @@ public class State {
     public Set<State> getAllNodes(ArrayList<Integer> alreadySeen) {
         alreadySeen.add(this.label);
         Set<State> res = new HashSet<>();
-        if (this.label != -1){
-            res.add(this);
-        }
+        res.add(this);
+
         for (State state : this.getNext()) {
-            if (!alreadySeen.contains(state.getLabel())){
+            if (!alreadySeen.contains(state.getLabel())) {
                 res.addAll(state.getAllNodes(alreadySeen));
             }
         }
         return res;
+    }
+
+    public void setFinal(boolean b) {
+        this.isFinal = b;
     }
 }
