@@ -18,8 +18,53 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Main {
+
+    private static void testState(){
+        //Test des fonctions d'analyse
+
+        State etat1 = new State(null, 1, new ArrayList<>(), new ArrayList<>());
+        State etat2 = new State(null, 2, new ArrayList<>(), new ArrayList<>());
+        State etat3 = new State(null, 3, new ArrayList<>(), new ArrayList<>(), true);
+        State etat4 = new State(null, 4, new ArrayList<>(), new ArrayList<>(), true);
+        State etat5 = new State(null, 5, new ArrayList<>(), new ArrayList<>(), true);
+        State etat6 = new State(null, 6, new ArrayList<>(), new ArrayList<>());
+        State etat7 = new State(null, 7, new ArrayList<>(), new ArrayList<>(), true);
+
+        etat1.setChildren(List.of(etat2));
+        etat1.setParents(List.of(etat2));
+        etat2.setParents(List.of(etat1));
+
+        etat2.setChildren(List.of(etat3, etat1, etat4));
+        etat3.setParents(List.of(etat2));
+        etat3.setChildren(List.of(etat5));
+
+        etat4.setParents(List.of(etat2));
+        etat4.setChildren(List.of(etat5));
+
+        etat5.setParents(List.of(etat4, etat3));
+
+        etat6.setChildren(List.of(etat7));
+        etat7.setParents(List.of(etat6));
+
+        Flow flow = new Flow();
+        flow.setHead(List.of(etat1, etat6));
+        System.out.println(flow);
+        flow.toDot("flow.dot");
+        flow.reverseFlow();
+        flow.toDot("flowReverse.dot");
+
+        System.out.println("After reverse \n");
+        System.out.println(flow);
+        flow.reverseFlow();
+        System.out.println("After reverse \n");
+        System.out.println(flow);
+    }
+
     private enum ErrorCode {
         SUCCESS,
         NO_FILE_NAME,
@@ -76,6 +121,7 @@ public class Main {
         System.out.println(program);
         VisitorPrint visitorPrint = new VisitorPrint();
         System.out.print(program.accept(visitorPrint));
+        testState();
 
         Flow flow = new Flow();
         MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
