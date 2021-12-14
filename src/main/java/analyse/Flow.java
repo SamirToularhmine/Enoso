@@ -7,12 +7,13 @@ public class Flow {
     private List<State> head;
     private List<State> finals;
 
-    public List<State> getHead() {
-        return head;
+    public Flow(){
+        this.head = new ArrayList<>();
+        this.finals = new ArrayList<>();
     }
 
-    public void setHead(List<State> head) {
-        this.head = head;
+    public List<State> getHead() {
+        return head;
     }
 
     public int getSize(){
@@ -22,10 +23,6 @@ public class Flow {
 
     public List<State> getFinals() {
         return finals;
-    }
-
-    public void setFinals(List<State> finals) {
-        this.finals = finals;
     }
 
     public void reverseFlow(){

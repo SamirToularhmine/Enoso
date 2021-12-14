@@ -15,120 +15,159 @@ import ast.opr.OprValue;
 import ast.statement.*;
 import ast.type.TypeTable;
 import ast.type.TypeType;
+import exceptions.InappropriateVisitException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class VisitorFlow implements Visitor<Flow>{
 
     @Override
     public Flow visit(Program program) {
-        Flow flow = new Flow();
+        List<Statement> statements = program.getStatements();
 
-        // Boucle sur les déclarations de procédures
+        Flow flowFinal = (Flow) statements.get(0).accept(this);
 
-        for(Statement s : program.getStatements()){
+        for (int i = 1; i < statements.size(); i++) {
+            Flow nextFlow = (Flow) statements.get(i).accept(this);
 
+            flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+            flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
 
-        return flow;
+        return flowFinal;
     }
 
     @Override
     public Flow visit(DecVariable decVariable) {
-        return null;
+        throw new InappropriateVisitException(decVariable);
     }
 
     @Override
     public Flow visit(Declaration declaration) {
+        //TODO
         return null;
     }
 
     @Override
     public Flow visit(AexpressionArray aexpressionArray) {
-        return null;
+        throw new InappropriateVisitException(aexpressionArray);
     }
 
     @Override
     public Flow visit(AexpressionBinary aexpressionBinary) {
-        return null;
+        throw new InappropriateVisitException(aexpressionBinary);
     }
 
     @Override
     public Flow visit(AexpressionConstant aexpressionConstant) {
-        return null;
+        throw new InappropriateVisitException(aexpressionConstant);
     }
 
     @Override
     public Flow visit(AexpressionIdentifier aexpressionIdentifier) {
-        return null;
+        throw new InappropriateVisitException(aexpressionIdentifier);
     }
 
     @Override
     public Flow visit(AexpressionNewArray aexpressionNewArray) {
-        return null;
+        throw new InappropriateVisitException(aexpressionNewArray);
     }
 
     @Override
     public Flow visit(AexpressionParenthesis aexpressionParenthesis) {
-        return null;
+        throw new InappropriateVisitException(aexpressionParenthesis);
     }
 
     @Override
     public Flow visit(AexpressionNeg aexpressionUnary) {
-        return null;
+        throw new InappropriateVisitException(aexpressionUnary);
     }
 
     @Override
     public Flow visit(BexpressionAexpressionOprAexpression bexpressionAexpressionOprAexpression) {
-        return null;
+        Flow flowFinal = new Flow();
+
+        State state = new State(bexpressionAexpressionOprAexpression, -1, new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
     public Flow visit(BexpressionConst bexpressionConst) {
-        return null;
+        Flow flowFinal = new Flow();
+
+        State state = new State(bexpressionConst, -1, new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
     public Flow visit(BexpressionNot bexpressionNot) {
-        return null;
+        return (Flow) bexpressionNot.getValue().accept(this);
     }
 
     @Override
     public Flow visit(BexpressionParenthesis bexpressionParenthesis) {
-        return null;
+        return (Flow) bexpressionParenthesis.getValue().accept(this);
     }
 
     @Override
     public Flow visit(BlockStatement blockStatement) {
-        return null;
+        Flow flowFinal = new Flow();
+
+        State state = new State(blockStatement.getStatement(), -1, new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
     public Flow visit(BlockWithinParenthesis blockWithinParenthesis) {
-        return null;
+        List<Statement> statements = blockWithinParenthesis.getStatements();
+        Flow flowFinal = (Flow) statements.get(0).accept(this);
+
+        flowFinal.getFinals().addAll(((Flow) statements.get(statements.size() - 1).accept(this)).getFinals());
+
+        for (int i = 0; i < blockWithinParenthesis.getStatements().size() - 1; i++) {
+            Flow currFlow = (Flow) statements.get(i).accept(this);
+            Flow nextFlow = (Flow) statements.get(i + 1).accept(this);
+
+            currFlow.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+        }
+
+        return flowFinal;
     }
 
     @Override
     public Flow visit(OpaValue opaDivision) {
-        return null;
+        throw new InappropriateVisitException(opaDivision);
     }
 
     @Override
     public Flow visit(OprValue oprValue) {
-        return null;
+        throw new InappropriateVisitException(oprValue);
     }
 
     @Override
     public Flow visit(StatementAffectation statementAffectation) {
-        return null;
+        Flow flowFinal = new Flow();
+
+        State state = new State(statementAffectation, -1, new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
     public Flow visit(StatementCall statementCall) {
+        // @TODO
         return null;
     }
 
@@ -140,8 +179,8 @@ public class VisitorFlow implements Visitor<Flow>{
         Flow flowIfBlock = (Flow) statementIf.getIfBlock().accept(this);
         Flow flowElseBlock;
 
-        flowFinal.setHead(List.of(flowCond.getHead().get(0)));
-        flowFinal.setFinals(new ArrayList<>(flowIfBlock.getFinals()));
+        flowFinal.getHead().addAll(flowCond.getHead());
+        flowFinal.getFinals().addAll(flowIfBlock.getFinals());
         flowFinal.getHead().get(0).setChildren(flowIfBlock.getHead());
 
         // Il peut ne pas y avoir de else block
@@ -166,20 +205,21 @@ public class VisitorFlow implements Visitor<Flow>{
         Flow fbexp = (Flow) statementWhile.getCondition().accept(this);
         Flow fblock = (Flow) statementWhile.getBlock().accept(this);
 
-        flowFinal.setHead(new ArrayList<>(fbexp.getHead()));
+        flowFinal.getHead().addAll(fbexp.getHead());
+        fblock.getFinals().forEach(s -> s.setChildren(flowFinal.getHead()));
         flowFinal.getHead().get(0).setChildren(List.of(fblock.getHead().get(0)));
-        flowFinal.setFinals(new ArrayList<>(fbexp.getHead()));
+        flowFinal.getFinals().addAll(fbexp.getHead());
 
         return flowFinal;
     }
 
     @Override
     public Flow visit(TypeTable typeTable) {
-        return null;
+        throw new InappropriateVisitException(typeTable);
     }
 
     @Override
     public Flow visit(TypeType typeType) {
-        return null;
+        throw new InappropriateVisitException(typeType);
     }
 }
