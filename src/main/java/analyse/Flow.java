@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Flow {
     private List<State> head;
+    private List<State> finals;
 
     public List<State> getHead() {
         return head;
@@ -17,6 +18,14 @@ public class Flow {
     public int getSize(){
         return 0;
         //Todo
+    }
+
+    public List<State> getFinals() {
+        return finals;
+    }
+
+    public void setFinals(List<State> finals) {
+        this.finals = finals;
     }
 
     public void reverseFlow(){

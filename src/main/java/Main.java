@@ -3,6 +3,7 @@ import analyse.Flow;
 import analyse.JoinType;
 import analyse.MonotoneFramework;
 import ast.AstBuilder;
+import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
 import org.antlr.v4.runtime.CharStream;
@@ -73,9 +74,12 @@ public class Main {
         InputStream inputStream = getInputStream(fileName);
         ParseTree parseTree = parse(inputStream);
         ast.Program program = buildAst(parseTree);
-        System.out.println(program);
+        //System.out.println(program);
         VisitorPrint visitorPrint = new VisitorPrint();
-        System.out.print(program.accept(visitorPrint));
+        //System.out.print(program.accept(visitorPrint));
+
+        VisitorFlow visitorFlow = new VisitorFlow();
+        Flow f = (Flow) program.accept(visitorFlow);
 
         Flow flow = new Flow();
         MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
