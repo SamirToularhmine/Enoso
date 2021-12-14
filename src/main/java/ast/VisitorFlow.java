@@ -88,7 +88,7 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(BexpressionAexpressionOprAexpression bexpressionAexpressionOprAexpression) {
         Flow flowFinal = new Flow();
 
-        State state = new State(bexpressionAexpressionOprAexpression, -1, new ArrayList<>());
+        State state = new State(bexpressionAexpressionOprAexpression, -1, new ArrayList<>(), new ArrayList<>());
         flowFinal.getHead().add(state);
         flowFinal.getFinals().add(state);
 
@@ -99,7 +99,7 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(BexpressionConst bexpressionConst) {
         Flow flowFinal = new Flow();
 
-        State state = new State(bexpressionConst, -1, new ArrayList<>());
+        State state = new State(bexpressionConst, -1, new ArrayList<>(), new ArrayList<>());
         flowFinal.getHead().add(state);
         flowFinal.getFinals().add(state);
 
@@ -120,7 +120,7 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(BlockStatement blockStatement) {
         Flow flowFinal = new Flow();
 
-        State state = new State(blockStatement.getStatement(), -1, new ArrayList<>());
+        State state = new State(blockStatement.getStatement(), -1, new ArrayList<>(), new ArrayList<>());
         flowFinal.getHead().add(state);
         flowFinal.getFinals().add(state);
 
@@ -158,7 +158,7 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(StatementAffectation statementAffectation) {
         Flow flowFinal = new Flow();
 
-        State state = new State(statementAffectation, -1, new ArrayList<>());
+        State state = new State(statementAffectation, -1, new ArrayList<>(), new ArrayList<>());
         flowFinal.getHead().add(state);
         flowFinal.getFinals().add(state);
 

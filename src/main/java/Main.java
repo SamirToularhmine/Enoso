@@ -17,8 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     private enum ErrorCode {
@@ -81,8 +79,10 @@ public class Main {
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
 
+        f.toDot("test.dot");
+
         Flow flow = new Flow();
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
+        //MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
 
         exitWithCode(ErrorCode.SUCCESS);
     }
