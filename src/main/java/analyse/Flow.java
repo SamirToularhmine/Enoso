@@ -5,16 +5,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Flow {
     private List<State> head;
     private List<State> finals;
 
-    public Flow(){
+    public Flow() {
         this.head = new ArrayList<>();
         this.finals = new ArrayList<>();
     }
@@ -132,5 +129,21 @@ public class Flow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void prepare() {
+        Queue<State> aTraiter = new ArrayDeque<>(this.head);
+        int label = 0;
+
+        while (!aTraiter.isEmpty()) {
+            State parent = aTraiter.poll();
+            parent.setLabel(label++);
+            for (State child : parent.getChildren()) {
+                child.getParents().add(parent);
+                if (child.getLabel() == -1)
+                    aTraiter.add(child);
+            }
+        }
+        this.finals.forEach(state -> state.setFinal(true));
     }
 }

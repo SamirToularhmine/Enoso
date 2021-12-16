@@ -78,6 +78,7 @@ public class Main {
 
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
+        f.prepare();
 
         f.toDot("test.dot");
 

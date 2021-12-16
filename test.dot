@@ -1,8 +1,14 @@
 digraph G {
-83 -> { 84 }
-84 -> { 83 }
+2 -> { 1 }
 {
-43 [style = filled fillcolor = green]
+0 [shape = doublecircle]
 }
-43 -> { 84 }
+{
+0 [style = filled fillcolor = green]
+}
+0 -> { 1 }
+{
+1 [shape = doublecircle]
+}
+1 -> { 2 }
 }
