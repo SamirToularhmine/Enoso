@@ -32,6 +32,7 @@ public class VisitorFlow implements Visitor<Flow>{
             Flow nextFlow = (Flow) statements.get(i).accept(this);
 
             flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+            flowFinal.getFinals().clear();
             flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
 
@@ -134,11 +135,12 @@ public class VisitorFlow implements Visitor<Flow>{
 
         flowFinal.getFinals().addAll(((Flow) statements.get(statements.size() - 1).accept(this)).getFinals());
 
-        for (int i = 0; i < blockWithinParenthesis.getStatements().size() - 1; i++) {
-            Flow currFlow = (Flow) statements.get(i).accept(this);
-            Flow nextFlow = (Flow) statements.get(i + 1).accept(this);
+        for (int i = 1; i < blockWithinParenthesis.getStatements().size() - 1; i++) {
+            Flow nextFlow = (Flow) statements.get(i).accept(this);
 
-            currFlow.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+            flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+            flowFinal.getFinals().clear();
+            flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
 
         return flowFinal;
