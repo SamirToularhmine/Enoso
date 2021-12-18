@@ -1,6 +1,8 @@
 package analyse;
 
 
+import ast.VisitorPrint;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -105,16 +107,18 @@ public class Flow {
     public void toDot(String name) {
         String str = "digraph G {\n";
         BufferedWriter writer = null;
+        VisitorPrint visitorPrint = new VisitorPrint();
+
         try {
             for (State allNode : this.getAllNodes()) {
                 if (allNode.isFinal()) {
-                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle]\n}\n";
+                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle, label=\"[" + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel() +"  \"]\n}\n";
                 }
                 if (this.head.contains(allNode)) {
-                    str += "{\n" + allNode.getLabel() + " [style = filled fillcolor = green]\n}\n";
+                    str += "{\n" + allNode.getLabel() + " [style = filled fillcolor = green, label =\"[" + allNode.getInstruction().accept(visitorPrint)+ "] " + allNode.getLabel() +"\" ]\n}\n";
                 }
                 if (allNode.getNext().size() > 0) {
-                    str += allNode.getLabel() + " -> { ";
+                    str += "{"+ allNode.getLabel() + "[label= \"[" + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel()  +"\"]} -> { ";
                     for (int i = 0; i < allNode.getNext().size() - 1; i++) {
                         str += allNode.getNext().get(i).getLabel() + " ";
                     }
