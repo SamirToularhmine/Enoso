@@ -31,7 +31,9 @@ public class VisitorFlow implements Visitor<Flow>{
         for (int i = 1; i < statements.size(); i++) {
             Flow nextFlow = (Flow) statements.get(i).accept(this);
 
-            flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
+            for (State s : flowFinal.getFinals()) {
+                s.getChildren().addAll(nextFlow.getHead());
+            }
             flowFinal.getFinals().clear();
             flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
@@ -132,17 +134,12 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(BlockWithinParenthesis blockWithinParenthesis) {
         List<Statement> statements = blockWithinParenthesis.getStatements();
         Flow flowFinal = (Flow) statements.get(0).accept(this);
-
-        flowFinal.getFinals().addAll(((Flow) statements.get(statements.size() - 1).accept(this)).getFinals());
-
         for (int i = 1; i < blockWithinParenthesis.getStatements().size() - 1; i++) {
             Flow nextFlow = (Flow) statements.get(i).accept(this);
-
             flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
             flowFinal.getFinals().clear();
             flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
-
         return flowFinal;
     }
 
@@ -183,7 +180,7 @@ public class VisitorFlow implements Visitor<Flow>{
 
         flowFinal.getHead().addAll(flowCond.getHead());
         flowFinal.getFinals().addAll(flowIfBlock.getFinals());
-        flowFinal.getHead().get(0).setChildren(flowIfBlock.getHead());
+        flowFinal.getHead().get(0).getChildren().addAll(flowIfBlock.getHead());
 
         // Il peut ne pas y avoir de else block
         if(statementIf.getElseBlock() != null){
@@ -208,8 +205,8 @@ public class VisitorFlow implements Visitor<Flow>{
         Flow fblock = (Flow) statementWhile.getBlock().accept(this);
 
         flowFinal.getHead().addAll(fbexp.getHead());
-        fblock.getFinals().forEach(s -> s.setChildren(flowFinal.getHead()));
-        flowFinal.getHead().get(0).setChildren(List.of(fblock.getHead().get(0)));
+        fblock.getFinals().forEach(s -> s.getChildren().addAll(flowFinal.getHead()));
+        flowFinal.getHead().get(0).getChildren().add(fblock.getHead().get(0));
         flowFinal.getFinals().addAll(fbexp.getHead());
 
         return flowFinal;
