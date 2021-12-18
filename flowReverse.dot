@@ -1,27 +1,27 @@
 digraph G {
 {
-1 [shape = doublecircle]
+7 [style = filled fillcolor = green]
 }
-1 -> { 2 }
-2 -> { 1 }
-{
-4 [style = filled fillcolor = green]
-}
-4 -> { 2 }
-{
-5 [style = filled fillcolor = green]
-}
-5 -> { 4, 3 }
+7 -> { 6 }
 {
 6 [shape = doublecircle]
 }
 
 {
+1 [shape = doublecircle]
+}
+1 -> { 2 }
+2 -> { 1 }
+{
+5 [style = filled fillcolor = green]
+}
+5 -> { 4 3 }
+{
+4 [style = filled fillcolor = green]
+}
+4 -> { 2 }
+{
 3 [style = filled fillcolor = green]
 }
 3 -> { 2 }
-{
-7 [style = filled fillcolor = green]
-}
-7 -> { 6 }
 }

@@ -5,6 +5,9 @@ import ast.Visitor;
 import ast.bexpression.Bexpression;
 import ast.block.Block;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class StatementIf extends Statement{
     private Bexpression condition;
     private Block ifBlock;

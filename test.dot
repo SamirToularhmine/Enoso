@@ -1,0 +1,14 @@
+digraph G {
+2 -> { 1 }
+{
+0 [shape = doublecircle]
+}
+{
+0 [style = filled fillcolor = green]
+}
+0 -> { 1 }
+{
+1 [shape = doublecircle]
+}
+1 -> { 2 }
+}

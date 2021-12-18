@@ -4,6 +4,9 @@ import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class StatementAffectation extends Statement{
     private String identifier;
     private Aexpression aexpression;

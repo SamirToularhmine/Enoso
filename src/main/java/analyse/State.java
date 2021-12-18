@@ -11,6 +11,12 @@ public class State {
     private boolean isReversed, isFinal;
     private int label;
 
+    public State(){
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
+        this.isFinal = false;
+    }
+
     public State(Node instruction, int label, List<State> children, List<State> parents, boolean isFinal) {
         this.instruction = instruction;
         this.label = label;
@@ -65,10 +71,15 @@ public class State {
         }
     }
 
+
+
     public void setChildren(List<State> children) {
         this.children = children;
     }
 
+    public List<State> getChildren() {
+        return this.children;
+    }
 
     public boolean isReversed() {
         return isReversed;
@@ -98,8 +109,8 @@ public class State {
         return "State{" +
                 "instruction=" + instruction +
                 ", isReversed=" + isReversed +
-                " Next=" + this.getNext().stream().map(em -> String.valueOf(em.getLabel() + " ")).reduce("", String::concat) +
-                " Parents=" + this.getParents().stream().map(em -> String.valueOf(em.getLabel() + " ")).reduce("", String::concat) +
+                ", Next=" + this.getNext().stream().map(em -> em.getLabel() + " ").reduce("", String::concat) +
+                ", Parents=" + this.getParents().stream().map(em -> em.getLabel() + " ").reduce("", String::concat) +
                 ", label=" + label +
                 ", isFinal=" + this.isFinal +
                 '}';
