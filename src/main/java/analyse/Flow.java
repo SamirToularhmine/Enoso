@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import java.util.*;
 
-public class Flow {
+public class Flow implements Cloneable {
     private List<State> head;
     private List<State> finals;
 
@@ -149,5 +149,16 @@ public class Flow {
             }
         }
         this.finals.forEach(state -> state.setFinal(true));
+    }
+
+    @Override
+    public Flow clone() {
+        try {
+            return (Flow)super.clone();
+        } catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

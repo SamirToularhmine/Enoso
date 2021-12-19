@@ -22,6 +22,8 @@ public class State {
     public State(){
         this.children = new ArrayList<>();
         this.parents = new ArrayList<>();
+        this.label = -1;
+        this.instruction = null;
         this.isFinal = false;
     }
 
