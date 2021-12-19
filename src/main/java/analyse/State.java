@@ -11,6 +11,14 @@ public class State {
     private boolean isReversed, isFinal;
     private int label;
 
+    public State(Node instruction){
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
+        this.label = -1;
+        this.instruction = instruction;
+        this.isFinal = false;
+    }
+
     public State(){
         this.children = new ArrayList<>();
         this.parents = new ArrayList<>();
