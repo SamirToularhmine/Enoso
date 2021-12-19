@@ -181,7 +181,10 @@ public class AstBuilder extends WhileLanguageBaseVisitor<Node> {
     @Override
     public Node visitStatementIf(WhileLanguageParser.StatementIfContext ctx) {
         Position pos = this.makePos(ctx);
-        return new StatementIf(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.block(0).accept(this), (Block) ctx.block(1).accept(this));
+        WhileLanguageParser.BlockContext elseBlock =  ctx.block(1);
+        if (elseBlock == null)
+            return new StatementIf(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.block(0).accept(this), null);
+        return new StatementIf(pos, (Bexpression) ctx.bexpression().accept(this), (Block) ctx.block(0).accept(this), (Block) elseBlock.accept(this));
     }
 
     @Override

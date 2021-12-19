@@ -31,9 +31,7 @@ public class VisitorFlow implements Visitor<Flow>{
         for (int i = 1; i < statements.size(); i++) {
             Flow nextFlow = (Flow) statements.get(i).accept(this);
 
-            for (State s : flowFinal.getFinals()) {
-                s.getChildren().addAll(nextFlow.getHead());
-            }
+            flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
             flowFinal.getFinals().clear();
             flowFinal.getFinals().addAll(nextFlow.getFinals());
         }
@@ -134,7 +132,7 @@ public class VisitorFlow implements Visitor<Flow>{
     public Flow visit(BlockWithinParenthesis blockWithinParenthesis) {
         List<Statement> statements = blockWithinParenthesis.getStatements();
         Flow flowFinal = (Flow) statements.get(0).accept(this);
-        for (int i = 1; i < blockWithinParenthesis.getStatements().size() - 1; i++) {
+        for (int i = 1; i < blockWithinParenthesis.getStatements().size(); i++) {
             Flow nextFlow = (Flow) statements.get(i).accept(this);
             flowFinal.getFinals().forEach(s -> s.getChildren().addAll(nextFlow.getHead()));
             flowFinal.getFinals().clear();
@@ -187,6 +185,8 @@ public class VisitorFlow implements Visitor<Flow>{
             flowElseBlock = (Flow) statementIf.getElseBlock().accept(this);
             flowFinal.getFinals().addAll(flowElseBlock.getFinals());
             flowFinal.getHead().get(0).getChildren().addAll(flowElseBlock.getHead());
+        }else{
+            flowFinal.getFinals().add(flowFinal.getHead().get(0));
         }
 
         return flowFinal;
