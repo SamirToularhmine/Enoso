@@ -18,39 +18,6 @@ public class Flow implements Cloneable {
         this.finals = new ArrayList<>();
     }
 
-    /*public Flow(Program program) {
-        int label = 0;
-        List<State> states = new ArrayList<>();
-        List<Declaration> progDeclarationList = program.getDeclarationList();
-        List<DecVariable> progDecVariables = program.getlDeclVariables();
-        List<Statement> progStatements = program.getStatements();
-        for (int i = 0; i < progDecVariables.size(); i++) {
-            //Todo
-            //D'abord la declaration des variables car juste après le begin (point d'entée)
-            State state = new State();
-            state.setInstruction(progDecVariables.get(i));
-            state.setLabel(label);
-            if(label != 0) { //Pas le premier
-                state.setParents(List.of(states.get(label - 1))); //Car la déclaration des variables est séquenciel
-                states.get(label - 1).setChildren(List.of(state));
-            }
-            label ++;
-            states.add(state);
-
-        }
-        for (int i = 0; i < progDeclarationList.size(); i++) {
-            //Avant les statements car il faut que les états soit créer avant (s'il sont call dans le corps du programme)
-            //Todo
-        }
-        for (int i = 0; i < progStatements.size(); i++) {
-            //Todo
-            State state = new State();
-            state.setInstruction(progStatements.get(i));
-
-        }
-        this.head = List.of(states.get(0));
-    }*/
-
     public List<State> getHead() {
         return head;
     }
@@ -137,15 +104,19 @@ public class Flow implements Cloneable {
 
     public void prepare() {
         Queue<State> aTraiter = new ArrayDeque<>(this.head);
+        Set<State> processed = new HashSet<>();
         int label = 0;
 
         while (!aTraiter.isEmpty()) {
             State parent = aTraiter.poll();
-            parent.setLabel(label++);
-            for (State child : parent.getChildren()) {
-                child.getParents().add(parent);
-                if (child.getLabel() == -1)
-                    aTraiter.add(child);
+            if (!processed.contains(parent)) {
+                processed.add(parent);
+                parent.setLabel(label++);
+                for (State child : parent.getChildren()) {
+                    child.getParents().add(parent);
+                    if (child.getLabel() == -1)
+                        aTraiter.add(child);
+                }
             }
         }
         this.finals.forEach(state -> state.setFinal(true));
