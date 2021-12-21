@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.util.*;
 
 public class Flow implements Cloneable {
-    private List<State> head;
-    private List<State> finals;
+    private Set<State> head;
+    private Set<State> finals;
 
     public Flow() {
-        this.head = new ArrayList<>();
-        this.finals = new ArrayList<>();
+        this.head = new HashSet<>();
+        this.finals = new HashSet<>();
     }
 
-    public List<State> getHead() {
+    public Set<State> getHead() {
         return head;
     }
 
@@ -26,7 +26,7 @@ public class Flow implements Cloneable {
         return getAllNodes().size();
     }
 
-    public List<State> getFinals() {
+    public Set<State> getFinals() {
         return finals;
     }
 
@@ -39,7 +39,7 @@ public class Flow implements Cloneable {
     }
 
     public void reverseFlow() {
-        boolean newFlow = !this.head.get(0).isReversed();
+        boolean newFlow = !this.head.iterator().next().isReversed();
         Set<State> newHeads = new HashSet<>();
 
         for (State state : this.head) { //Pour chacuns des points d'entrés actuels
@@ -52,7 +52,7 @@ public class Flow implements Cloneable {
         for (State state : this.head) {
             state.setFinal(true);
         }
-        this.head = List.copyOf(newHeads); //Finalement, on change l'attribut head
+        this.head = Set.copyOf(newHeads); //Finalement, on change l'attribut head
         for (State state : this.head) {
             state.setFinal(false);
         }

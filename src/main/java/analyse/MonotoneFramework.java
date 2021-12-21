@@ -1,9 +1,8 @@
 package analyse;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.antlr.v4.runtime.misc.Pair;
+
+import java.util.*;
 
 public class MonotoneFramework<T> {
     private JoinType joinType;
@@ -12,16 +11,49 @@ public class MonotoneFramework<T> {
     private Comparison comparison;
     private T bottom;
     private Set<T> iota;
+    private ITransferFunction<Set<T>> transferFunction;
 
-    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota) {
+    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, ITransferFunction<Set<T>> transferFunction) {
         this.joinType = joinType;
         this.flow = flow;
         this.domain = new HashSet<>();
         this.domain.addAll(iota);
         this.comparison = comparison;
         this.bottom = bottom;
+        this.transferFunction = transferFunction;
     }
 
+    public void analyse() {
+        // Analyse MFP
+        Set<State> entries = this.flow.getHead();
+        Set<State> nodes = this.flow.getAllNodes();
+        Map<Integer, Set<T>> currentMfp = new HashMap<>();
+        Queue<Pair<State, State>> workQueue = new ArrayDeque<>();
+
+        nodes.forEach(n -> currentMfp.put(n.getLabel(), new HashSet<>()));
+        entries.forEach(s -> {
+            currentMfp.put(s.getLabel(), new HashSet<>(this.iota));
+            s.getChildren().forEach(c -> workQueue.add(new Pair<>(s, c)));
+        });
+
+        while(!workQueue.isEmpty()){
+            Pair<State, State> current = workQueue.poll();
+            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(current.a, nodes));
+            boolean modified = false;
+
+            if(this.joinType == JoinType.MAY){
+                modified = currentMfp.get(current.b.getLabel()).addAll(calculatedEntry);
+            }else{
+                modified = currentMfp.get(current.b.getLabel()).retainAll(calculatedEntry);
+            }
+
+            if(modified){
+                current.b.getChildren().forEach(s -> {
+                    s.getChildren().forEach(c -> workQueue.add(new Pair<>(s, c)));
+                });
+            }
+        }
+    }
 
     public JoinType getJoinType() {
         return joinType;
@@ -56,4 +88,11 @@ public class MonotoneFramework<T> {
         this.bottom = bottom;
     }
 
+    public ITransferFunction<Set<T>> getTransferFunction() {
+        return transferFunction;
+    }
+
+    public void setTransferFunction(ITransferFunction<Set<T>> transferFunction) {
+        this.transferFunction = transferFunction;
+    }
 }

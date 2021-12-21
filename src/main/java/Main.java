@@ -1,11 +1,9 @@
-import analyse.Comparison;
-import analyse.Flow;
-import analyse.JoinType;
-import analyse.MonotoneFramework;
+import analyse.*;
 import ast.AstBuilder;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
+import ast.transfer.TransferVisitorAvailableExpression;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -17,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     private enum ErrorCode {
@@ -79,11 +79,20 @@ public class Main {
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
         f.prepare();
-
         f.toDot("test.dot");
 
-        Flow flow = new Flow();
-        //MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
+        f.reverseFlow();
+        f.toDot("reversed.dot");
+
+        TransferVisitorAvailableExpression<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression();
+
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, null, new ITransferFunction<Set<Aexpression>>() {
+            @Override
+            public Set<Aexpression> apply(State state, Set<State> nodes) {
+                return null;
+            }
+        });
+        monotoneFrameworkAexpression.analyse();
 
         exitWithCode(ErrorCode.SUCCESS);
     }
