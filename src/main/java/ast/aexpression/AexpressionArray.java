@@ -2,6 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
+import ast.transfer.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -17,6 +18,11 @@ public class AexpressionArray extends Aexpression {
 
     @Override
     public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
         return visitor.visit(this);
     }
 

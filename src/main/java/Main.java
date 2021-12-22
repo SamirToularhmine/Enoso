@@ -86,7 +86,7 @@ public class Main {
         f.toDot("reversed.dot");
 
 
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, null, (currentValue, state, nodes) -> {
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), (currentValue, state, nodes) -> {
             ITransferVisitor<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression(currentValue, nodes);
             return (Set<Aexpression>) state.getInstruction().accept(transferVisitorAvailableExpression);
         });

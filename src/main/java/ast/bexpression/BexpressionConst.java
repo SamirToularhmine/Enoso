@@ -2,6 +2,7 @@ package ast.bexpression;
 
 import ast.Position;
 import ast.Visitor;
+import ast.transfer.ITransferVisitor;
 
 public class BexpressionConst extends Bexpression{
         private boolean value;
@@ -13,6 +14,11 @@ public class BexpressionConst extends Bexpression{
 
         @Override
         public Object accept(Visitor visitor) {
+                return visitor.visit(this);
+        }
+
+        @Override
+        public Object accept(ITransferVisitor visitor) {
                 return visitor.visit(this);
         }
 

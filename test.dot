@@ -1,14 +1,11 @@
 digraph G {
-2 -> { 1 }
 {
-0 [shape = doublecircle]
+1 [shape = doublecircle, label="[0 < x] 1  "]
 }
+{1[label= "[0 < x] 1"]} -> { 2 }
 {
-0 [style = filled fillcolor = green]
+0 [style = filled fillcolor = green, label ="[x := 100] 0" ]
 }
-0 -> { 1 }
-{
-1 [shape = doublecircle]
-}
-1 -> { 2 }
+{0[label= "[x := 100] 0"]} -> { 1 }
+{2[label= "[x := x - 1 + x] 2"]} -> { 1 }
 }

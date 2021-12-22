@@ -4,6 +4,7 @@ import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
 import ast.opr.Opr;
+import ast.transfer.ITransferVisitor;
 
 public class BexpressionAexpressionOprAexpression extends Bexpression{
 
@@ -19,6 +20,11 @@ public class BexpressionAexpressionOprAexpression extends Bexpression{
 
     @Override
     public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
         return visitor.visit(this);
     }
 

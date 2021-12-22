@@ -16,6 +16,7 @@ public class MonotoneFramework<T> {
     public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, ITransferFunction<Set<T>> transferFunction) {
         this.joinType = joinType;
         this.flow = flow;
+        this.iota = new HashSet<>(iota);
         this.domain = new HashSet<>();
         this.domain.addAll(iota);
         this.comparison = comparison;
@@ -30,7 +31,7 @@ public class MonotoneFramework<T> {
         Map<Integer, Set<T>> currentMfp = new HashMap<>();
         Queue<Pair<State, State>> workQueue = new ArrayDeque<>();
 
-        nodes.forEach(n -> currentMfp.put(n.getLabel(), new HashSet<>()));
+        nodes.forEach(n -> currentMfp.put(n.getLabel(), null));
         entries.forEach(s -> {
             currentMfp.put(s.getLabel(), new HashSet<>(this.iota));
             s.getChildren().forEach(c -> workQueue.add(new Pair<>(s, c)));
@@ -38,13 +39,18 @@ public class MonotoneFramework<T> {
 
         while(!workQueue.isEmpty()){
             Pair<State, State> current = workQueue.poll();
-            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(currentMfp.get(current.a), current.a, nodes));
+            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(currentMfp.get(current.a.getLabel()), current.a, nodes));
             boolean modified;
 
-            if(this.joinType == JoinType.MAY){
-                modified = currentMfp.get(current.b.getLabel()).addAll(calculatedEntry);
+            if(currentMfp.get(current.b.getLabel()) == null){
+                modified = true;
+                currentMfp.put(current.b.getLabel(), new HashSet<>(calculatedEntry));
             }else{
-                modified = currentMfp.get(current.b.getLabel()).retainAll(calculatedEntry);
+                if(this.joinType == JoinType.MAY){
+                    modified = currentMfp.get(current.b.getLabel()).addAll(calculatedEntry);
+                }else{
+                    modified = currentMfp.get(current.b.getLabel()).retainAll(calculatedEntry);
+                }
             }
 
             if(modified){
