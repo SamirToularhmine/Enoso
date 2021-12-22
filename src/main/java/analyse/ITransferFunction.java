@@ -4,5 +4,5 @@ import java.util.Set;
 
 public interface ITransferFunction<T> {
 
-    T apply(State state, Set<State> flow);
+    T apply(T currentValue, State state, Set<State> flow);
 }
