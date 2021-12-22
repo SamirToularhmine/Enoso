@@ -38,8 +38,8 @@ public class MonotoneFramework<T> {
 
         while(!workQueue.isEmpty()){
             Pair<State, State> current = workQueue.poll();
-            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(current.a, nodes));
-            boolean modified = false;
+            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(currentMfp.get(current.a), current.a, nodes));
+            boolean modified;
 
             if(this.joinType == JoinType.MAY){
                 modified = currentMfp.get(current.b.getLabel()).addAll(calculatedEntry);

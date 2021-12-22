@@ -1,9 +1,7 @@
 package ast;
 
-import analyse.State;
-import ast.transfer.TransferVisitor;
-
-import java.util.Set;
+import ast.transfer.ITransferVisitor;
+import exceptions.InappropriateVisitException;
 
 public abstract class Node<T> {
     protected Position position;
@@ -12,6 +10,12 @@ public abstract class Node<T> {
         return position;
     }
 
-    public abstract T accept(Visitor<T> visitor);
+    public T accept(Visitor<T> visitor){
+        throw new InappropriateVisitException(this);
+    }
+
+    public T accept(ITransferVisitor<T> visitor){
+        throw new InappropriateVisitException(this);
+    }
 
 }

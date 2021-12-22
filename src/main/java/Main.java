@@ -3,6 +3,7 @@ import ast.AstBuilder;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
+import ast.transfer.ITransferVisitor;
 import ast.transfer.TransferVisitorAvailableExpression;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -84,15 +85,13 @@ public class Main {
         f.reverseFlow();
         f.toDot("reversed.dot");
 
-        TransferVisitorAvailableExpression<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression();
 
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, null, new ITransferFunction<Set<Aexpression>>() {
-            @Override
-            public Set<Aexpression> apply(State state, Set<State> nodes) {
-                return null;
-            }
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, null, (currentValue, state, nodes) -> {
+            ITransferVisitor<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression(currentValue, nodes);
+            return (Set<Aexpression>) state.getInstruction().accept(transferVisitorAvailableExpression);
         });
         monotoneFrameworkAexpression.analyse();
+
 
         exitWithCode(ErrorCode.SUCCESS);
     }

@@ -3,9 +3,6 @@ package ast.block;
 import ast.Position;
 import ast.Visitor;
 import ast.statement.Statement;
-import ast.transfer.TransferVisitor;
-
-import java.util.Set;
 
 public class BlockStatement extends Block{
     private Statement statement;
