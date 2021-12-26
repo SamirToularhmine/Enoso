@@ -11,9 +11,10 @@ public class MonotoneFramework<T> {
     private Comparison comparison;
     private T bottom;
     private Set<T> iota;
+    private boolean reversed;
     private ITransferFunction<Set<T>> transferFunction;
 
-    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, ITransferFunction<Set<T>> transferFunction) {
+    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, boolean reversed, ITransferFunction<Set<T>> transferFunction) {
         this.joinType = joinType;
         this.flow = flow;
         this.iota = new HashSet<>(iota);
@@ -21,11 +22,14 @@ public class MonotoneFramework<T> {
         this.domain.addAll(iota);
         this.comparison = comparison;
         this.bottom = bottom;
+        this.reversed = reversed;
         this.transferFunction = transferFunction;
     }
 
     public void analyse() {
         // Analyse MFP
+        if (this.reversed)
+            flow.reverseFlow();
         Set<State> entries = this.flow.getHead();
         Set<State> nodes = this.flow.getAllNodes();
         Map<Integer, Set<T>> currentMfp = new HashMap<>();

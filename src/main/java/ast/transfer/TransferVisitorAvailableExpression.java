@@ -25,9 +25,9 @@ import java.util.Set;
 public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<String>> {
 
     private Set<State> allNodes;
-    Set<String> currentValue;
+    private Set<Aexpression> currentValue;
 
-    public TransferVisitorAvailableExpression(Set<String> currentValue, Set<State> allNodes) {
+    public TransferVisitorAvailableExpression(Set<Aexpression> currentValue, Set<State> allNodes) {
         this.allNodes = allNodes;
         this.currentValue = currentValue;
     }
@@ -35,12 +35,12 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
     @Override
     public Set<String> visit(StatementAffectation statementAffectation) {
         // - Kill + Gen
-        Set<String> result = new HashSet<>(this.currentValue);
+        //Set<String> result = new HashSet<>(this.currentValue);
         String identifier = statementAffectation.getIdentifier();
         Set<String> gen = (Set<String>) statementAffectation.getAexpression().accept(this);
 
-
-        return result;
+        return null;
+        // return result;
     }
 
     @Override
@@ -80,7 +80,8 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<String> visit(AexpressionArray aexpressionArray) {
-        return new HashSet<>(Set.of(aexpressionArray.getIndex()));
+        return null;
+        //return new HashSet<>(Set.of(aexpressionArray.getIndex()));
     }
 
     @Override
@@ -89,7 +90,7 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
         result.addAll((Set<String>) aexpressionBinary.getLeft().accept(this));
         result.addAll((Set<String>) aexpressionBinary.getRight().accept(this));
-        result.add(aexpressionBinary);
+        //result.add(aexpressionBinary);
 
         return result;
     }
@@ -101,7 +102,8 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<String> visit(AexpressionIdentifier aexpressionIdentifier) {
-        return new HashSet<>(Set.of((String) aexpressionIdentifier));
+        return null;
+        //return new HashSet<>(Set.of((String) aexpressionIdentifier));
     }
 
     @Override

@@ -5,6 +5,7 @@ import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
 import ast.transfer.ITransferVisitor;
 import ast.transfer.TransferVisitorAvailableExpression;
+import ast.transfer.TransferVisitorLiveVariables;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -82,15 +83,22 @@ public class Main {
         f.prepare();
         f.toDot("test.dot");
 
-        f.reverseFlow();
-        f.toDot("reversed.dot");
 
 
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), (currentValue, state, nodes) -> {
+        /*MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), (currentValue, state, nodes) -> {
             ITransferVisitor<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression(currentValue, nodes);
             return (Set<Aexpression>) state.getInstruction().accept(transferVisitorAvailableExpression);
+        });*/
+
+       MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, (currentValue, state, nodes) -> {
+            ITransferVisitor<Set<String>> transferVisitorLiveVariables = new TransferVisitorLiveVariables(currentValue, nodes);
+            return (Set<String>) state.getInstruction().accept(transferVisitorLiveVariables);
         });
-        monotoneFrameworkAexpression.analyse();
+        monotoneFrameworkString.analyse();
+        f.toDot("test.dot");
+
+
+        //monotoneFrameworkAexpression.analyse();
 
 
         exitWithCode(ErrorCode.SUCCESS);
