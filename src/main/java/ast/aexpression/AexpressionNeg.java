@@ -2,7 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -30,6 +30,11 @@ public class AexpressionNeg extends Aexpression {
 
     public void setValue(Aexpression value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean contains(String identifier) {
+        return this.value.contains(identifier);
     }
 
     @Override

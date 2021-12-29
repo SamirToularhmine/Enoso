@@ -1,6 +1,5 @@
-package ast.transfer;
+package analyse.live_variables;
 
-import analyse.State;
 import ast.DecVariable;
 import ast.FunctionDeclaration.Declaration;
 import ast.Program;
@@ -14,10 +13,10 @@ import ast.block.BlockWithinParenthesis;
 import ast.opa.OpaValue;
 import ast.opr.OprValue;
 import ast.statement.*;
+import analyse.ITransferVisitor;
 import ast.type.TypeTable;
 import ast.type.TypeType;
 import exceptions.InappropriateVisitException;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,8 +25,12 @@ public class TransferVisitorLiveVariables implements ITransferVisitor<Set<String
 
     private Set<String> currentValue;
 
-    public TransferVisitorLiveVariables(Set<String> currentValue, Set<State> allNodes) {
-        this.currentValue = currentValue;
+    public TransferVisitorLiveVariables() {
+        this.currentValue = new HashSet<>();
+    }
+
+    public void reset(Set<String> currentValue){
+        this.currentValue = new HashSet<>(currentValue);
     }
 
     @Override
@@ -139,10 +142,14 @@ public class TransferVisitorLiveVariables implements ITransferVisitor<Set<String
     }
 
     private Set<String> killGen(Set<String> kill, Set<String> gen) {
-        if(kill != null)
-            this.currentValue.remove(kill);
-        if (gen != null)
-            this.currentValue.addAll(gen);
+        if(this.currentValue != null){
+            if(kill != null)
+                this.currentValue.removeAll(kill);
+
+            if (gen != null)
+                this.currentValue.addAll(gen);
+        }
+
         return currentValue;
     }
 

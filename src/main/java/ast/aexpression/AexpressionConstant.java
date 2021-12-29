@@ -2,7 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -27,6 +27,11 @@ public class AexpressionConstant extends Aexpression {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public boolean contains(String identifier) {
+        return false;
     }
 
     @Override

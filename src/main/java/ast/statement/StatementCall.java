@@ -3,10 +3,9 @@ package ast.statement;
 import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 
 import java.util.List;
-import java.util.Set;
 
 public class StatementCall extends Statement{
     private String identifier;

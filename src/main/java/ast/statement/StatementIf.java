@@ -4,10 +4,7 @@ import ast.Position;
 import ast.Visitor;
 import ast.bexpression.Bexpression;
 import ast.block.Block;
-import ast.transfer.ITransferVisitor;
-
-import java.util.HashSet;
-import java.util.Set;
+import analyse.ITransferVisitor;
 
 public class StatementIf extends Statement{
     private Bexpression condition;

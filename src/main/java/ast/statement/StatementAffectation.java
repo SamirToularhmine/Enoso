@@ -3,10 +3,7 @@ package ast.statement;
 import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
-import ast.transfer.ITransferVisitor;
-
-import java.util.HashSet;
-import java.util.Set;
+import analyse.ITransferVisitor;
 
 public class StatementAffectation extends Statement{
     private String identifier;

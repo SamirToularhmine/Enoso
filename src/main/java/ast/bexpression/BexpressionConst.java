@@ -2,7 +2,9 @@ package ast.bexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
+
+import java.util.Objects;
 
 public class BexpressionConst extends Bexpression{
         private boolean value;
@@ -30,5 +32,8 @@ public class BexpressionConst extends Bexpression{
                 this.value = value;
         }
 
-
+        @Override
+        public int hashCode() {
+                return Objects.hash(value);
+        }
 }

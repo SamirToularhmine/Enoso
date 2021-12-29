@@ -2,7 +2,7 @@ package ast.bexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 
 public class BexpressionNot extends Bexpression{
     private Bexpression value;
@@ -28,5 +28,10 @@ public class BexpressionNot extends Bexpression{
 
     public void setValue(Bexpression value) {
         this.value = value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
     }
 }

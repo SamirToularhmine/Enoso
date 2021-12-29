@@ -1,6 +1,6 @@
 package ast;
 
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 import exceptions.InappropriateVisitException;
 
 public abstract class Node<T> {

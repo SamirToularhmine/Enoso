@@ -3,6 +3,7 @@ package analyse;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MonotoneFramework<T> {
     private JoinType joinType;
@@ -12,9 +13,9 @@ public class MonotoneFramework<T> {
     private T bottom;
     private Set<T> iota;
     private boolean reversed;
-    private ITransferFunction<Set<T>> transferFunction;
+    private IAnalysis<Set<T>> analysis;
 
-    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, boolean reversed, ITransferFunction<Set<T>> transferFunction) {
+    public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, boolean reversed, IAnalysis<Set<T>> analysis) {
         this.joinType = joinType;
         this.flow = flow;
         this.iota = new HashSet<>(iota);
@@ -23,7 +24,7 @@ public class MonotoneFramework<T> {
         this.comparison = comparison;
         this.bottom = bottom;
         this.reversed = reversed;
-        this.transferFunction = transferFunction;
+        this.analysis = analysis;
     }
 
     public void analyse() {
@@ -38,12 +39,15 @@ public class MonotoneFramework<T> {
         nodes.forEach(n -> currentMfp.put(n.getLabel(), null));
         entries.forEach(s -> {
             currentMfp.put(s.getLabel(), new HashSet<>(this.iota));
-            s.getChildren().forEach(c -> workQueue.add(new Pair<>(s, c)));
+            s.getNext().forEach(c -> workQueue.add(new Pair<>(s, c)));
         });
 
+        System.out.println();
         while(!workQueue.isEmpty()){
             Pair<State, State> current = workQueue.poll();
-            Set<T> calculatedEntry = new HashSet<>(this.transferFunction.apply(currentMfp.get(current.a.getLabel()), current.a, nodes));
+            Set<T> result = this.analysis.apply(currentMfp.get(current.a.getLabel()), current.a);
+            System.out.println("On traite l'arc : (" + (current.a.getLabel() + 1) + "," + (current.b.getLabel() + 1) + ")" + " -> " + this.analysis.print(result));
+            Set<T> calculatedEntry = new HashSet<>(result);
             boolean modified;
 
             if(currentMfp.get(current.b.getLabel()) == null){
@@ -58,10 +62,44 @@ public class MonotoneFramework<T> {
             }
 
             if(modified){
-                current.b.getChildren().forEach(s -> {
-                    s.getChildren().forEach(c -> workQueue.add(new Pair<>(s, c)));
+                current.b.getNext().forEach(s -> {
+                    workQueue.add(new Pair<>(current.b, s));
                 });
             }
+        }
+
+        Map<Integer, Set<T>> currentMfpExit = new HashMap<>(currentMfp);
+        for(Integer key : currentMfpExit.keySet()){
+            Set<T> entry = currentMfpExit.get(key);
+            currentMfpExit.put(key, this.analysis.apply(entry, this.flow.findByLabel(key)));
+        }
+
+        System.out.println();
+
+        for(Integer i : currentMfp.keySet()){
+            if(currentMfp.get(i) != null){
+                Set<T> res = currentMfp.get(i);
+                System.out.print("Entry(" + (i+1) +") = ");
+
+                if(res == null || res.size() == 0){
+                    System.out.println("∅");
+                }else{
+                    System.out.println("{ " + this.analysis.print(res) + " }");
+                }
+            }
+
+            if(currentMfpExit.get(i) != null){
+                Set<T> res = currentMfpExit.get(i);
+
+                System.out.print("Exit(" + (i+1) +")  = ");
+                if(res == null || res.size() == 0){
+                    System.out.println("∅");
+                }else{
+                    System.out.println("{ " + this.analysis.print(res) + " }");
+                }
+            }
+
+            System.out.println();
         }
     }
 
@@ -96,13 +134,5 @@ public class MonotoneFramework<T> {
 
     public void setBottom(T bottom) {
         this.bottom = bottom;
-    }
-
-    public ITransferFunction<Set<T>> getTransferFunction() {
-        return transferFunction;
-    }
-
-    public void setTransferFunction(ITransferFunction<Set<T>> transferFunction) {
-        this.transferFunction = transferFunction;
     }
 }

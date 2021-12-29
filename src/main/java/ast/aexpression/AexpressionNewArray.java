@@ -2,7 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 import ast.type.Type;
 
 import java.util.Objects;
@@ -44,6 +44,11 @@ public class AexpressionNewArray extends Aexpression {
     }
 
     @Override
+    public boolean contains(String identifier) {
+        return this.value.contains(identifier);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -53,6 +58,6 @@ public class AexpressionNewArray extends Aexpression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, value);
+        return Objects.hash(type, value.hashCode());
     }
 }

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Flow implements Cloneable {
     private Set<State> head;
@@ -36,6 +37,16 @@ public class Flow implements Cloneable {
             allNodes.addAll(state.getAllNodes(new ArrayList<Integer>()));
         }
         return allNodes;
+    }
+
+    public State findByLabel(int label){
+        List<State> states = this.getAllNodes().stream().filter(s -> s.getLabel() == label).collect(Collectors.toList());
+
+        if(states.size() > 0){
+            return states.get(0);
+        }
+
+        return null;
     }
 
     public void reverseFlow() {

@@ -1,11 +1,12 @@
 import analyse.*;
+import analyse.available_expressions.AvailableExpressionsAnalysis;
+import analyse.live_variables.LiveVariablesAnalysis;
 import ast.AstBuilder;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
-import ast.transfer.ITransferVisitor;
-import ast.transfer.TransferVisitorAvailableExpression;
-import ast.transfer.TransferVisitorLiveVariables;
+import analyse.available_expressions.TransferVisitorAvailableExpression;
+import analyse.live_variables.TransferVisitorLiveVariables;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -75,7 +76,6 @@ public class Main {
         ParseTree parseTree = parse(inputStream);
         ast.Program program = buildAst(parseTree);
         //System.out.println(program);
-        VisitorPrint visitorPrint = new VisitorPrint();
         //System.out.print(program.accept(visitorPrint));
 
         VisitorFlow visitorFlow = new VisitorFlow();
@@ -83,22 +83,18 @@ public class Main {
         f.prepare();
         f.toDot("test.dot");
 
+        // f.reverseFlow();
+        // f.toDot("reversed.dot");
 
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkAexpression.analyse();
 
-        /*MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), (currentValue, state, nodes) -> {
-            ITransferVisitor<Set<Aexpression>> transferVisitorAvailableExpression = new TransferVisitorAvailableExpression(currentValue, nodes);
-            return (Set<Aexpression>) state.getInstruction().accept(transferVisitorAvailableExpression);
-        });*/
+        MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
 
-       MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, (currentValue, state, nodes) -> {
-            ITransferVisitor<Set<String>> transferVisitorLiveVariables = new TransferVisitorLiveVariables(currentValue, nodes);
-            return (Set<String>) state.getInstruction().accept(transferVisitorLiveVariables);
-        });
         monotoneFrameworkString.analyse();
         f.toDot("test.dot");
-
-
         //monotoneFrameworkAexpression.analyse();
+
 
 
         exitWithCode(ErrorCode.SUCCESS);

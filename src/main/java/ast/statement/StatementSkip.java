@@ -2,9 +2,7 @@ package ast.statement;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
-
-import java.util.Set;
+import analyse.ITransferVisitor;
 
 public class StatementSkip extends Statement{
 

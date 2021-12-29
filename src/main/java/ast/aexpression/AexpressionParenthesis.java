@@ -2,7 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
-import ast.transfer.ITransferVisitor;
+import analyse.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -33,6 +33,11 @@ public class AexpressionParenthesis extends Aexpression {
     }
 
     @Override
+    public boolean contains(String identifier) {
+        return this.aexpression.contains(identifier);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -42,6 +47,6 @@ public class AexpressionParenthesis extends Aexpression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(aexpression);
+        return aexpression.hashCode();
     }
 }
