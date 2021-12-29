@@ -1,5 +1,6 @@
 package analyse;
 
+import ast.VisitorPrint;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
@@ -29,8 +30,9 @@ public class MonotoneFramework<T> {
 
     public void analyse() {
         // Analyse MFP
-        if (this.reversed)
+        if (this.reversed && !flow.isBackward())
             flow.reverseFlow();
+
         Set<State> entries = this.flow.getHead();
         Set<State> nodes = this.flow.getAllNodes();
         Map<Integer, Set<T>> currentMfp = new HashMap<>();
@@ -46,7 +48,7 @@ public class MonotoneFramework<T> {
         while(!workQueue.isEmpty()){
             Pair<State, State> current = workQueue.poll();
             Set<T> result = this.analysis.apply(currentMfp.get(current.a.getLabel()), current.a);
-            System.out.println("On traite l'arc : (" + (current.a.getLabel() + 1) + "," + (current.b.getLabel() + 1) + ")" + " -> " + this.analysis.print(result));
+            System.out.println("On traite l'arc : (" + (current.a.getLabel() + 0) + "," + (current.b.getLabel() + 0) + ")" + " -> " + this.analysis.print(result));
             Set<T> calculatedEntry = new HashSet<>(result);
             boolean modified;
 
@@ -75,11 +77,12 @@ public class MonotoneFramework<T> {
         }
 
         System.out.println();
+        VisitorPrint visitorPrint = new VisitorPrint();
 
         for(Integer i : currentMfp.keySet()){
             if(currentMfp.get(i) != null){
                 Set<T> res = currentMfp.get(i);
-                System.out.print("Entry(" + (i+1) +") = ");
+                System.out.print("Entry [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i+1) +") = ");
 
                 if(res == null || res.size() == 0){
                     System.out.println("∅");
@@ -91,7 +94,7 @@ public class MonotoneFramework<T> {
             if(currentMfpExit.get(i) != null){
                 Set<T> res = currentMfpExit.get(i);
 
-                System.out.print("Exit(" + (i+1) +")  = ");
+                System.out.print("Exit [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i+1) +")  = ");
                 if(res == null || res.size() == 0){
                     System.out.println("∅");
                 }else{

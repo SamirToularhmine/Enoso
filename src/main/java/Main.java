@@ -1,7 +1,10 @@
 import analyse.*;
 import analyse.available_expressions.AvailableExpressionsAnalysis;
 import analyse.live_variables.LiveVariablesAnalysis;
+import analyse.reaching_definition.ReachingDefinitionAnalysis;
+import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
 import ast.AstBuilder;
+import ast.DecVariable;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
@@ -10,6 +13,7 @@ import analyse.live_variables.TransferVisitorLiveVariables;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.WhileLanguageLexer;
 import parser.WhileLanguageParser;
@@ -20,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Main {
     private enum ErrorCode {
@@ -86,12 +91,39 @@ public class Main {
         // f.reverseFlow();
         // f.toDot("reversed.dot");
 
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+ /*       MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
         monotoneFrameworkAexpression.analyse();
 
         MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
-
         monotoneFrameworkString.analyse();
+
+        Set<Pair<String, Integer>> iota = new HashSet<>();
+        for (DecVariable v : program.getlDeclVariables()) {
+            iota.addAll(v.getIdentifiers().stream().map(i -> new Pair<>(i, -1)).collect(Collectors.toSet()));
+        }
+
+        MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
+                JoinType.MAY,
+                f,
+                Comparison.SUBSET,
+                null,
+                iota,
+                false,
+                new ReachingDefinitionAnalysis(f.getAllNodes()));
+        monotoneFrameworkPair.analyse();*/
+
+        f.reverseFlow();
+        f.toDot("test_reversed.dot");
+        MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
+                JoinType.MUST,
+                f,
+                Comparison.SUPSET,
+                null,
+                new HashSet<>(),
+                true,
+                new VeryBusyExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkVb.analyse();
+
         f.toDot("test.dot");
         //monotoneFrameworkAexpression.analyse();
 

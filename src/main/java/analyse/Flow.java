@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 public class Flow implements Cloneable {
     private Set<State> head;
     private Set<State> finals;
+    private boolean backward;
 
     public Flow() {
         this.head = new HashSet<>();
         this.finals = new HashSet<>();
+        this.backward = false;
     }
 
     public Set<State> getHead() {
@@ -39,6 +41,10 @@ public class Flow implements Cloneable {
         return allNodes;
     }
 
+    public boolean isBackward() {
+        return backward;
+    }
+
     public State findByLabel(int label){
         List<State> states = this.getAllNodes().stream().filter(s -> s.getLabel() == label).collect(Collectors.toList());
 
@@ -51,6 +57,7 @@ public class Flow implements Cloneable {
 
     public void reverseFlow() {
         boolean newFlow = !this.head.iterator().next().isReversed();
+        this.backward = !this.backward;
         Set<State> newHeads = new HashSet<>();
 
         for (State state : this.head) { //Pour chacuns des points d'entrés actuels
