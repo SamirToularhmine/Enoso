@@ -4,6 +4,9 @@ import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
 import ast.opr.Opr;
+import analyse.ITransferVisitor;
+
+import java.util.Objects;
 
 public class BexpressionAexpressionOprAexpression extends Bexpression{
 
@@ -19,6 +22,11 @@ public class BexpressionAexpressionOprAexpression extends Bexpression{
 
     @Override
     public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
         return visitor.visit(this);
     }
 
@@ -44,5 +52,10 @@ public class BexpressionAexpressionOprAexpression extends Bexpression{
 
     public void setOpr(Opr opr) {
         this.opr = opr;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(left.hashCode(), right.hashCode(), opr.hashCode());
     }
 }

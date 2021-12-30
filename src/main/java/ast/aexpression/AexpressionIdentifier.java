@@ -2,6 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
+import analyse.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -18,12 +19,22 @@ public class AexpressionIdentifier extends Aexpression {
         return visitor.visit(this);
     }
 
+    @Override
+    public Object accept(ITransferVisitor visitor) {
+        return visitor.visit(this);
+    }
+
     public String getIdentifier() {
         return identifier;
     }
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public boolean contains(String identifier) {
+        return this.identifier.equals(identifier);
     }
 
     @Override

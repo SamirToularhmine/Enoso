@@ -8,17 +8,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Flow implements Cloneable {
-    private List<State> head;
-    private List<State> finals;
+    private Set<State> head;
+    private Set<State> finals;
 
     public Flow() {
-        this.head = new ArrayList<>();
-        this.finals = new ArrayList<>();
+        this.head = new HashSet<>();
+        this.finals = new HashSet<>();
     }
 
-    public List<State> getHead() {
+    public Set<State> getHead() {
         return head;
     }
 
@@ -26,20 +27,32 @@ public class Flow implements Cloneable {
         return getAllNodes().size();
     }
 
-    public List<State> getFinals() {
+    public Set<State> getFinals() {
         return finals;
     }
 
     public Set<State> getAllNodes() {
         Set<State> allNodes = new HashSet<>();
+
         for (State state : this.head) {
-            allNodes.addAll(state.getAllNodes(new ArrayList<Integer>()));
+            allNodes.addAll(state.getAllNodes(new ArrayList<>()));
         }
+
         return allNodes;
     }
 
+    public State findByLabel(int label){
+        List<State> states = this.getAllNodes().stream().filter(s -> s.getLabel() == label).collect(Collectors.toList());
+
+        if(states.size() > 0){
+            return states.get(0);
+        }
+
+        return null;
+    }
+
     public void reverseFlow() {
-        boolean newFlow = !this.head.get(0).isReversed();
+        boolean newFlow = !this.head.iterator().next().isReversed();
         Set<State> newHeads = new HashSet<>();
 
         for (State state : this.head) { //Pour chacuns des points d'entrés actuels
@@ -49,10 +62,13 @@ public class Flow implements Cloneable {
         for (State allNode : this.getAllNodes()) {
             allNode.setReversed(newFlow);
         }
+
         for (State state : this.head) {
             state.setFinal(true);
         }
-        this.head = List.copyOf(newHeads); //Finalement, on change l'attribut head
+
+        this.head = Set.copyOf(newHeads); //Finalement, on change l'attribut head
+
         for (State state : this.head) {
             state.setFinal(false);
         }
@@ -64,10 +80,13 @@ public class Flow implements Cloneable {
         for (State state : this.getHead()) {
             res.append(state.getLabel() + " ");
         }
+
         res.append("\n");
+
         for (State allNode : this.getAllNodes()) {
             res.append(allNode + "\n");
         }
+
         return res.toString();
     }
 

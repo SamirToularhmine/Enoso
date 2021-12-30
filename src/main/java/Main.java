@@ -1,14 +1,19 @@
-import analyse.Comparison;
-import analyse.Flow;
-import analyse.JoinType;
-import analyse.MonotoneFramework;
+import analyse.*;
+import analyse.available_expressions.AvailableExpressionsAnalysis;
+import analyse.live_variables.LiveVariablesAnalysis;
+import analyse.reaching_definition.ReachingDefinitionAnalysis;
+import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
 import ast.AstBuilder;
+import ast.DecVariable;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
+import analyse.available_expressions.TransferVisitorAvailableExpression;
+import analyse.live_variables.TransferVisitorLiveVariables;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.WhileLanguageLexer;
 import parser.WhileLanguageParser;
@@ -17,6 +22,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Main {
     private enum ErrorCode {
@@ -73,17 +81,52 @@ public class Main {
         ParseTree parseTree = parse(inputStream);
         ast.Program program = buildAst(parseTree);
         //System.out.println(program);
-        VisitorPrint visitorPrint = new VisitorPrint();
         //System.out.print(program.accept(visitorPrint));
 
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
         f.prepare();
-
         f.toDot("test.dot");
 
-        Flow flow = new Flow();
-        //MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, flow ,  Comparison.SUPSET, null, null);
+        // f.reverseFlow();
+        // f.toDot("reversed.dot");
+
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkAexpression.analyse();
+
+        MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
+        monotoneFrameworkString.analyse();
+
+        Set<Pair<String, Integer>> iota = new HashSet<>();
+        for (DecVariable v : program.getlDeclVariables()) {
+            iota.addAll(v.getIdentifiers().stream().map(i -> new Pair<>(i, -1)).collect(Collectors.toSet()));
+        }
+
+        MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
+                JoinType.MAY,
+                f,
+                Comparison.SUBSET,
+                null,
+                iota,
+                false,
+                new ReachingDefinitionAnalysis(f.getAllNodes()));
+        monotoneFrameworkPair.analyse();
+
+        f.toDot("test_reversed.dot");
+        MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
+                JoinType.MUST,
+                f,
+                Comparison.SUPSET,
+                null,
+                new HashSet<>(),
+                true,
+                new VeryBusyExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkVb.analyse();
+
+        f.toDot("test.dot");
+        //monotoneFrameworkAexpression.analyse();
+
+
 
         exitWithCode(ErrorCode.SUCCESS);
     }

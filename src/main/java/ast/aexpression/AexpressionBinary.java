@@ -3,6 +3,7 @@ package ast.aexpression;
 import ast.Position;
 import ast.Visitor;
 import ast.opa.Opa;
+import analyse.ITransferVisitor;
 
 import java.util.Objects;
 
@@ -19,6 +20,11 @@ public class AexpressionBinary extends Aexpression {
 
     @Override
     public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
         return visitor.visit(this);
     }
 
@@ -47,6 +53,11 @@ public class AexpressionBinary extends Aexpression {
     }
 
     @Override
+    public boolean contains(String identifier) {
+        return this.getLeft().contains(identifier) || this.getRight().contains(identifier);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -56,6 +67,6 @@ public class AexpressionBinary extends Aexpression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(left, right, operator);
+        return Objects.hash(left.hashCode(), right.hashCode(), operator.hashCode());
     }
 }

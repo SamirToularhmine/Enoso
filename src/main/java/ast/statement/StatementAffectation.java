@@ -3,9 +3,7 @@ package ast.statement;
 import ast.Position;
 import ast.Visitor;
 import ast.aexpression.Aexpression;
-
-import java.util.HashSet;
-import java.util.Set;
+import analyse.ITransferVisitor;
 
 public class StatementAffectation extends Statement{
     private String identifier;
@@ -19,6 +17,11 @@ public class StatementAffectation extends Statement{
 
     @Override
     public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
         return visitor.visit(this);
     }
 

@@ -30,7 +30,7 @@ public class State {
     public State(Node instruction, int label, List<State> children, List<State> parents, boolean isFinal) {
         this.instruction = instruction;
         this.label = label;
-        this.children = children;
+        this.children = new ArrayList<>(children);
         this.parents = parents;
         this.isReversed = false;
         this.isFinal = isFinal;
@@ -39,7 +39,7 @@ public class State {
     public State(Node instruction, int label, List<State> children, List<State> parents) {
         this.instruction = instruction;
         this.label = label;
-        this.children = children;
+        this.children = new ArrayList<>(children);
         this.parents = parents;
         this.isReversed = false;
         this.isFinal = false;

@@ -2,6 +2,7 @@ package ast.aexpression;
 
 import ast.Position;
 import ast.Visitor;
+import analyse.ITransferVisitor;
 import ast.type.Type;
 
 import java.util.Objects;
@@ -20,6 +21,12 @@ public class AexpressionNewArray extends Aexpression {
     public Object accept(Visitor visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public Object accept(ITransferVisitor visitor) {
+        return visitor.visit(this);
+    }
+
     public Type getType() {
         return type;
     }
@@ -37,6 +44,11 @@ public class AexpressionNewArray extends Aexpression {
     }
 
     @Override
+    public boolean contains(String identifier) {
+        return this.value.contains(identifier);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -46,6 +58,6 @@ public class AexpressionNewArray extends Aexpression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, value);
+        return Objects.hash(type, value.hashCode());
     }
 }

@@ -123,7 +123,13 @@ public class VisitorFlow implements Visitor<Flow>{
 
     @Override
     public Flow visit(BexpressionNot bexpressionNot) {
-        return (Flow) bexpressionNot.getValue().accept(this);
+        Flow flowFinal = new Flow();
+
+        State state = new State(bexpressionNot, -1, new ArrayList<>(), new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
@@ -188,16 +194,6 @@ public class VisitorFlow implements Visitor<Flow>{
         flowfinal.getHead().add(entree);
         flowfinal.getFinals().add(sortie);
 
-        /*if(procFlow != null){
-            entree.getChildren().addAll(procFlow.getHead());
-            procFlow.getFinals().forEach(f -> f.getChildren().add(sortie));
-            flowfinal.getHead().add(entree);
-            flowfinal.getFinals().add(sortie);
-        }else{
-            // Procédure innexistante
-        }
-        */
-
 
         return flowfinal;
     }
@@ -212,15 +208,15 @@ public class VisitorFlow implements Visitor<Flow>{
 
         flowFinal.getHead().addAll(flowCond.getHead());
         flowFinal.getFinals().addAll(flowIfBlock.getFinals());
-        flowFinal.getHead().get(0).getChildren().addAll(flowIfBlock.getHead());
+        flowFinal.getHead().iterator().next().getChildren().addAll(flowIfBlock.getHead());
 
         // Il peut ne pas y avoir de else block
         if(statementIf.getElseBlock() != null){
             flowElseBlock = (Flow) statementIf.getElseBlock().accept(this);
             flowFinal.getFinals().addAll(flowElseBlock.getFinals());
-            flowFinal.getHead().get(0).getChildren().addAll(flowElseBlock.getHead());
+            flowFinal.getHead().iterator().next().getChildren().addAll(flowElseBlock.getHead());
         }else{
-            flowFinal.getFinals().add(flowFinal.getHead().get(0));
+            flowFinal.getFinals().add(flowFinal.getHead().iterator().next());
         }
 
         return flowFinal;
@@ -240,7 +236,7 @@ public class VisitorFlow implements Visitor<Flow>{
 
         flowFinal.getHead().addAll(fbexp.getHead());
         fblock.getFinals().forEach(s -> s.getChildren().addAll(flowFinal.getHead()));
-        flowFinal.getHead().get(0).getChildren().add(fblock.getHead().get(0));
+        flowFinal.getHead().iterator().next().getChildren().add(fblock.getHead().iterator().next());
         flowFinal.getFinals().addAll(fbexp.getHead());
 
         return flowFinal;
