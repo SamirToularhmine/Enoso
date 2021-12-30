@@ -91,7 +91,7 @@ public class Main {
         // f.reverseFlow();
         // f.toDot("reversed.dot");
 
- /*       MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
         monotoneFrameworkAexpression.analyse();
 
         MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
@@ -110,9 +110,8 @@ public class Main {
                 iota,
                 false,
                 new ReachingDefinitionAnalysis(f.getAllNodes()));
-        monotoneFrameworkPair.analyse();*/
+        monotoneFrameworkPair.analyse();
 
-        f.reverseFlow();
         f.toDot("test_reversed.dot");
         MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
                 JoinType.MUST,

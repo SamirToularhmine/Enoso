@@ -18,7 +18,7 @@ public class MonotoneFramework<T> {
 
     public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, boolean reversed, IAnalysis<Set<T>> analysis) {
         this.joinType = joinType;
-        this.flow = flow;
+        this.flow = flow.clone();
         this.iota = new HashSet<>(iota);
         this.domain = new HashSet<>();
         this.domain.addAll(iota);
@@ -30,7 +30,7 @@ public class MonotoneFramework<T> {
 
     public void analyse() {
         // Analyse MFP
-        if (this.reversed && !flow.isBackward())
+        if (this.reversed)
             flow.reverseFlow();
 
         Set<State> entries = this.flow.getHead();
@@ -49,7 +49,11 @@ public class MonotoneFramework<T> {
             Pair<State, State> current = workQueue.poll();
             Set<T> result = this.analysis.apply(currentMfp.get(current.a.getLabel()), current.a);
             System.out.println("On traite l'arc : (" + (current.a.getLabel() + 0) + "," + (current.b.getLabel() + 0) + ")" + " -> " + this.analysis.print(result));
-            Set<T> calculatedEntry = new HashSet<>(result);
+            Set<T> calculatedEntry = new HashSet<>();
+            if(result != null){
+                calculatedEntry.addAll(result);
+            }
+
             boolean modified;
 
             if(currentMfp.get(current.b.getLabel()) == null){

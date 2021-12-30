@@ -36,7 +36,12 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
         // On crée toutes les expressions et sous expressions du programme
         VisitorGenAeStar visitorGenAeStar = new VisitorGenAeStar();
         VisitorPrint visitorPrint = new VisitorPrint();
-        this.allNodes.forEach(n -> aeStar.addAll((Set<Aexpression>) n.getInstruction().accept(visitorGenAeStar)));
+        for (State s : this.allNodes) {
+            Set<Aexpression> saexp = (Set<Aexpression>) s.getInstruction().accept(visitorGenAeStar);
+            if(saexp != null){
+                this.aeStar.addAll(saexp);
+            }
+        }
         aeStar.forEach(a -> System.out.println(a.accept(visitorPrint)));
     }
 
@@ -68,7 +73,24 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementCall statementCall) {
-        throw new InappropriateVisitException(statementCall);
+        if(statementCall.getParameters() != null){
+            Set<Aexpression> result = new HashSet<>();
+
+            for (Aexpression parameter : statementCall.getParameters()) {
+                if(parameter != null){
+                    Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
+
+                    if(paramGen != null){
+                        result.add(parameter);
+                        result.addAll(paramGen);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
     @Override
@@ -78,7 +100,7 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementSkip statementSkip) {
-        throw new InappropriateVisitException(statementSkip);
+        return null;
     }
 
     @Override
@@ -103,7 +125,14 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(AexpressionArray aexpressionArray) {
-        throw new InappropriateVisitException(aexpressionArray);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> indexGen = (Set<Aexpression>)aexpressionArray.getIndex().accept(this);
+        if(indexGen != null){
+            result.addAll(indexGen);
+        }
+
+        return result;
     }
 
     @Override
@@ -123,17 +152,38 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(AexpressionNewArray aexpressionNewArray) {
-        throw new InappropriateVisitException(aexpressionNewArray);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)aexpressionNewArray.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionParenthesis aexpressionParenthesis) {
-        throw new InappropriateVisitException(aexpressionParenthesis);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> aexpGen = (Set<Aexpression>)aexpressionParenthesis.getAexpression().accept(this);
+        if(aexpGen != null){
+            result.addAll(aexpGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionNeg aexpressionUnary) {
-        throw new InappropriateVisitException(aexpressionUnary);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)aexpressionUnary.getValue().accept(this);
+        if(valueGen != null){
+            result.add(aexpressionUnary);
+        }
+
+        return result;
     }
 
     @Override
@@ -155,17 +205,31 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(BexpressionConst bexpressionConst) {
-        throw new InappropriateVisitException(bexpressionConst);
+        return null;
     }
 
     @Override
     public Set<Aexpression> visit(BexpressionNot bexpressionNot) {
-        throw new InappropriateVisitException(bexpressionNot);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)bexpressionNot.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(BexpressionParenthesis bexpressionParenthesis) {
-        throw new InappropriateVisitException(bexpressionParenthesis);
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)bexpressionParenthesis.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override

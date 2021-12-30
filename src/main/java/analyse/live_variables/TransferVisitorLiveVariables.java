@@ -155,7 +155,17 @@ public class TransferVisitorLiveVariables implements ITransferVisitor<Set<String
 
     @Override
     public Set<String> visit(StatementCall statementCall) {
-        throw new InappropriateVisitException(statementCall);
+        if(statementCall.getParameters() != null){
+            Set<String> result = new HashSet<>();
+
+            for (Aexpression parameter : statementCall.getParameters()) {
+                result.addAll((Set<String>) parameter.accept(this));
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
     @Override

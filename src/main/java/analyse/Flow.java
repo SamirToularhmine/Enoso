@@ -13,12 +13,10 @@ import java.util.stream.Collectors;
 public class Flow implements Cloneable {
     private Set<State> head;
     private Set<State> finals;
-    private boolean backward;
 
     public Flow() {
         this.head = new HashSet<>();
         this.finals = new HashSet<>();
-        this.backward = false;
     }
 
     public Set<State> getHead() {
@@ -35,14 +33,12 @@ public class Flow implements Cloneable {
 
     public Set<State> getAllNodes() {
         Set<State> allNodes = new HashSet<>();
-        for (State state : this.head) {
-            allNodes.addAll(state.getAllNodes(new ArrayList<Integer>()));
-        }
-        return allNodes;
-    }
 
-    public boolean isBackward() {
-        return backward;
+        for (State state : this.head) {
+            allNodes.addAll(state.getAllNodes(new ArrayList<>()));
+        }
+
+        return allNodes;
     }
 
     public State findByLabel(int label){
@@ -57,7 +53,6 @@ public class Flow implements Cloneable {
 
     public void reverseFlow() {
         boolean newFlow = !this.head.iterator().next().isReversed();
-        this.backward = !this.backward;
         Set<State> newHeads = new HashSet<>();
 
         for (State state : this.head) { //Pour chacuns des points d'entrés actuels
@@ -67,10 +62,13 @@ public class Flow implements Cloneable {
         for (State allNode : this.getAllNodes()) {
             allNode.setReversed(newFlow);
         }
+
         for (State state : this.head) {
             state.setFinal(true);
         }
+
         this.head = Set.copyOf(newHeads); //Finalement, on change l'attribut head
+
         for (State state : this.head) {
             state.setFinal(false);
         }
@@ -82,10 +80,13 @@ public class Flow implements Cloneable {
         for (State state : this.getHead()) {
             res.append(state.getLabel() + " ");
         }
+
         res.append("\n");
+
         for (State allNode : this.getAllNodes()) {
             res.append(allNode + "\n");
         }
+
         return res.toString();
     }
 

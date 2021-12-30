@@ -27,7 +27,6 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     private Set<State> allNodes;
     private Set<Aexpression> currentValue;
-    private State currentState;
     private Set<Aexpression> aeStar;
 
     public TransferVisitorVeryBusyExpressions(Set<State> allNodes) {
@@ -38,13 +37,17 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
         // On crée toutes les expressions et sous expressions du programme
         VisitorGenAeStar visitorGenAeStar = new VisitorGenAeStar();
         VisitorPrint visitorPrint = new VisitorPrint();
-        this.allNodes.forEach(n -> aeStar.addAll((Set<Aexpression>) n.getInstruction().accept(visitorGenAeStar)));
+        for (State s : this.allNodes) {
+            Set<Aexpression> saexp = (Set<Aexpression>) s.getInstruction().accept(visitorGenAeStar);
+            if(saexp != null){
+                this.aeStar.addAll(saexp);
+            }
+        }
         aeStar.forEach(a -> System.out.println(a.accept(visitorPrint)));
     }
 
-    public void reset(State currentState, Set<Aexpression> currentValue){
+    public void reset(Set<Aexpression> currentValue){
         this.currentValue = currentValue;
-        this.currentState = currentState;
     }
 
     @Override
@@ -64,7 +67,14 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(AexpressionArray aexpressionArray) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> indexGen = (Set<Aexpression>)aexpressionArray.getIndex().accept(this);
+        if(indexGen != null){
+            result.addAll(indexGen);
+        }
+
+        return result;
     }
 
     @Override
@@ -96,17 +106,38 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(AexpressionNewArray aexpressionNewArray) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)aexpressionNewArray.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionParenthesis aexpressionParenthesis) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> aexpGen = (Set<Aexpression>)aexpressionParenthesis.getAexpression().accept(this);
+        if(aexpGen != null){
+            result.addAll(aexpGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionNeg aexpressionUnary) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)aexpressionUnary.getValue().accept(this);
+        if(valueGen != null){
+            result.add(aexpressionUnary);
+        }
+
+        return result;
     }
 
     @Override
@@ -133,12 +164,26 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(BexpressionNot bexpressionNot) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)bexpressionNot.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Aexpression> visit(BexpressionParenthesis bexpressionParenthesis) {
-        return null;
+        Set<Aexpression> result = new HashSet<>();
+
+        Set<Aexpression> valueGen = (Set<Aexpression>)bexpressionParenthesis.getValue().accept(this);
+        if(valueGen != null){
+            result.addAll(valueGen);
+        }
+
+        return result;
     }
 
     @Override
@@ -165,13 +210,14 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
     public Set<Aexpression> visit(StatementAffectation statementAffectation) {
         Set<Aexpression> result = new HashSet<>(this.currentValue != null ? this.currentValue : new HashSet<>());
         Set<Aexpression> kill = new HashSet<>(this.aeStar.stream().filter(a -> a.contains(statementAffectation.getIdentifier())).collect(Collectors.toSet()));
-        Set<Aexpression> gen = new HashSet<>(Set.of(statementAffectation.getAexpression()));
+        Set<Aexpression> gen = new HashSet<>();
 
         // Result - Kill
         result.removeAll(kill);
 
         Set<Aexpression> aexpa = (Set<Aexpression>) statementAffectation.getAexpression().accept(this);
         if(aexpa != null){
+            gen.add(statementAffectation.getAexpression());
             gen.addAll(aexpa);
         }
 
@@ -183,6 +229,23 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementCall statementCall) {
+        if(statementCall.getParameters() != null){
+            Set<Aexpression> result = new HashSet<>();
+
+            for (Aexpression parameter : statementCall.getParameters()) {
+                if(parameter != null){
+                    Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
+
+                    if(paramGen != null){
+                        result.add(parameter);
+                        result.addAll(paramGen);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         return null;
     }
 

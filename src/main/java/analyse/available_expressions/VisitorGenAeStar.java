@@ -2,7 +2,6 @@ package analyse.available_expressions;
 
 import ast.DecVariable;
 import ast.FunctionDeclaration.Declaration;
-import ast.Position;
 import ast.Program;
 import ast.Visitor;
 import ast.aexpression.*;
@@ -42,7 +41,6 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
     public Set<Aexpression> visit(AexpressionArray aexpressionArray) {
         Set<Aexpression> result = new HashSet<>();
 
-        result.add(aexpressionArray);
         result.addAll((Set<Aexpression>)aexpressionArray.getIndex().accept(this));
 
         return result;
@@ -70,22 +68,34 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
 
     @Override
     public Set<Aexpression> visit(AexpressionConstant aexpressionConstant) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionIdentifier aexpressionIdentifier) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionNewArray aexpressionNewArray) {
-        return new HashSet<>((Set<Aexpression>)aexpressionNewArray.getValue().accept(this));
+        Set<Aexpression> gen = (Set<Aexpression>) aexpressionNewArray.getValue().accept(this);
+
+        if(gen != null){
+            return new HashSet<>(gen);
+        }
+
+        return new HashSet<>();
     }
 
     @Override
     public Set<Aexpression> visit(AexpressionParenthesis aexpressionParenthesis) {
-        return new HashSet<>((Set<Aexpression>)aexpressionParenthesis.getAexpression().accept(this));
+        Set<Aexpression> gen = (Set<Aexpression>) aexpressionParenthesis.getAexpression().accept(this);
+
+        if(gen != null){
+            return new HashSet<>(gen);
+        }
+
+        return new HashSet<>();
     }
 
     @Override
@@ -93,7 +103,11 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
         Set<Aexpression> result = new HashSet<>();
 
         result.add(aexpressionUnary);
-        result.addAll((Set<Aexpression>)aexpressionUnary.getValue().accept(this));
+
+        Set<Aexpression> gen = (Set<Aexpression>)aexpressionUnary.getValue().accept(this);
+        if(gen != null){
+            result.addAll(gen);
+        }
 
         return result;
     }
@@ -117,17 +131,27 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
 
     @Override
     public Set<Aexpression> visit(BexpressionConst bexpressionConst) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
     public Set<Aexpression> visit(BexpressionNot bexpressionNot) {
-        throw new InappropriateVisitException(bexpressionNot);
+        Set<Aexpression> gen = (Set<Aexpression>) bexpressionNot.getValue().accept(this);
+        if(gen != null){
+            return new HashSet<>(gen);
+        }
+
+        return new HashSet<>();
     }
 
     @Override
     public Set<Aexpression> visit(BexpressionParenthesis bexpressionParenthesis) {
-        throw new InappropriateVisitException(bexpressionParenthesis);
+        Set<Aexpression> gen = (Set<Aexpression>) bexpressionParenthesis.getValue().accept(this);
+        if(gen != null){
+            return new HashSet<>(gen);
+        }
+
+        return new HashSet<>();
     }
 
     @Override
@@ -154,7 +178,7 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
     public Set<Aexpression> visit(StatementAffectation statementAffectation) {
         Set<Aexpression> expressions = (Set<Aexpression>) statementAffectation.getAexpression().accept(this);
         if(expressions != null){
-            return new HashSet<>((Set<Aexpression>) statementAffectation.getAexpression().accept(this));
+            return new HashSet<>(expressions);
         }
 
         return new HashSet<>();
@@ -162,7 +186,24 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
 
     @Override
     public Set<Aexpression> visit(StatementCall statementCall) {
-        throw new InappropriateVisitException(statementCall);
+        if(statementCall.getParameters() != null){
+            Set<Aexpression> result = new HashSet<>();
+
+            for (Aexpression parameter : statementCall.getParameters()) {
+                if(parameter != null){
+                    Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
+
+                    if(paramGen != null){
+                        result.add(parameter);
+                        result.addAll(paramGen);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        return new HashSet<>();
     }
 
     @Override
@@ -172,7 +213,7 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
 
     @Override
     public Set<Aexpression> visit(StatementSkip statementSkip) {
-        throw new InappropriateVisitException(statementSkip);
+        return new HashSet<>();
     }
 
     @Override

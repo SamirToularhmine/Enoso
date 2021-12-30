@@ -2,11 +2,9 @@ package analyse.reaching_definition;
 
 import analyse.ITransferVisitor;
 import analyse.State;
-import analyse.available_expressions.VisitorGenAeStar;
 import ast.DecVariable;
 import ast.FunctionDeclaration.Declaration;
 import ast.Program;
-import ast.VisitorPrint;
 import ast.aexpression.*;
 import ast.bexpression.BexpressionAexpressionOprAexpression;
 import ast.bexpression.BexpressionConst;
@@ -31,18 +29,10 @@ public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<P
     private Set<State> allNodes;
     private Set<Pair<String, Integer>> currentValue;
     private State currentState;
-    private Set<Aexpression> aeStar;
 
     public TransferVisitorReachingDefinition(Set<State> allNodes) {
         this.allNodes = new HashSet<>(allNodes);
         this.currentValue = new HashSet<>();
-        this.aeStar = new HashSet<>();
-
-        // On crée toutes les expressions et sous expressions du programme
-        VisitorGenAeStar visitorGenAeStar = new VisitorGenAeStar();
-        VisitorPrint visitorPrint = new VisitorPrint();
-        this.allNodes.forEach(n -> aeStar.addAll((Set<Aexpression>) n.getInstruction().accept(visitorGenAeStar)));
-        aeStar.forEach(a -> System.out.println(a.accept(visitorPrint)));
     }
 
     public void reset(State currentState, Set<Pair<String, Integer>> currentValue){
@@ -173,7 +163,7 @@ public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<P
 
     @Override
     public Set<Pair<String, Integer>> visit(StatementCall statementCall) {
-        throw new InappropriateVisitException(statementCall);
+        return new HashSet<>();
     }
 
     @Override
@@ -183,7 +173,7 @@ public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<P
 
     @Override
     public Set<Pair<String, Integer>> visit(StatementSkip statementSkip) {
-        throw new InappropriateVisitException(statementSkip);
+        return new HashSet<>();
     }
 
     @Override

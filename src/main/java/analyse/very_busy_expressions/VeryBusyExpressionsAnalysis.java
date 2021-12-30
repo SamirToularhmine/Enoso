@@ -19,13 +19,17 @@ public class VeryBusyExpressionsAnalysis implements IAnalysis<Set<Aexpression>> 
 
     @Override
     public Set<Aexpression> apply(Set<Aexpression> currentValue, State state) {
-        this.transferVisitorVeryBusyExpressions.reset(state, currentValue);
+        this.transferVisitorVeryBusyExpressions.reset(currentValue);
         return (Set<Aexpression>) state.getInstruction().accept(transferVisitorVeryBusyExpressions);
     }
 
     @Override
     public String print(Set<Aexpression> obj) {
-        VisitorPrint visitorPrint = new VisitorPrint();
-        return obj.stream().map(p -> (String) p.accept(visitorPrint) ).collect(Collectors.joining(", "));
+        if(obj != null){
+            VisitorPrint visitorPrint = new VisitorPrint();
+            return obj.stream().map(p -> (String) p.accept(visitorPrint) ).collect(Collectors.joining(", "));
+        }
+
+        return "";
     }
 }
