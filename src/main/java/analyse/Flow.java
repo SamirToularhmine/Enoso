@@ -124,7 +124,7 @@ public class Flow implements Cloneable {
     public void prepare() {
         Queue<State> aTraiter = new ArrayDeque<>(this.head);
         Set<State> processed = new HashSet<>();
-        int label = 0;
+        int label = 1;
 
         while (!aTraiter.isEmpty()) {
             State parent = aTraiter.poll();

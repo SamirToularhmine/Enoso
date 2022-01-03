@@ -86,7 +86,7 @@ public class MonotoneFramework<T> {
         for(Integer i : currentMfp.keySet()){
             if(currentMfp.get(i) != null){
                 Set<T> res = currentMfp.get(i);
-                System.out.print("Entry [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i+1) +") = ");
+                System.out.print("Entry [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i) +") = ");
 
                 if(res == null || res.size() == 0){
                     System.out.println("∅");
@@ -98,7 +98,7 @@ public class MonotoneFramework<T> {
             if(currentMfpExit.get(i) != null){
                 Set<T> res = currentMfpExit.get(i);
 
-                System.out.print("Exit [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i+1) +")  = ");
+                System.out.print("Exit [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i) +")  = ");
                 if(res == null || res.size() == 0){
                     System.out.println("∅");
                 }else{
