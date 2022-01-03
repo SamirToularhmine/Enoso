@@ -74,14 +74,13 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
     @Override
     public Set<Aexpression> visit(StatementCall statementCall) {
         if(statementCall.getParameters() != null){
-            Set<Aexpression> result = new HashSet<>();
+            Set<Aexpression> result = this.currentValue != null ? new HashSet<>(this.currentValue) : new HashSet<>();
 
             for (Aexpression parameter : statementCall.getParameters()) {
                 if(parameter != null){
                     Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
 
                     if(paramGen != null){
-                        result.add(parameter);
                         result.addAll(paramGen);
                     }
                 }

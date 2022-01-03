@@ -50,8 +50,13 @@ public class MonotoneFramework<T> {
             Set<T> result = this.analysis.apply(currentMfp.get(current.a.getLabel()), current.a);
             System.out.println("On traite l'arc : (" + (current.a.getLabel() + 0) + "," + (current.b.getLabel() + 0) + ")" + " -> " + this.analysis.print(result));
             Set<T> calculatedEntry = new HashSet<>();
+
             if(result != null){
                 calculatedEntry.addAll(result);
+            }
+
+            if(currentMfp.get(current.b.getLabel()) != null){
+                calculatedEntry.addAll(currentMfp.get(current.b.getLabel()));
             }
 
             boolean modified;

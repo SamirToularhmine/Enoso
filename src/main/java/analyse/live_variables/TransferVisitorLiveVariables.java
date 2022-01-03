@@ -162,7 +162,7 @@ public class TransferVisitorLiveVariables implements ITransferVisitor<Set<String
                 result.addAll((Set<String>) parameter.accept(this));
             }
 
-            return result;
+            return killGen(null, result);
         }
 
         return null;

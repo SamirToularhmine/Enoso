@@ -91,13 +91,13 @@ public class Main {
         // f.reverseFlow();
         // f.toDot("reversed.dot");
 
-        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
-        monotoneFrameworkAexpression.analyse();
+        /*MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkAexpression.analyse();*/
 
         MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
         monotoneFrameworkString.analyse();
 
-        Set<Pair<String, Integer>> iota = new HashSet<>();
+        /*Set<Pair<String, Integer>> iota = new HashSet<>();
         for (DecVariable v : program.getlDeclVariables()) {
             iota.addAll(v.getIdentifiers().stream().map(i -> new Pair<>(i, -1)).collect(Collectors.toSet()));
         }
@@ -123,7 +123,7 @@ public class Main {
                 new VeryBusyExpressionsAnalysis(f.getAllNodes()));
         monotoneFrameworkVb.analyse();
 
-        f.toDot("test.dot");
+        f.toDot("test.dot");*/
         //monotoneFrameworkAexpression.analyse();
 
 

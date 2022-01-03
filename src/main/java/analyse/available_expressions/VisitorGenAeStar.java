@@ -194,7 +194,6 @@ public class VisitorGenAeStar implements Visitor<Set<Aexpression>> {
                     Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
 
                     if(paramGen != null){
-                        result.add(parameter);
                         result.addAll(paramGen);
                     }
                 }
