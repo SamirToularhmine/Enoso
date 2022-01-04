@@ -1,15 +1,9 @@
 import analyse.*;
-import analyse.available_expressions.AvailableExpressionsAnalysis;
-import analyse.live_variables.LiveVariablesAnalysis;
 import analyse.reaching_definition.ReachingDefinitionAnalysis;
-import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
+import analyse.reaching_definition.VisitorGenFreeVariables;
 import ast.AstBuilder;
 import ast.DecVariable;
 import ast.VisitorFlow;
-import ast.VisitorPrint;
-import ast.aexpression.Aexpression;
-import analyse.available_expressions.TransferVisitorAvailableExpression;
-import analyse.live_variables.TransferVisitorLiveVariables;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,6 +16,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,21 +83,28 @@ public class Main {
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
         f.prepare();
-        f.toDot("test.dot");
 
-        // f.reverseFlow();
-        // f.toDot("reversed.dot");
-
-        /*MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
-        monotoneFrameworkAexpression.analyse();*/
+        f.toDot(outNameFromFileName(fileName));
+/*
+       MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
+        monotoneFrameworkAexpression.analyse();
 
         MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
+
         monotoneFrameworkString.analyse();
 
-        /*Set<Pair<String, Integer>> iota = new HashSet<>();
-        for (DecVariable v : program.getlDeclVariables()) {
+*/
+
+
+        Set<Pair<String, Integer>> iota = new HashSet<>();
+        /*for (DecVariable v : program.getlDeclVariables()) {
             iota.addAll(v.getIdentifiers().stream().map(i -> new Pair<>(i, -1)).collect(Collectors.toSet()));
         }
+
+         */
+
+        VisitorGenFreeVariables visitorGenFreeVariables = new VisitorGenFreeVariables();
+        iota.addAll((Set<Pair<String, Integer>>) program.accept(visitorGenFreeVariables));
 
         MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
                 JoinType.MAY,
@@ -111,8 +115,7 @@ public class Main {
                 false,
                 new ReachingDefinitionAnalysis(f.getAllNodes()));
         monotoneFrameworkPair.analyse();
-
-        f.toDot("test_reversed.dot");
+/*
         MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
                 JoinType.MUST,
                 f,
@@ -123,11 +126,26 @@ public class Main {
                 new VeryBusyExpressionsAnalysis(f.getAllNodes()));
         monotoneFrameworkVb.analyse();
 
-        f.toDot("test.dot");*/
         //monotoneFrameworkAexpression.analyse();
 
-
+*/
 
         exitWithCode(ErrorCode.SUCCESS);
+    }
+
+    private static String outNameFromFileName(String fileName) {
+        String total = fileName.replaceAll("src/main/resources", "src/main/out/");
+        String[] splitted = total.split("/");
+        StringBuilder directoryName = new StringBuilder();
+        for (int i = 0; i < splitted.length - 1; i++) {
+            directoryName.append(splitted[i]).append("/");
+        }
+        try {
+            Files.createDirectories(Paths.get(directoryName.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return total.split("\\.")[0] + ".dot";
     }
 }
