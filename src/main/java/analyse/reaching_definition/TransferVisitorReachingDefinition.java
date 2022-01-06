@@ -103,12 +103,12 @@ public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<P
 
     @Override
     public Set<Pair<String, Integer>> visit(BexpressionNot bexpressionNot) {
-        throw new InappropriateVisitException(bexpressionNot);
+        return (Set<Pair<String, Integer>>) bexpressionNot.getValue().accept(this);
     }
 
     @Override
     public Set<Pair<String, Integer>> visit(BexpressionParenthesis bexpressionParenthesis) {
-        throw new InappropriateVisitException(bexpressionParenthesis);
+        return (Set<Pair<String, Integer>>) bexpressionParenthesis.getValue().accept(this);
     }
 
     @Override

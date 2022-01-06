@@ -224,7 +224,13 @@ public class VisitorFlow implements Visitor<Flow>{
 
     @Override
     public Flow visit(StatementSkip statementSkip) {
-        return new Flow();
+        Flow flowFinal = new Flow();
+
+        State state = new State(statementSkip, -1, new ArrayList<>(), new ArrayList<>());
+        flowFinal.getHead().add(state);
+        flowFinal.getFinals().add(state);
+
+        return flowFinal;
     }
 
     @Override
