@@ -99,14 +99,16 @@ public class Flow implements Cloneable {
 
         try {
             for (State allNode : this.getAllNodes()) {
+                String labelName = " < [" + allNode.getPrefix() + " " + ((String) allNode.getInstruction().accept(visitorPrint)).replaceAll("<", "&lt;").replaceAll(">", "&gt;") + "]<SUP>"+ allNode.getLabel() +"</SUP>  >]";
                 if (allNode.isFinal()) {
-                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle, style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label=\"[" + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel() +"  \"]\n}\n";
+                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle, style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label= " + labelName + "\n}\n";
                 }
                 if (this.head.contains(allNode)) {
-                    str += "{\n n0 -> {" + allNode.getLabel() + " [ style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label =\"["  + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint)+ "] " + allNode.getLabel() +"\" ] }\n}\n";
+                    str += "{\n n0 -> {" + allNode.getLabel() + " [ style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label = "+ labelName +" }\n}\n";
                 }
                 if (allNode.getNext().size() > 0) {
-                    str += "{"+ allNode.getLabel() + "[style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label= \"["  + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel()  +"\"]} -> { ";
+                    str += "{"+ allNode.getLabel() + "[style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label= " + labelName + "} \n";
+                    str += allNode.getLabel() +" -> { ";
                     for (int i = 0; i < allNode.getNext().size() - 1; i++) {
                         str += allNode.getNext().get(i).getLabel() + " ";
                     }
