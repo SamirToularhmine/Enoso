@@ -2,7 +2,9 @@ package analyse;
 
 import ast.Node;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class State {
     private Node instruction;
@@ -10,6 +12,8 @@ public class State {
     private List<State> parents;
     private boolean isReversed, isFinal;
     private int label;
+    private String prefix;
+    private Color color;
 
     public State(Node instruction){
         this.children = new ArrayList<>();
@@ -17,6 +21,8 @@ public class State {
         this.label = -1;
         this.instruction = instruction;
         this.isFinal = false;
+        this.prefix = "";
+        this.color = Color.white;
     }
 
     public State(){
@@ -25,6 +31,8 @@ public class State {
         this.label = -1;
         this.instruction = null;
         this.isFinal = false;
+        this.prefix = "";
+        this.color = Color.white;
     }
 
     public State(Node instruction, int label, List<State> children, List<State> parents, boolean isFinal) {
@@ -34,6 +42,8 @@ public class State {
         this.parents = parents;
         this.isReversed = false;
         this.isFinal = isFinal;
+        this.prefix = "";
+        this.color = Color.white;
     }
 
     public State(Node instruction, int label, List<State> children, List<State> parents) {
@@ -43,6 +53,8 @@ public class State {
         this.parents = parents;
         this.isReversed = false;
         this.isFinal = false;
+        this.prefix = "";
+        this.color = Color.white;
     }
 
     public Node getInstruction() {
@@ -145,5 +157,21 @@ public class State {
 
     public void setFinal(boolean b) {
         this.isFinal = b;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

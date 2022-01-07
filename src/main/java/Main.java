@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.WhileLanguageLexer;
 import parser.WhileLanguageParser;
+import utils.Utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -87,9 +88,7 @@ public class Main {
         VisitorFlow visitorFlow = new VisitorFlow();
         Flow f = (Flow) program.accept(visitorFlow);
         f.prepare();
-        f.reverseFlow();
-        f.toDot(outNameFromFileName(fileName));
-        f.reverseFlow();
+        f.toDot(Utils.outNameFromFileName(fileName));
 /*
        MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
         monotoneFrameworkAexpression.analyse();
@@ -118,24 +117,7 @@ public class Main {
         monotoneFrameworkVb.analyse();*/
 
 
-
-
-        exitWithCode(ErrorCode.SUCCESS);
     }
 
-    private static String outNameFromFileName(String fileName) {
-        String total = fileName.replaceAll("src/main/resources", "src/main/out/");
-        String[] splitted = total.split("/");
-        StringBuilder directoryName = new StringBuilder();
-        for (int i = 0; i < splitted.length - 1; i++) {
-            directoryName.append(splitted[i]).append("/");
-        }
-        try {
-            Files.createDirectories(Paths.get(directoryName.toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return total.split("\\.")[0] + ".dot";
-    }
 }

@@ -2,6 +2,7 @@ package analyse;
 
 
 import ast.VisitorPrint;
+import utils.Utils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -92,19 +93,20 @@ public class Flow implements Cloneable {
 
     public void toDot(String name) {
         String str = "digraph G {\n";
+        str += "n0 [label= \"\", shape=none,height=.0,width=.0] \n";
         BufferedWriter writer = null;
         VisitorPrint visitorPrint = new VisitorPrint();
 
         try {
             for (State allNode : this.getAllNodes()) {
                 if (allNode.isFinal()) {
-                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle, label=\"[" + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel() +"  \"]\n}\n";
+                    str += "{\n" + allNode.getLabel() + " [shape = doublecircle, style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label=\"[" + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel() +"  \"]\n}\n";
                 }
                 if (this.head.contains(allNode)) {
-                    str += "{\n" + allNode.getLabel() + " [style = filled fillcolor = green, label =\"[" + allNode.getInstruction().accept(visitorPrint)+ "] " + allNode.getLabel() +"\" ]\n}\n";
+                    str += "{\n n0 -> {" + allNode.getLabel() + " [ style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label =\"["  + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint)+ "] " + allNode.getLabel() +"\" ] }\n}\n";
                 }
                 if (allNode.getNext().size() > 0) {
-                    str += "{"+ allNode.getLabel() + "[label= \"[" + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel()  +"\"]} -> { ";
+                    str += "{"+ allNode.getLabel() + "[style = filled fillcolor = \""+ Utils.formatColor(allNode.getColor()) +"\", label= \"["  + allNode.getPrefix() + " " + allNode.getInstruction().accept(visitorPrint) + "] "+ allNode.getLabel()  +"\"]} -> { ";
                     for (int i = 0; i < allNode.getNext().size() - 1; i++) {
                         str += allNode.getNext().get(i).getLabel() + " ";
                     }

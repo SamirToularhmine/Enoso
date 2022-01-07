@@ -16,9 +16,12 @@ import ast.statement.*;
 import ast.type.TypeTable;
 import ast.type.TypeType;
 import exceptions.InappropriateVisitException;
+import utils.Utils;
 
+import java.awt.*;
 import java.sql.Array;
 import java.util.*;
+import java.util.List;
 
 public class VisitorFlow implements Visitor<Flow>{
 
@@ -178,10 +181,14 @@ public class VisitorFlow implements Visitor<Flow>{
     @Override
     public Flow visit(StatementCall statementCall) {
         Flow flowfinal = new Flow();
+        State entree = new State(statementCall); // entry Call
 
-        State entree = new State(statementCall);
-        State sortie = new State(statementCall);
-        //Flow procFlow = this.proceduresMap.get(statementCall.getIdentifier()).clone();
+        Color color = Utils.createRandomColor();
+        entree.setPrefix("Entry");
+        entree.setColor(color);
+        State sortie = new State(statementCall); // exit Call
+        sortie.setPrefix("Exit");
+        sortie.setColor(color);
 
         if (this.entryState.containsKey(statementCall.getIdentifier())){
             this.entryState.get(statementCall.getIdentifier()).add(entree);
