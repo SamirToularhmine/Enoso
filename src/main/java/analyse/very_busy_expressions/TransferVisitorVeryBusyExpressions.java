@@ -81,6 +81,7 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
     public Set<Aexpression> visit(AexpressionBinary aexpressionBinary) {
         Set<Aexpression> result = new HashSet<>();
 
+        result.add(aexpressionBinary);
         Set<Aexpression> left = (Set<Aexpression>)aexpressionBinary.getLeft().accept(this);
         if(left != null){
             result.addAll(left);
@@ -142,7 +143,7 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(BexpressionAexpressionOprAexpression bexpressionAexpressionOprAexpression) {
-        Set<Aexpression> result = new HashSet<>(this.currentValue != null ? this.currentValue : new HashSet<>());
+        Set<Aexpression> result = this.currentValue != null ? new HashSet<>(this.currentValue) : new HashSet<>();
 
         Set<Aexpression> left = (Set<Aexpression>)bexpressionAexpressionOprAexpression.getLeft().accept(this);
         if(left != null){
@@ -208,7 +209,7 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementAffectation statementAffectation) {
-        Set<Aexpression> result = new HashSet<>(this.currentValue != null ? this.currentValue : new HashSet<>());
+        Set<Aexpression> result = this.currentValue != null ? new HashSet<>(this.currentValue) : new HashSet<>();
         Set<Aexpression> kill = new HashSet<>(this.aeStar.stream().filter(a -> a.contains(statementAffectation.getIdentifier())).collect(Collectors.toSet()));
         Set<Aexpression> gen = new HashSet<>();
 
@@ -230,14 +231,13 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
     @Override
     public Set<Aexpression> visit(StatementCall statementCall) {
         if(statementCall.getParameters() != null){
-            Set<Aexpression> result = new HashSet<>();
+            Set<Aexpression> result = this.currentValue != null ? new HashSet<>(this.currentValue) : new HashSet<>();
 
             for (Aexpression parameter : statementCall.getParameters()) {
                 if(parameter != null){
                     Set<Aexpression> paramGen = (Set<Aexpression>) parameter.accept(this);
 
                     if(paramGen != null){
-                        result.add(parameter);
                         result.addAll(paramGen);
                     }
                 }
@@ -256,7 +256,7 @@ public class TransferVisitorVeryBusyExpressions implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementSkip statementSkip) {
-        return null;
+        return this.currentValue != null ? new HashSet<>(this.currentValue) : new HashSet<>();
     }
 
     @Override

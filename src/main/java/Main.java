@@ -1,4 +1,6 @@
 import analyse.*;
+import analyse.available_expressions.AvailableExpressionsAnalysis;
+import analyse.live_variables.LiveVariablesAnalysis;
 import analyse.reaching_definition.ReachingDefinitionAnalysis;
 import analyse.reaching_definition.VisitorGenFreeVariables;
 import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
@@ -94,7 +96,7 @@ public class Main {
 
         MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
         monotoneFrameworkString.analyse();
-"
+*/
         MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
                 JoinType.MAY,
                 f,
@@ -104,7 +106,7 @@ public class Main {
                 false,
                 new ReachingDefinitionAnalysis(f.getAllNodes()));
         monotoneFrameworkPair.analyse();
-*/
+/*
         MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
                 JoinType.MUST,
                 f,
@@ -113,9 +115,8 @@ public class Main {
                 new HashSet<>(),
                 true,
                 new VeryBusyExpressionsAnalysis(f.getAllNodes()));
-        monotoneFrameworkVb.analyse();
+        monotoneFrameworkVb.analyse();*/
 
-        //monotoneFrameworkAexpression.analyse();
 
 
 

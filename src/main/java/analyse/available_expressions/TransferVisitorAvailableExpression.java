@@ -99,7 +99,7 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
 
     @Override
     public Set<Aexpression> visit(StatementSkip statementSkip) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override

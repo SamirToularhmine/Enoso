@@ -55,10 +55,6 @@ public class MonotoneFramework<T> {
                 calculatedEntry.addAll(result);
             }
 
-            if(currentMfp.get(current.b.getLabel()) != null){
-                calculatedEntry.addAll(currentMfp.get(current.b.getLabel()));
-            }
-
             boolean modified;
 
             if(currentMfp.get(current.b.getLabel()) == null){

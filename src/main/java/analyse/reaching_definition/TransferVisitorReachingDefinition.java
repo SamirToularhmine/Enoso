@@ -163,7 +163,7 @@ public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<P
 
     @Override
     public Set<Pair<String, Integer>> visit(StatementCall statementCall) {
-        return new HashSet<>();
+        return new HashSet<>(this.currentValue);
     }
 
     @Override

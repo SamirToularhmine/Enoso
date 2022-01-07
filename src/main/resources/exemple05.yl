@@ -1,0 +1,23 @@
+program tout
+proc test(int z, res int v)
+  begin
+    v := z * 2
+  end
+begin
+int a,b,c,d,e;
+b := 3;
+while( a > (b * 8)) do (
+if (a > b) then (
+x := b-a;
+y := a-b
+) else (
+y := b - a;
+b := a-b
+)
+);
+if (x > e) then(
+x := a / z;
+call test(x, e)
+)else
+skip
+end
