@@ -78,6 +78,10 @@ public class Main {
         if (arguments.length == 0)
             // No name given to the command line
             exitWithCode(ErrorCode.NO_FILE_NAME);
+        if (arguments.length == 2 && arguments[0].equals("getDotName")){
+            System.out.println(Utils.outNameFromFileName(arguments[1]));
+            return;
+        }
         String fileName = arguments[0];
         InputStream inputStream = getInputStream(fileName);
         ParseTree parseTree = parse(inputStream);
