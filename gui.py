@@ -87,9 +87,9 @@ class Gui():
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
         canvas.configure(yscrollcommand=scrollbar.set)
-        container.pack()
+        container.pack(fill="both", expand=True)
         canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        scrollbar.pack(side="right", fill="both", expand=True)
         return scrollable_frame
 
     def analyse(self):
