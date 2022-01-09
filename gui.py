@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import filedialog
 import os
@@ -71,23 +72,28 @@ class Gui():
     def openWindow(self, title):
         newWindow = tkinter.Toplevel(self.app)
         newWindow.title(title)
-        canv = tkinter.Canvas(newWindow)
-        canv.grid(row=0, column=0)
+        container = ttk.Frame(newWindow)
+        canvas = tkinter.Canvas(container)
+        scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
 
-        defilY = tkinter.Scrollbar(newWindow, orient='vertical',
-                           command=canv.yview)
-        defilY.grid(row=0, column=1, sticky='ns')
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
 
-        defilX = tkinter.Scrollbar(newWindow, orient='horizontal',
-                           command=canv.xview)
-        defilX.grid(row=1, column=0, sticky='ew')
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
-        canv['xscrollcommand'] = defilX.set
-        canv['yscrollcommand'] = defilY.set
-        return canv
+        canvas.configure(yscrollcommand=scrollbar.set)
+        container.pack()
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        return scrollable_frame
 
     def analyse(self):
-        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname,
+        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname+" "+self.varGr.get(),
                                               shell=True, stdout=subprocess.PIPE)
         analyse = subprocess_analyze.stdout.read()
         tkinter.Label(self.openWindow("Resultat d'analyse"), text=analyse.decode('utf-8')).pack()

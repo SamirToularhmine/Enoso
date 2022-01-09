@@ -78,49 +78,71 @@ public class Main {
         if (arguments.length == 0)
             // No name given to the command line
             exitWithCode(ErrorCode.NO_FILE_NAME);
-        if (arguments.length == 2 && arguments[0].equals("getDotName")){
+        if (arguments.length == 2 && arguments[0].equals("getDotName")) {
             System.out.println(Utils.outNameFromFileName(arguments[1]));
             return;
         }
-        String fileName = arguments[0];
-        InputStream inputStream = getInputStream(fileName);
-        ParseTree parseTree = parse(inputStream);
-        ast.Program program = buildAst(parseTree);
-        //System.out.println(program);
-        //System.out.print(program.accept(visitorPrint));
+        if (arguments.length == 2) {
+            String fileName = arguments[0];
+            String analyse = arguments[1];
+            InputStream inputStream = getInputStream(fileName);
+            ParseTree parseTree = parse(inputStream);
+            ast.Program program = buildAst(parseTree);
+            //System.out.println(program);
+            //System.out.print(program.accept(visitorPrint));
 
-        VisitorFlow visitorFlow = new VisitorFlow();
-        Flow f = (Flow) program.accept(visitorFlow);
-        f.prepare();
-        f.toDot(Utils.outNameFromFileName(fileName));
-/*
-       MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(JoinType.MUST, f, Comparison.SUPSET, null, new HashSet<>(), false, new AvailableExpressionsAnalysis(f.getAllNodes()));
-        monotoneFrameworkAexpression.analyse();
+            VisitorFlow visitorFlow = new VisitorFlow();
+            Flow f = (Flow) program.accept(visitorFlow);
+            f.prepare();
+            f.toDot(Utils.outNameFromFileName(fileName));
+            switch (analyse) {
+                case ("VeryBusy"):
+                    MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
+                            JoinType.MUST,
+                            f,
+                            Comparison.SUPSET,
+                            null,
+                            new HashSet<>(),
+                            true,
+                            new VeryBusyExpressionsAnalysis(f.getAllNodes()));
+                    monotoneFrameworkVb.analyse();
+                    return;
 
-        MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(JoinType.MAY, f, Comparison.SUBSET, null, new HashSet<>(), true, new LiveVariablesAnalysis());
-        monotoneFrameworkString.analyse();
-*/
-        MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
-                JoinType.MAY,
-                f,
-                Comparison.SUBSET,
-                null,
-                (Set<Pair<String, Integer>>) program.accept(new VisitorGenFreeVariables()), // iota
-                false,
-                new ReachingDefinitionAnalysis(f.getAllNodes()));
-        monotoneFrameworkPair.analyse();
-/*
-        MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
-                JoinType.MUST,
-                f,
-                Comparison.SUPSET,
-                null,
-                new HashSet<>(),
-                true,
-                new VeryBusyExpressionsAnalysis(f.getAllNodes()));
-        monotoneFrameworkVb.analyse();*/
-
-
+                case ("Reaching"):
+                    MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
+                            JoinType.MAY,
+                            f,
+                            Comparison.SUBSET,
+                            null,
+                            (Set<Pair<String, Integer>>) program.accept(new VisitorGenFreeVariables()), // iota
+                            false,
+                            new ReachingDefinitionAnalysis(f.getAllNodes()));
+                    monotoneFrameworkPair.analyse();
+                    return;
+                case ("AvailableExp"):
+                    MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(
+                            JoinType.MUST,
+                            f,
+                            Comparison.SUPSET,
+                            null,
+                            new HashSet<>(),
+                            false,
+                            new AvailableExpressionsAnalysis(f.getAllNodes()));
+                    monotoneFrameworkAexpression.analyse();
+                    return;
+                case ("LiveVar"):
+                    MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(
+                            JoinType.MAY,
+                            f,
+                            Comparison.SUBSET,
+                            null,
+                            new HashSet<>(),
+                            true,
+                            new LiveVariablesAnalysis());
+                    monotoneFrameworkString.analyse();
+                    return;
+            }
+        }
     }
 
 
