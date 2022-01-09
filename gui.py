@@ -4,6 +4,9 @@ from tkinter import filedialog
 import os
 import subprocess
 
+JAR_LOCATION = "target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar"
+
+
 class Gui():
     def __init__(self) -> None:
         self.app = tkinter.Tk()
@@ -65,19 +68,31 @@ class Gui():
         ).name
         self.btnBrowse['text'] = self.progname
 
-
     def openWindow(self, title):
         newWindow = tkinter.Toplevel(self.app)
         newWindow.title(title)
-        return newWindow
+        canv = tkinter.Canvas(newWindow)
+        canv.grid(row=0, column=0)
+
+        defilY = tkinter.Scrollbar(newWindow, orient='vertical',
+                           command=canv.yview)
+        defilY.grid(row=0, column=1, sticky='ns')
+
+        defilX = tkinter.Scrollbar(newWindow, orient='horizontal',
+                           command=canv.xview)
+        defilX.grid(row=1, column=0, sticky='ew')
+
+        canv['xscrollcommand'] = defilX.set
+        canv['yscrollcommand'] = defilY.set
+        return canv
 
     def analyse(self):
-        subprocess_analyze = subprocess.Popen("java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar " + self.progname,
-                                      shell=True, stdout=subprocess.PIPE)
+        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname,
+                                              shell=True, stdout=subprocess.PIPE)
         analyse = subprocess_analyze.stdout.read()
         tkinter.Label(self.openWindow("Resultat d'analyse"), text=analyse.decode('utf-8')).pack()
         subprocess_getdotname = subprocess.Popen(
-            "java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar getDotName " + self.progname, shell=True,
+            "java -jar " + JAR_LOCATION + " getDotName " + self.progname, shell=True,
             stdout=subprocess.PIPE)
         dotname = subprocess_getdotname.stdout.read()
         pathtoDot = dotname.decode('utf-8')
@@ -86,5 +101,6 @@ class Gui():
         self.imgDot = Image.open(pathtoDot.replace(".dot", ".png"))
         self.imgDisplay = ImageTk.PhotoImage(self.imgDot)
         tkinter.Label(self.openWindow("Graphique"), image=self.imgDisplay).pack()
+
 
 Gui()
