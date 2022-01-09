@@ -2,7 +2,7 @@ import tkinter
 from PIL import ImageTk, Image
 from tkinter import filedialog
 import os
-
+import subprocess
 
 class Gui():
     def __init__(self) -> None:
@@ -65,42 +65,26 @@ class Gui():
         ).name
         self.btnBrowse['text'] = self.progname
 
-    def openNewWindow(self, img):
-        # Toplevel object which will
-        # be treated as a new window
+
+    def openWindow(self, title):
         newWindow = tkinter.Toplevel(self.app)
-
-        # sets the title of the
-        # Toplevel widget
-        newWindow.title("Graphique du programme")
-
-        # sets the geometry of toplevel
-
-        # A Label widget to show in toplevel
-        panelDisplay = tkinter.Label(newWindow, image=img).pack()
-
+        newWindow.title(title)
+        return newWindow
 
     def analyse(self):
-        print("java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar " + self.progname)
-        # os.system("java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar "+self.progname)
-        import subprocess
-        subprocess = subprocess.Popen("java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar " + self.progname,
+        subprocess_analyze = subprocess.Popen("java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar " + self.progname,
                                       shell=True, stdout=subprocess.PIPE)
-        analyse = subprocess.stdout.read()
-        import subprocess
-        subprocess = subprocess.Popen(
+        analyse = subprocess_analyze.stdout.read()
+        tkinter.Label(self.openWindow("Resultat d'analyse"), text=analyse.decode('utf-8')).pack()
+        subprocess_getdotname = subprocess.Popen(
             "java -jar target/Enoso-1.0-SNAPSHOT-jar-with-dependencies.jar getDotName " + self.progname, shell=True,
             stdout=subprocess.PIPE)
-        subprocess_return = subprocess.stdout.read()
-        print(subprocess_return)
-        pathtoDot = subprocess_return.decode('utf-8')
+        dotname = subprocess_getdotname.stdout.read()
+        pathtoDot = dotname.decode('utf-8')
         pathtoDot = pathtoDot.replace("\r\n", '')
-        print("dot -Tpng " + pathtoDot + " > " + pathtoDot + ".png")
-        os.system("dot -Tpng " + pathtoDot + " > " + pathtoDot + ".png")
-        imgDot = Image.open(pathtoDot + ".png")
-        imgDisplay = ImageTk.PhotoImage(imgDot)
-        self.openNewWindow(imgDisplay)
-        tkinter.messagebox.showinfo("Resultat", analyse)
-
+        os.system("dot -Tpng " + pathtoDot + " > " + pathtoDot.replace(".dot", ".png"))
+        self.imgDot = Image.open(pathtoDot.replace(".dot", ".png"))
+        self.imgDisplay = ImageTk.PhotoImage(self.imgDot)
+        tkinter.Label(self.openWindow("Graphique"), image=self.imgDisplay).pack()
 
 Gui()
