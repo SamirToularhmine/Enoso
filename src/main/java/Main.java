@@ -90,7 +90,7 @@ public class Main {
             ParseTree parseTree = parse(inputStream);
             ast.Program program = buildAst(parseTree);
             VisitorPrint visitorPrint = new VisitorPrint();
-            System.out.print(program.accept(visitorPrint));
+            System.out.println(program.accept(visitorPrint));
 
             VisitorFlow visitorFlow = new VisitorFlow();
             Flow f = (Flow) program.accept(visitorFlow);
