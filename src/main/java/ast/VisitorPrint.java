@@ -30,22 +30,16 @@ public class VisitorPrint implements Visitor<String> {
         res.append("\n");
         for (Declaration declaration : program.getDeclarationList()) {
             res.append((String) declaration.accept(this));
+            res.append("\n");
         }
         res.append("begin \n");
         tabulation++;
         for (DecVariable getlDeclVariable : program.getlDeclVariables()) {
             res.append((String) getlDeclVariable.accept(this));
+            res.append("\n");
         }
         List<Statement> statements = program.getStatements();
-        for (int i = 0; i < statements.size(); i++) {
-            Statement statement = statements.get(i);
-            res.append((String) statement.accept(this));
-            if (i != statements.size() - 1) {
-                res.append(";\n");
-            }else{
-                res.append("\n");
-            }
-        }
+        getStatements(res, statements);
         res.append("end");
         tabulation = 0;
         return res.toString();
@@ -61,31 +55,31 @@ public class VisitorPrint implements Visitor<String> {
             if (i != decVariable.getIdentifiers().size() - 1)
                 str.append(", ");
         }
-        str.append(";\n");
+        str.append(";");
         return str.toString();
     }
 
     @Override
     public String visit(Declaration declaration) {
-        StringBuilder str = new StringBuilder("proc " + declaration.getProcName() + "(");
+        StringBuilder res = new StringBuilder("proc " + declaration.getProcName() + "(");
         for (int i = 0; i < declaration.getArguments().size(); i++) {
             Arguments argument = declaration.getArguments().get(i);
-            str.append(argument.getType().accept(this) + " " + argument.getIdentifier());
+            res.append(argument.getType().accept(this) + " " + argument.getIdentifier());
             if (i != declaration.getArguments().size() - 1) {
-                str.append(", ");
+                res.append(", ");
             }
         }
         if (declaration.getReturnType() != null) {
-            str.append(", res " + (String) declaration.getReturnType().b.accept(this) + " " + declaration.getReturnType().a);
+            res.append(", res " + declaration.getReturnType().b.accept(this) + " " + declaration.getReturnType().a);
         }
         tabulation++;
-        str.append(")\nbegin\n");
+        res.append(")\nbegin\n");
 
-        for (int i = 0; i < declaration.getBody().size(); i++) {
-            str.append(declaration.getBody().get(i).accept(this));
-        }
+        List<Statement> statements = declaration.getBody();
+        getStatements(res, statements);
+
         tabulation = 0;
-        return str.append("end\n").toString();
+        return res.append("end").toString();
     }
 
     @Override
@@ -145,7 +139,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(BlockStatement blockStatement) {
-        return (String) blockStatement.getStatement().accept(this) + "\n";
+        return (String) blockStatement.getStatement().accept(this);
     }
 
     @Override
@@ -197,6 +191,7 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(StatementIf statementIf) {
+        StringBuilder result = new StringBuilder();
         String tab = "\t".repeat(Math.max(0, this.tabulation));
         tabulation++;
         String ifBlock = (String) statementIf.getIfBlock().accept(this);
@@ -204,27 +199,22 @@ public class VisitorPrint implements Visitor<String> {
         if (premierVraiChar(ifBlock) != '(') {
             ifBlock = "\n" + ifBlock;
         }
-        String result = tab + "if " + statementIf.getCondition().accept(this) + " then" + ifBlock;
-        String elseString = "";
 
-
+        StringBuilder elseBlock = new StringBuilder();
         if (statementIf.getElseBlock() != null) {
-            elseString = "else";
-            tab = "\t".repeat(Math.max(0, this.tabulation));
-            String lastChar = ifBlock.substring(ifBlock.length() - 1);
-            if (!lastChar.equals(")"))
-                elseString = tab + elseString;
+            elseBlock.append("\n " + tab + "else");
             tabulation++;
-            String elseBlock = (String) statementIf.getElseBlock().accept(this);
-            tabulation--;
-            if (premierVraiChar(elseBlock) != '(') {
-                elseString+= "\n";
+            String elseString = (String) statementIf.getElseBlock().accept(this);
+            if (premierVraiChar(elseString) != '(') {
+                elseBlock.append("\n");
             }
-            elseString += elseBlock;
+            elseBlock.append(elseString);
+            tabulation--;
         }
 
-        result += elseString;
-        return result;
+        result.append(tab + "if ").append(statementIf.getCondition().accept(this)).append(" then").append(ifBlock).append(elseBlock);
+
+        return result.toString();
     }
 
     @Override
@@ -235,11 +225,14 @@ public class VisitorPrint implements Visitor<String> {
     @Override
     public String visit(StatementWhile statementWhile) {
         String tab = "\t".repeat(Math.max(0, this.tabulation));
-        String result = tab + "while " + statementWhile.getCondition().accept(this) + " do ";
+        StringBuilder resultat = new StringBuilder(tab + "while " + statementWhile.getCondition().accept(this) + " do ");
         tabulation++;
-        result += statementWhile.getBlock().accept(this);
+        String whileBlock = (String) statementWhile.getBlock().accept(this);
+        if (premierVraiChar(whileBlock) != '(')
+            resultat.append("\n");
+        resultat.append(statementWhile.getBlock().accept(this));
         tabulation--;
-        return result;
+        return resultat.toString();
     }
 
     @Override
@@ -250,6 +243,18 @@ public class VisitorPrint implements Visitor<String> {
     @Override
     public String visit(TypeType typeType) {
         return typeType.getType();
+    }
+
+    private void getStatements(StringBuilder res, List<Statement> statements) {
+        for (int i = 0; i < statements.size(); i++) {
+            Statement statement = statements.get(i);
+            res.append((String) statement.accept(this));
+            if (i != statements.size() - 1) {
+                res.append(";\n");
+            } else {
+                res.append("\n");
+            }
+        }
     }
 
     private char premierVraiChar(String string) {
