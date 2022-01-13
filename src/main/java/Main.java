@@ -7,6 +7,7 @@ import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
 import ast.AstBuilder;
 import ast.DecVariable;
 import ast.VisitorFlow;
+import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -88,8 +89,8 @@ public class Main {
             InputStream inputStream = getInputStream(fileName);
             ParseTree parseTree = parse(inputStream);
             ast.Program program = buildAst(parseTree);
-            //System.out.println(program);
-            //System.out.print(program.accept(visitorPrint));
+            VisitorPrint visitorPrint = new VisitorPrint();
+            System.out.print(program.accept(visitorPrint));
 
             VisitorFlow visitorFlow = new VisitorFlow();
             Flow f = (Flow) program.accept(visitorFlow);

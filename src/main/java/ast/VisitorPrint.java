@@ -9,8 +9,8 @@ import ast.bexpression.BexpressionNot;
 import ast.bexpression.BexpressionParenthesis;
 import ast.block.BlockStatement;
 import ast.block.BlockWithinParenthesis;
-import ast.opa.*;
-import ast.opr.*;
+import ast.opa.OpaValue;
+import ast.opr.OprValue;
 import ast.statement.*;
 import ast.type.TypeTable;
 import ast.type.TypeType;
@@ -18,17 +18,21 @@ import ast.type.TypeType;
 import java.util.List;
 
 public class VisitorPrint implements Visitor<String> {
+    private int tabulation;
+
     @Override
     public String visit(Program program) {
-        StringBuilder res = new StringBuilder("program ");
-        if (program.getProgramName() != null){
-            res.append(program.getProgramName());
+        StringBuilder res = new StringBuilder("program");
+        tabulation = 0;
+        if (program.getProgramName() != null) {
+            res.append(" " + program.getProgramName());
         }
         res.append("\n");
         for (Declaration declaration : program.getDeclarationList()) {
             res.append((String) declaration.accept(this));
         }
         res.append("begin \n");
+        tabulation++;
         for (DecVariable getlDeclVariable : program.getlDeclVariables()) {
             res.append((String) getlDeclVariable.accept(this));
         }
@@ -36,17 +40,22 @@ public class VisitorPrint implements Visitor<String> {
         for (int i = 0; i < statements.size(); i++) {
             Statement statement = statements.get(i);
             res.append((String) statement.accept(this));
-            if (i != statements.size()-1){
+            if (i != statements.size() - 1) {
                 res.append(";\n");
+            }else{
+                res.append("\n");
             }
         }
-        res.append("\nend");
+        res.append("end");
+        tabulation = 0;
         return res.toString();
     }
 
     @Override
     public String visit(DecVariable decVariable) {
-        StringBuilder str = new StringBuilder(decVariable.getType().accept(this)+ " ");
+        StringBuilder str = new StringBuilder();
+        str.append("\t".repeat(Math.max(0, this.tabulation)));
+        str.append(decVariable.getType().accept(this) + " ");
         for (int i = 0; i < decVariable.getIdentifiers().size(); i++) {
             str.append(decVariable.getIdentifiers().get(i));
             if (i != decVariable.getIdentifiers().size() - 1)
@@ -62,19 +71,21 @@ public class VisitorPrint implements Visitor<String> {
         for (int i = 0; i < declaration.getArguments().size(); i++) {
             Arguments argument = declaration.getArguments().get(i);
             str.append(argument.getType().accept(this) + " " + argument.getIdentifier());
-            if (i != declaration.getArguments().size()-1){
+            if (i != declaration.getArguments().size() - 1) {
                 str.append(", ");
             }
         }
-        if (declaration.getReturnType() != null){
+        if (declaration.getReturnType() != null) {
             str.append(", res " + (String) declaration.getReturnType().b.accept(this) + " " + declaration.getReturnType().a);
         }
+        tabulation++;
         str.append(")\nbegin\n");
 
         for (int i = 0; i < declaration.getBody().size(); i++) {
             str.append(declaration.getBody().get(i).accept(this));
         }
-        return str.append("\nend\n").toString();
+        tabulation = 0;
+        return str.append("end\n").toString();
     }
 
     @Override
@@ -99,12 +110,12 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(AexpressionNewArray aexpressionNewArray) {
-        return "new " + aexpressionNewArray.getType().accept(this) + "[" + aexpressionNewArray.getValue().accept(this)+ "]";
+        return "new " + aexpressionNewArray.getType().accept(this) + "[" + aexpressionNewArray.getValue().accept(this) + "]";
     }
 
     @Override
     public String visit(AexpressionParenthesis aexpressionParenthesis) {
-        return "(" + aexpressionParenthesis.getAexpression().accept(this) +")";
+        return "(" + aexpressionParenthesis.getAexpression().accept(this) + ")";
     }
 
     @Override
@@ -124,12 +135,12 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(BexpressionNot bexpressionNot) {
-        return "not " + bexpressionNot.getValue().accept(this) ;
+        return "not " + bexpressionNot.getValue().accept(this);
     }
 
     @Override
     public String visit(BexpressionParenthesis bexpressionParenthesis) {
-        return "(" + bexpressionParenthesis.getValue().accept(this) +")";
+        return "(" + bexpressionParenthesis.getValue().accept(this) + ")";
     }
 
     @Override
@@ -139,19 +150,21 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(BlockWithinParenthesis blockWithinParenthesis) {
-        StringBuilder str = new StringBuilder("(\n");
+        String tab = "\t".repeat(Math.max(0, this.tabulation - 1));
+
+        StringBuilder str = new StringBuilder(" (\n");
         for (int i = 0; i < blockWithinParenthesis.getStatements().size(); i++) {
             str.append(blockWithinParenthesis.getStatements().get(i).accept(this));
-            if(i != blockWithinParenthesis.getStatements().size() -1){
-                str.append("; ");
+            if (i != blockWithinParenthesis.getStatements().size() - 1) {
+                str.append(";\n");
             }
         }
-        return str.append("\n)").toString();
+        return str.append("\n" + tab + ")").toString();
     }
 
     @Override
     public String visit(OpaValue opaValue) {
-        return " " +opaValue.getCaracter() + " ";
+        return " " + opaValue.getCaracter() + " ";
     }
 
     @Override
@@ -161,7 +174,9 @@ public class VisitorPrint implements Visitor<String> {
 
     @Override
     public String visit(StatementAffectation statementAffectation) {
-        return statementAffectation.getIdentifier() + " := " + statementAffectation.getAexpression().accept(this);
+        StringBuilder str = new StringBuilder();
+        str.append("\t".repeat(Math.max(0, this.tabulation)));
+        return str.append(statementAffectation.getIdentifier() + " := " + statementAffectation.getAexpression().accept(this)).toString();
     }
 
     @Override
@@ -171,30 +186,60 @@ public class VisitorPrint implements Visitor<String> {
         for (int i = 0; i < statementCallParameters.size(); i++) {
             Aexpression parameter = statementCallParameters.get(i);
             str.append((String) parameter.accept(this));
-            if(i != statementCallParameters.size() -1){
+            if (i != statementCallParameters.size() - 1) {
                 str.append(", ");
             }
         }
-        return "call " + statementCall.getIdentifier() + "(" + str + ")";
+        String tab = "\t".repeat(Math.max(0, this.tabulation));
+
+        return tab + "call " + statementCall.getIdentifier() + "(" + str + ")";
     }
 
     @Override
     public String visit(StatementIf statementIf) {
-        String elseString = "";
-        if (statementIf.getElseBlock()!= null){
-            elseString = "else " + statementIf.getElseBlock().accept(this);
+        String tab = "\t".repeat(Math.max(0, this.tabulation));
+        tabulation++;
+        String ifBlock = (String) statementIf.getIfBlock().accept(this);
+        tabulation--;
+        if (premierVraiChar(ifBlock) != '(') {
+            ifBlock = "\n" + ifBlock;
         }
-        return "if " + statementIf.getCondition().accept(this)+ " then " + statementIf.getIfBlock().accept(this) + elseString;
+        String result = tab + "if " + statementIf.getCondition().accept(this) + " then" + ifBlock;
+        String elseString = "";
+
+
+        if (statementIf.getElseBlock() != null) {
+            elseString = "else";
+            tab = "\t".repeat(Math.max(0, this.tabulation));
+            String lastChar = ifBlock.substring(ifBlock.length() - 1);
+            if (!lastChar.equals(")"))
+                elseString = tab + elseString;
+            tabulation++;
+            String elseBlock = (String) statementIf.getElseBlock().accept(this);
+            tabulation--;
+            if (premierVraiChar(elseBlock) != '(') {
+                elseString+= "\n";
+            }
+            elseString += elseBlock;
+        }
+
+        result += elseString;
+        return result;
     }
 
     @Override
     public String visit(StatementSkip statementSkip) {
-        return "skip";
+        return "\t".repeat(Math.max(0, this.tabulation)) + "skip";
     }
 
     @Override
     public String visit(StatementWhile statementWhile) {
-        return "while " +  statementWhile.getCondition().accept(this) + " do " + statementWhile.getBlock().accept(this) + "";
+        String tab = "\t".repeat(Math.max(0, this.tabulation));
+        String result = tab + "while " + statementWhile.getCondition().accept(this) + " do ";
+        tabulation++;
+        result += statementWhile.getBlock().accept(this);
+        tabulation--;
+        return result;
     }
 
     @Override
@@ -205,5 +250,10 @@ public class VisitorPrint implements Visitor<String> {
     @Override
     public String visit(TypeType typeType) {
         return typeType.getType();
+    }
+
+    private char premierVraiChar(String string) {
+        string = string.replaceAll("[\\n\\t ]", "");
+        return string.charAt(0);
     }
 }
