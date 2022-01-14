@@ -69,11 +69,16 @@ class Gui():
         ).name
         self.btnBrowse['text'] = self.progname
 
-    def openWindow(self, title):
+    def openWindow(self, title, size = None):
         newWindow = tkinter.Toplevel(self.app)
         newWindow.title(title)
         container = ttk.Frame(newWindow)
-        canvas = tkinter.Canvas(container)
+        container.grid_propagate(False)
+        if size:
+            canvas = tkinter.Canvas(container, width=size[0], height=size[1])
+        else:
+            canvas = tkinter.Canvas(container)
+
         scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
 
@@ -90,13 +95,18 @@ class Gui():
         container.pack(fill="both", expand=True)
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="both", expand=True)
-        return scrollable_frame
+        return canvas
 
     def analyse(self):
         subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname+" "+self.varGr.get(),
                                               shell=True, stdout=subprocess.PIPE)
         analyse = subprocess_analyze.stdout.read()
-        tkinter.Label(self.openWindow("Resultat d'analyse"), text=analyse.decode('utf-8')).pack()
+        analyseOutText = analyse.decode('utf-8')
+        self.analyseOutWindow = self.openWindow("Resultat d'analyse")
+        self.analyseOut = tkinter.Text(self.analyseOutWindow, height=len(analyseOutText)/50)
+        self.analyseOut.insert("end", analyseOutText)
+        self.analyseOut.config(state="disabled")
+        self.analyseOut.pack(fill='both', expand=True)
         subprocess_getdotname = subprocess.Popen(
             "java -jar " + JAR_LOCATION + " getDotName " + self.progname, shell=True,
             stdout=subprocess.PIPE)
@@ -106,7 +116,7 @@ class Gui():
         os.system("dot -Tpng " + pathtoDot + " > " + pathtoDot.replace(".dot", ".png"))
         self.imgDot = Image.open(pathtoDot.replace(".dot", ".png"))
         self.imgDisplay = ImageTk.PhotoImage(self.imgDot)
-        tkinter.Label(self.openWindow("Graphique"), image=self.imgDisplay).pack()
+        tkinter.Label(self.openWindow("Graphique", (self.imgDisplay.width() + 10, self.imgDisplay.height() + 10)), image=self.imgDisplay).pack()
 
 
 Gui()
