@@ -9,7 +9,7 @@ import java.util.Random;
 public class Utils {
 
     public static String outNameFromFileName(String fileName) {
-        String total = fileName.replaceAll("src/main/resources", "src/main/out/");
+        String total = fileName.replaceAll("src/main/resources", "src/main/out");
         String[] splitted = total.split("/");
         StringBuilder directoryName = new StringBuilder();
         for (int i = 0; i < splitted.length - 1; i++) {

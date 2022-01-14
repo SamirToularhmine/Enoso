@@ -32,6 +32,8 @@ Voici la liste des arguments disponibles actuellement :
 | getDotName \<cheminProgramme\>  | Permet d'obtenir un chemin vers le graphe du programme (au format dot)         |
 | \<cheminProgramme\> \<Analyse\> | Permet de visualiser dans la sortie standard l'analyse appliquée au programme  |
 
+**Note :** il est nécessaire d'exécuter une analyse sur le programme avant de pouvoir obtenir le fichier dot
+correspondant à son flow.
 
 Voici la liste des analyses disponibles actuellement :
 
