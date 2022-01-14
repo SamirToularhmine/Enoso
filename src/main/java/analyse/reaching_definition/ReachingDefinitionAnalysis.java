@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class ReachingDefinitionAnalysis implements IAnalysis<Set<Pair<String, Integer>>> {
 
-    private TransferVisitorReachingDefinition transferVisitorReachingDefinition;
+    private final TransferVisitorReachingDefinition transferVisitorReachingDefinition;
 
     public ReachingDefinitionAnalysis(Set<State> allNodes) {
         this.transferVisitorReachingDefinition = new TransferVisitorReachingDefinition(allNodes);

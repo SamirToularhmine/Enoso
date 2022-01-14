@@ -32,16 +32,25 @@ class Gui():
         self.btnBrowse = tkinter.Button(self.choixduprogframe, text='Parcourir', command=self.askopenfile)
         self.label2 = tkinter.Label(self.choixduprogframe, text="Type d'analyse")
 
-        vals = ['VeryBusy', 'Reaching', 'AvailableExp', 'LiveVar']
-        etiqs = ['Very Busy', 'Reaching Definition', 'Available Expression', 'Live Variable']
+        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " showAnalyses",
+                                              shell=True, stdout=subprocess.PIPE)
+        allAnalyses = subprocess_analyze.stdout.read().decode()
+        vals = allAnalyses.split("\n")
         self.varGr = tkinter.StringVar()
         self.varGr.set(vals[0])
         self.rb = []
-        for i in range(4):
+        self.analysesList = tkinter.Listbox(self.choixduprogframe)
+
+        for i in range(len(vals)):
+            self.analysesList.insert(i, vals[i])
+
+        """
+        for i in range(len(vals):
             b = tkinter.Radiobutton(self.choixduprogframe, variable=self.varGr, text=etiqs[i], value=vals[i])
             self.rb.append(b)
+        """
 
-        self.startbtn = tkinter.Button(self.choixduprogframe, text="Analyser !", command=self.analyse)
+        self.startbtn = tkinter.Button(self.choixduprogframe, text="Analyser !", command=self.analyse, state="disabled")
 
         # Affichage des widget
         self.panel.pack(fill="both", expand=1, pady=10)
@@ -50,8 +59,13 @@ class Gui():
         self.label1.pack()
         self.btnBrowse.pack(fill="x", pady=10, padx=10)
         self.label2.pack()
+        """
         for radiobtn in self.rb:
             radiobtn.pack()
+        """
+        self.analysesList.pack()
+        self.analysesList.select_set(0)
+        self.analysesList.event_generate("<<ListboxSelect>>")
 
         self.startbtn.pack(fill="both", pady=10, padx=10)
 
@@ -66,8 +80,11 @@ class Gui():
     def askopenfile(self):
         self.progname = filedialog.askopenfile(
             title="Select a File",
-        ).name
-        self.btnBrowse['text'] = self.progname
+        )
+        if(self.progname):
+            self.btnBrowse['text'] = self.progname.name
+            self.progname = self.progname.name
+            self.startbtn['state'] = 'normal'
 
     def openWindow(self, title, size = None):
         newWindow = tkinter.Toplevel(self.app)
@@ -98,10 +115,11 @@ class Gui():
         return canvas
 
     def analyse(self):
-        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname+" "+self.varGr.get(),
+        subprocess_analyze = subprocess.Popen("java -jar " + JAR_LOCATION + " " + self.progname + " " + str(self.analysesList.curselection()[0]),
                                               shell=True, stdout=subprocess.PIPE)
         analyse = subprocess_analyze.stdout.read()
-        analyseOutText = analyse.decode('utf-8')
+        # analyseOutText = analyse.decode('utf-8')
+        analyseOutText = analyse
         self.analyseOutWindow = self.openWindow("Resultat d'analyse")
         self.analyseOut = tkinter.Text(self.analyseOutWindow, height=len(analyseOutText)/50)
         self.analyseOut.insert("end", analyseOutText)
@@ -116,7 +134,7 @@ class Gui():
         os.system("dot -Tpng " + pathtoDot + " > " + pathtoDot.replace(".dot", ".png"))
         self.imgDot = Image.open(pathtoDot.replace(".dot", ".png"))
         self.imgDisplay = ImageTk.PhotoImage(self.imgDot)
-        tkinter.Label(self.openWindow("Graphique", (self.imgDisplay.width() + 10, self.imgDisplay.height() + 10)), image=self.imgDisplay).pack()
+        tkinter.Label(self.openWindow("Flow du programme", (self.imgDisplay.width() + 10, self.imgDisplay.height() + 10)), image=self.imgDisplay).pack()
 
 
 Gui()

@@ -1,11 +1,13 @@
-import analyse.*;
+import analyse.Comparison;
+import analyse.Flow;
+import analyse.JoinType;
+import analyse.MonotoneFramework;
 import analyse.available_expressions.AvailableExpressionsAnalysis;
 import analyse.live_variables.LiveVariablesAnalysis;
 import analyse.reaching_definition.ReachingDefinitionAnalysis;
 import analyse.reaching_definition.VisitorGenFreeVariables;
 import analyse.very_busy_expressions.VeryBusyExpressionsAnalysis;
 import ast.AstBuilder;
-import ast.DecVariable;
 import ast.VisitorFlow;
 import ast.VisitorPrint;
 import ast.aexpression.Aexpression;
@@ -22,12 +24,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collection;
+import java.nio.file.FileSystem;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Main {
     private enum ErrorCode {
@@ -74,13 +75,23 @@ public class Main {
         return tree;
     }
 
-
     public static void main(String[] arguments) throws IOException {
+        List<String> allAnalysis = List.of(
+                "Very Busy Expressions",
+                "Reaching Definition",
+                "Available Expressions",
+                "Live Variables"
+        );
+
         if (arguments.length == 0)
             // No name given to the command line
             exitWithCode(ErrorCode.NO_FILE_NAME);
         if (arguments.length == 2 && arguments[0].equals("getDotName")) {
             System.out.println(Utils.outNameFromFileName(arguments[1]));
+            return;
+        }
+        if (arguments.length == 1 && arguments[0].equals("showAnalyses")) {
+            System.out.print(String.join(System.lineSeparator(), allAnalysis));
             return;
         }
         if (arguments.length == 2) {
@@ -90,6 +101,7 @@ public class Main {
             ParseTree parseTree = parse(inputStream);
             ast.Program program = buildAst(parseTree);
             VisitorPrint visitorPrint = new VisitorPrint();
+
             System.out.println(program.accept(visitorPrint));
 
             VisitorFlow visitorFlow = new VisitorFlow();
@@ -97,7 +109,7 @@ public class Main {
             f.prepare();
             f.toDot(Utils.outNameFromFileName(fileName));
             switch (analyse) {
-                case ("VeryBusy"):
+                case ("0") -> {
                     MonotoneFramework<Aexpression> monotoneFrameworkVb = new MonotoneFramework<>(
                             JoinType.MUST,
                             f,
@@ -107,9 +119,8 @@ public class Main {
                             true,
                             new VeryBusyExpressionsAnalysis(f.getAllNodes()));
                     monotoneFrameworkVb.analyse();
-                    return;
-
-                case ("Reaching"):
+                }
+                case ("1") -> {
                     MonotoneFramework<Pair<String, Integer>> monotoneFrameworkPair = new MonotoneFramework<>(
                             JoinType.MAY,
                             f,
@@ -119,8 +130,8 @@ public class Main {
                             false,
                             new ReachingDefinitionAnalysis(f.getAllNodes()));
                     monotoneFrameworkPair.analyse();
-                    return;
-                case ("AvailableExp"):
+                }
+                case ("2") -> {
                     MonotoneFramework<Aexpression> monotoneFrameworkAexpression = new MonotoneFramework<>(
                             JoinType.MUST,
                             f,
@@ -130,8 +141,8 @@ public class Main {
                             false,
                             new AvailableExpressionsAnalysis(f.getAllNodes()));
                     monotoneFrameworkAexpression.analyse();
-                    return;
-                case ("LiveVar"):
+                }
+                case ("3") -> {
                     MonotoneFramework<String> monotoneFrameworkString = new MonotoneFramework<>(
                             JoinType.MAY,
                             f,
@@ -141,7 +152,7 @@ public class Main {
                             true,
                             new LiveVariablesAnalysis());
                     monotoneFrameworkString.analyse();
-                    return;
+                }
             }
         }
     }

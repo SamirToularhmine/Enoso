@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class LiveVariablesAnalysis implements IAnalysis<Set<String>> {
 
-    private TransferVisitorLiveVariables transferVisitorLiveVariables;
+    private final TransferVisitorLiveVariables transferVisitorLiveVariables;
 
     public LiveVariablesAnalysis() {
         this.transferVisitorLiveVariables = new TransferVisitorLiveVariables();

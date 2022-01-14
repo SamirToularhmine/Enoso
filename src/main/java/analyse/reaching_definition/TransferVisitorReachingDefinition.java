@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class TransferVisitorReachingDefinition implements ITransferVisitor<Set<Pair<String, Integer>>> {
 
-    private Set<State> allNodes;
+    private final Set<State> allNodes;
     private Set<Pair<String, Integer>> currentValue;
     private State currentState;
 

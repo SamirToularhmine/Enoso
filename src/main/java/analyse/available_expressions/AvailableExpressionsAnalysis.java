@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class AvailableExpressionsAnalysis implements IAnalysis<Set<Aexpression>> {
 
-    private TransferVisitorAvailableExpression transferVisitorAvailableExpression;
-    private VisitorPrint visitorPrint;
+    private final TransferVisitorAvailableExpression transferVisitorAvailableExpression;
+    private final VisitorPrint visitorPrint;
 
     public AvailableExpressionsAnalysis(Set<State> allNodes) {
         this.transferVisitorAvailableExpression = new TransferVisitorAvailableExpression(allNodes);

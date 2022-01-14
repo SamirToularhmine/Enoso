@@ -25,9 +25,9 @@ import java.util.List;
 
 public class VisitorFlow implements Visitor<Flow>{
 
-    private Map<String, Flow> proceduresMap;
-    private Map<String, List<State>> entryState; // proc1, [S1,S2,S3]
-    private Map<String, List<State>> exitState; // proc2, [S1,S2,S3]
+    private final Map<String, Flow> proceduresMap;
+    private final Map<String, List<State>> entryState; // proc1, [S1,S2,S3]
+    private final Map<String, List<State>> exitState; // proc2, [S1,S2,S3]
 
     public VisitorFlow(){
         this.proceduresMap = new HashMap<>();

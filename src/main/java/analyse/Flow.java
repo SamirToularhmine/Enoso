@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Flow implements Cloneable {
     private Set<State> head;
-    private Set<State> finals;
+    private final Set<State> finals;
 
     public Flow() {
         this.head = new HashSet<>();

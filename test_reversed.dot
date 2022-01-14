@@ -1,0 +1,9 @@
+digraph G {
+{
+0 [shape = doublecircle, label="[x := 0] 0  "]
+}
+{
+0 [style = filled fillcolor = green, label ="[x := 0] 0" ]
+}
+
+}

@@ -19,14 +19,15 @@ import ast.type.TypeType;
 import exceptions.InappropriateVisitException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<Aexpression>> {
 
-    private Set<State> allNodes;
+    private final Set<State> allNodes;
     private Set<Aexpression> currentValue;
-    private Set<Aexpression> aeStar;
+    private final Set<Aexpression> aeStar;
 
     public TransferVisitorAvailableExpression(Set<State> allNodes) {
         this.allNodes = new HashSet<>(allNodes);
@@ -42,7 +43,11 @@ public class TransferVisitorAvailableExpression implements ITransferVisitor<Set<
                 this.aeStar.addAll(saexp);
             }
         }
-        aeStar.forEach(a -> System.out.println(a.accept(visitorPrint)));
+
+        System.out.println();
+        System.out.println("Expressions trouvées dans le programme :");
+        List<String> aeStarList = aeStar.stream().map(a -> (String) a.accept(visitorPrint)).collect(Collectors.toList());
+        System.out.println("{ " + String.join(",", aeStarList) + " }");
     }
 
     public void reset(Set<Aexpression> currentValue){

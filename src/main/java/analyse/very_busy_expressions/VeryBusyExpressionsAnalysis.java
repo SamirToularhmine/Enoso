@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class VeryBusyExpressionsAnalysis implements IAnalysis<Set<Aexpression>> {
 
-    private TransferVisitorVeryBusyExpressions transferVisitorVeryBusyExpressions;
+    private final TransferVisitorVeryBusyExpressions transferVisitorVeryBusyExpressions;
 
     public VeryBusyExpressionsAnalysis(Set<State> allNodes) {
         this.transferVisitorVeryBusyExpressions = new TransferVisitorVeryBusyExpressions(allNodes);

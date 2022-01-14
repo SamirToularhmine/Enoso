@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 public class MonotoneFramework<T> {
     private JoinType joinType;
     private Flow flow;
-    private Set<T> domain;
+    private final Set<T> domain;
     private Comparison comparison;
     private T bottom;
-    private Set<T> iota;
-    private boolean reversed;
-    private IAnalysis<Set<T>> analysis;
+    private final Set<T> iota;
+    private final boolean reversed;
+    private final IAnalysis<Set<T>> analysis;
 
     public MonotoneFramework(JoinType joinType, Flow flow, Comparison comparison, T bottom, Set<T> iota, boolean reversed, IAnalysis<Set<T>> analysis) {
         this.joinType = joinType;
@@ -48,7 +48,9 @@ public class MonotoneFramework<T> {
         while(!workQueue.isEmpty()){
             Pair<State, State> current = workQueue.poll();
             Set<T> result = this.analysis.apply(currentMfp.get(current.a.getLabel()), current.a);
-            System.out.println("On traite l'arc : (" + (current.a.getLabel() + 0) + "," + (current.b.getLabel() + 0) + ")" + " -> " + this.analysis.print(result));
+
+            System.out.println("On traite l'arc : (" + (current.a.getLabel()) + "," + (current.b.getLabel()) + ")" + " -> { " + this.analysis.print(result) + " }");
+
             Set<T> calculatedEntry = new HashSet<>();
 
             if(result != null){
@@ -90,7 +92,7 @@ public class MonotoneFramework<T> {
                 System.out.print("Entry [" + this.flow.findByLabel(i).getInstruction().accept(visitorPrint) + "] (" + (i) +") = ");
 
                 if(res == null || res.size() == 0){
-                    System.out.println("∅");
+                    System.out.println("{ }");
                 }else{
                     System.out.println("{ " + this.analysis.print(res) + " }");
                 }
