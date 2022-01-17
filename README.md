@@ -24,6 +24,8 @@ Pour lancer le projet, il suffit d'éxecuter le fichier JAR fourni avec par exem
 
 ``` java -jar Enoso.jar ARGUMENTS ```
 
+**Note :** Le jar fourni a été compilé avec Java en version 17.
+
 Voici la liste des arguments disponibles actuellement :
 
 |        Nom de l'argument        | Description de l'argument                                                      |
