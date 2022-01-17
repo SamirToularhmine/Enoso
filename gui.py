@@ -16,7 +16,7 @@ class Gui():
         self.app.minsize(211, 538)
 
         # Creation des widgets
-        self.imgFile = Image.open("logo_small.png")
+        self.imgFile = Image.open("img/logo_small.png")
         self.img = ImageTk.PhotoImage(self.imgFile.resize((self.imgFile.height // 6, self.imgFile.width // 6)))
         self.panel = tkinter.Label(self.app, image=self.img)
         self.mainframe = tkinter.LabelFrame(self.app, text="Enoso - Analyse du langage while")
@@ -25,7 +25,7 @@ class Gui():
         self.creditLabel1 = tkinter.Label(self.creditframe, text="Pierre-Louis Bertrand")
         self.creditLabel2 = tkinter.Label(self.creditframe, text="Ionas Neonakis")
         self.creditLabel3 = tkinter.Label(self.creditframe, text="Thomas Quetier")
-        self.creditLabel4 = tkinter.Label(self.creditframe, text="Samir Toulharmine")
+        self.creditLabel4 = tkinter.Label(self.creditframe, text="Samir Toularhmine")
 
         self.choixduprogframe = tkinter.LabelFrame(self.mainframe, text="Analyse")
         self.label1 = tkinter.Label(self.choixduprogframe, text="Choix du programme")
@@ -131,6 +131,7 @@ class Gui():
         dotname = subprocess_getdotname.stdout.read()
         pathtoDot = dotname.decode('utf-8')
         pathtoDot = pathtoDot.replace("\r\n", '')
+        pathtoDot = pathtoDot.replace("\n", '')
         os.system("dot -Tpng " + pathtoDot + " > " + pathtoDot.replace(".dot", ".png"))
         self.imgDot = Image.open(pathtoDot.replace(".dot", ".png"))
         self.imgDisplay = ImageTk.PhotoImage(self.imgDot)
